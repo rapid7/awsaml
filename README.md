@@ -9,17 +9,29 @@ application's running.
 The application itself is written in JavaScript, packaged with Electron, and
 distributed as a native application. JavaScript and Electron where chosen
 because the Node.js environment provides the cryptography libraries necessary
-to do authentication with SSH, and the Chromium runtime provides the rendering
-necessary to do authentication with SAML.
+for authentication with SSH, and the Chromium runtime provides the rendering
+necessary for authentication with SAML.
 
 ## Authenticate with SSH
 SSH authentication requires a service running in AWS that has access to the
-developer's public key. The application contacts the service to request
-temporary AWS keys. The request is signed with the developer's private key and
-the service verifies the signature with the developer's public key. Assuming the
-verification is correct, the service calls the [AssumeRole][] API in AWS to
-generate temporary credentials which are returned to the application. All
-communication between the application and service happens over HTTP.
+developer's public key. It also requires the application have access to the
+developer's private key. Communication between the application and service
+happens over HTTP. Every 50 minutes, the application takes the following
+actions
+
+1. Constructs a payload requesting new temporary credentials.
+2. Signs the payload with the developer's private key.
+3. Sends the signed payload to the service and waits for a response.
+
+Upon receiving a signed paylaod, the service take the following actions
+
+1. Verifies the signature on the payload with the developer's public key.
+2. Generates new temporary AWS keys by calling the [AssumeRole][] API.
+3. Returns the temporary AWS keys to the application.
+
+Upon receiving new temporary keys the application writes them to disk. This
+flow repeats every 50 minutes so the developer has a valid set of AWS keys
+while the application's running.
 
 * User Management: Github
 * Code Complexity: Low
@@ -28,9 +40,17 @@ communication between the application and service happens over HTTP.
 
 ## Authenticate with SAML
 SAML authentication requires the application authenticate with an identity
-provider e.g. Okta to generate a SAML authentication response. The application
-then calls the [AssumeRoleWithSAML][] API in AWS to generate temporary
-credentials.
+provider e.g. Okta. The developer's Okta crednetials are cached in a cookie
+so they're only required to reauthenticate when the cookie expires. Every 50
+minutes, the application takes the following actions
+
+1. Authenticates the developer with the identity provider.
+2. Reads the SAML authentication response returned from the identity provider.
+3. Generates new temporary AWS keys by calling the [AssumeRoleWithSAML][] API.
+4. Writes the new temporary credentials to disk.
+
+This flow repeats every 50 minutes so the developer has a valid set of AWS keys
+while the application's running.
 
 * User Management: Okta
 * Code Complexity: High
