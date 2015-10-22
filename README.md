@@ -6,7 +6,7 @@ Credentials are valid for one hour and are rotated every 50 minutes while the
 application's running.
 
 The application itself is written in JavaScript, packaged with Electron, and
-distributed as a native application. JavaScript and Electron where chosen
+distributed as a desktop application. JavaScript and Electron where chosen
 because the Node.js environment provides the cryptography libraries necessary
 for authentication with SSH, and the Chromium runtime provides the rendering
 necessary for authentication with SAML.
@@ -33,7 +33,7 @@ flow repeats every 50 minutes so the developer has a valid set of AWS keys
 while the application's running.
 
 * User Management: SSH Keys
-* Code Complexity: Low
+* Authentication: Silent
 * Requires Client: Yes
 * Requires Server: Yes
 
@@ -52,7 +52,7 @@ This flow repeats every 50 minutes so the developer has a valid set of AWS keys
 while the application's running.
 
 * User Management: Identity Provider
-* Code Complexity: High
+* Authentication: Prompted
 * Requires Client: Yes
 * Requires Server: No
 
