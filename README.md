@@ -1,5 +1,4 @@
 # Dev AWS Keys
-
 This is an application that provides automatically rotated temporary AWS
 credentials. Credentials are stored in `~/.aws/credentials` so they can be used
 with AWS SDKs as well as `~/.mvn/settings.xml` so they can be used with Maven.
@@ -23,7 +22,7 @@ actions
 2. Signs the payload with the developer's private key.
 3. Sends the signed payload to the service and waits for a response.
 
-Upon receiving a signed paylaod, the service take the following actions
+Upon receiving a signed payload, the service take the following actions
 
 1. Verifies the signature on the payload with the developer's public key.
 2. Generates new temporary AWS keys by calling the [AssumeRole][] API.
@@ -33,16 +32,16 @@ Upon receiving new temporary keys the application writes them to disk. This
 flow repeats every 50 minutes so the developer has a valid set of AWS keys
 while the application's running.
 
-* User Management: Github
+* User Management: SSH Keys
 * Code Complexity: Low
 * Requires Client: Yes
 * Requires Server: Yes
 
 ## Authenticate with SAML
 SAML authentication requires the application authenticate with an identity
-provider e.g. Okta. The developer's Okta crednetials are cached in a cookie
-so they're only required to reauthenticate when the cookie expires. Every 50
-minutes, the application takes the following actions
+provider e.g. Okta. The developer's identity provider credentials are cached in
+a cookie so they're only required to authenticate when the cookie expires. Every
+50 minutes, the application takes the following actions
 
 1. Authenticates the developer with the identity provider.
 2. Reads the SAML authentication response returned from the identity provider.
@@ -52,7 +51,7 @@ minutes, the application takes the following actions
 This flow repeats every 50 minutes so the developer has a valid set of AWS keys
 while the application's running.
 
-* User Management: Okta
+* User Management: Identity Provider
 * Code Complexity: High
 * Requires Client: Yes
 * Requires Server: No
