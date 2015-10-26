@@ -1,10 +1,10 @@
 var express = require('express')
   , connect = require('connect')
   , passport = require('passport')
+  , config = require('./config')
   , SamlStrategy = require('passport-saml').Strategy
   , users = []
   , app = express()
-
 
 function findByEmail (email, done) {
   var i = 0
@@ -37,12 +37,11 @@ passport.protected = function (req, res, next) {
 }
 
 passport.use(new SamlStrategy({
-  issuer: 'http://localhost:2600/',
   path: '/login/callback',
-  entryPoint: 'http://localhost:2600/login/callback',
-  cert: ''
+  issuer: config.auth.issuer,
+  entryPoint: config.auth.entryPoint,
+  cert: config.auth.cert
 }, function (profile, done) {
-  console.log("Profile: %s", JSON.stringify(profile))
   if (!profile.email) {
     return done(new Error('No email found'), null)
   }
