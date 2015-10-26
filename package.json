@@ -1,0 +1,15 @@
+{
+  "name": "dev-aws-keys",
+  "version": "0.1.0",
+  "description": "Periodically local refreshes AWS access keys",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "3.5.0",
+    "passport-saml": "0.13.0",
+    "passport": "0.3.0",
+    "connect": "2.14.3"
+  }
+}
