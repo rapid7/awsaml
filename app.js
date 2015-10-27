@@ -170,4 +170,30 @@ app.get('/login', passport.authenticate('saml', {
 })
 
 app.listen(2600)
-console.log('Server started.')
+
+var app = require('app')
+var BrowserWindow = require('browser-window')
+
+var mainWindow = null
+
+app.on('window-all-closed', function() {
+  if (process.platform != 'darwin') {
+    app.quit()
+  }
+})
+
+app.on('ready', function() {
+  mainWindow = new BrowserWindow({
+    title: 'Dev AWS Keys',
+    width: 800,
+    height: 700,
+    show: false
+  })
+
+  mainWindow.on('closed', function() {
+    mainWindow = null
+  })
+
+  mainWindow.loadUrl(config.auth.portalUrl)
+  mainWindow.show()
+})
