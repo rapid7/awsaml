@@ -1,6 +1,7 @@
 var express = require('express')
   , connect = require('connect')
   , passport = require('passport')
+  , Aws = require('aws-sdk')
   , config = require('./config')
   , SamlStrategy = require('passport-saml').Strategy
   , users = []
@@ -70,7 +71,34 @@ app.configure(function () {
 })
 
 app.get('/', passport.protected, function (req, res) {
-  res.end('Hello '+req.session.passport.user)
+  var email = req.session.passport.user
+  res.end('Hello '+email)
+  process.nextTick(function () {
+    findByEmail (email, function (err, user) {
+      var assertion = null
+        , sts = new Aws.STS()
+      if (err) {
+        return console.log(err)
+      }
+      if (!user) {
+        return console.log('User not found: %s', email)
+      }
+      assertion = user.getResponseBase64()
+      var xml = new Buffer(assertion, 'base64').toString('utf8')
+
+      sts.assumeRoleWithSAML({
+        PrincipalArn: config.aws.principalArn,
+        RoleArn: config.aws.roleArn,
+        SAMLAssertion: assertion,
+        DurationSeconds: 900
+      }, function (err, data) {
+        if (err) {
+          return console.log(err, err.stack)
+        }
+        console.log(data)
+      })
+    })
+  })
 })
 
 app.get('/health', passport.protected, function (req, res) {
