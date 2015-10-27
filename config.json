@@ -6,6 +6,6 @@
   },
   "aws": {
     "principalArn": "arn:aws:iam::042293964381:saml-provider/dev-aws-keys",
-    "roleArn": "arn:aws:iam::042293964381:role/dev-aws-keys"
+    "roleArn": "arn:aws:iam::042293964381:role/ssoAdmin"
   }
 }

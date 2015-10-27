@@ -7,6 +7,10 @@ var express = require('express')
   , users = []
   , app = express()
 
+Aws.config.credentials = new Aws.SharedIniFileCredentials({
+  profile: 'dev-aws-keys'
+})
+
 function findByEmail (email, done) {
   var i = 0
     , length = users.length
@@ -86,16 +90,16 @@ app.get('/', passport.protected, function (req, res) {
       assertion = user.getResponseBase64()
       var xml = new Buffer(assertion, 'base64').toString('utf8')
 
-      sts.assumeRoleWithSAML({
-        PrincipalArn: config.aws.principalArn,
+      sts.assumeRole({
+        ExternalId: user.externalId,
         RoleArn: config.aws.roleArn,
-        SAMLAssertion: assertion,
-        DurationSeconds: 900
+        RoleSessionName: email,
+        DurationSeconds: 3600
       }, function (err, data) {
         if (err) {
           return console.log(err, err.stack)
         }
-        console.log(data)
+        return console.log(data)
       })
     })
   })
