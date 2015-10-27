@@ -171,6 +171,7 @@ app.listen(2600)
 
 var app = require('app')
 var BrowserWindow = require('browser-window')
+var Storage = require('./lib/storage')
 
 var mainWindow = null
 
@@ -181,11 +182,32 @@ app.on('window-all-closed', function() {
 })
 
 app.on('ready', function() {
+  var lastWindowState = Storage.get('lastWindowState')
+  if (lastWindowState === null) {
+    lastWindowState = {
+      width: 800,
+      height: 700
+    }
+  }
+
   mainWindow = new BrowserWindow({
     title: 'Dev AWS Keys',
-    width: 800,
-    height: 700,
+    x: lastWindowState.x,
+    y: lastWindowState.y,
+    width: lastWindowState.width,
+    height: lastWindowState.height,
     show: false
+  })
+
+  mainWindow.on('close', function () {
+    var bounds = mainWindow.getBounds()
+    Storage.set('lastWindowState', {
+      x: bounds.x,
+      y: bounds.y,
+      width: bounds.width,
+      height: bounds.height,
+      version: 1
+    })
   })
 
   mainWindow.on('closed', function() {
