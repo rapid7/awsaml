@@ -2,6 +2,9 @@ var express = require('express')
   , connect = require('connect')
   , passport = require('passport')
   , Aws = require('aws-sdk')
+  , path = require('path')
+  , fs = require('fs')
+  , ini = require('ini')
   , config = require('./config')
   , SamlStrategy = require('passport-saml').Strategy
   , users = []
@@ -22,6 +25,45 @@ function findByEmail (email, done) {
     }
   }
   return done(null, null)
+}
+
+function resolveHomePath () {
+  var env = process.env
+    , home = env.HOME ||
+      env.USERPROFILE ||
+      (env.HOMEPATH ? ((env.HOMEDRIVE || 'C:/') + env.HOMEPATH) : null)
+  return home
+}
+
+function saveCredentials (credentials, done) {
+  if (!credentials) {
+    return done(new Error('Invalid AWS credentials'))
+  }
+
+  var home = resolveHomePath()
+  if (!home) {
+    return done(new Error('Cannot save credentials, HOME path not set'))
+  }
+
+  var awsConfigFile = path.join(home, '.aws', 'credentials')
+  fs.readFile(awsConfigFile, 'utf8', function (err, data) {
+    if (err) {
+      return done(err)
+    }
+
+    var awsConfig = ini.parse(data)
+    awsConfig[config.aws.profile] = {}
+    awsConfig[config.aws.profile].aws_access_key_id = credentials.AccessKeyId
+    awsConfig[config.aws.profile].aws_secret_access_key = credentials.SecretAccessKey
+    awsConfig = ini.encode(awsConfig, { whitespace: true })
+
+    fs.writeFile(awsConfigFile, awsConfig, 'utf8', function (err) {
+      if (err) {
+        return done(err)
+      }
+      return done(null)
+    })
+  })
 }
 
 passport.serializeUser(function (user, done) {
@@ -99,7 +141,11 @@ app.get('/', passport.protected, function (req, res) {
         if (err) {
           return console.log(err, err.stack)
         }
-        return console.log(data)
+        saveCredentials(data.Credentials, function (err) {
+          if (err) {
+            return console.log(err, err.stack)
+          }
+        })
       })
     })
   })
