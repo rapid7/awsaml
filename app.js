@@ -1,5 +1,4 @@
 var express = require('express')
-  , connect = require('connect')
   , passport = require('passport')
   , Aws = require('aws-sdk')
   , path = require('path')
@@ -108,7 +107,6 @@ passport.use(new SamlStrategy({
 
 app.configure(function () {
   app.use(express.logger())
-  app.use(connect.compress())
   app.use(express.cookieParser())
   app.use(express.bodyParser())
   app.use(express.session({secret: 'very secret'}))
