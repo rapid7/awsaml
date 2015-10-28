@@ -7,11 +7,8 @@ var express = require('express')
   , config = require('./config')
   , SamlStrategy = require('passport-saml').Strategy
   , users = []
+  , cachedSAMLAssertion = null
   , app = express()
-
-Aws.config.credentials = new Aws.SharedIniFileCredentials({
-  profile: 'dev-aws-keys'
-})
 
 function findByEmail (email, done) {
   var i = 0
@@ -127,13 +124,11 @@ app.get('/', passport.protected, function (req, res) {
       if (!user) {
         return console.log('User not found: %s', email)
       }
-      assertion = user.getResponseBase64()
-      var xml = new Buffer(assertion, 'base64').toString('utf8')
 
-      sts.assumeRole({
-        ExternalId: user.externalId,
+      sts.assumeRoleWithSAML({
+        PrincipalArn: config.aws.principalArn,
         RoleArn: config.aws.roleArn,
-        RoleSessionName: email,
+        SAMLAssertion: cachedSAMLAssertion,
         DurationSeconds: 3600
       }, function (err, data) {
         if (err) {
@@ -157,6 +152,7 @@ app.post('/login/callback', passport.authenticate('saml', {
   failureRedirect: '/',
   failureFlush: true
 }), function (req, res) {
+  cachedSAMLAssertion = req.body.SAMLResponse
   res.redirect('/')
 })
 
