@@ -150,10 +150,6 @@ app.get('/', passport.protected, function (req, res) {
   })
 })
 
-app.get('/health', passport.protected, function (req, res) {
-  res.end('health check')
-})
-
 app.post('/login/callback', passport.authenticate('saml', {
   failureRedirect: '/',
   failureFlush: true
