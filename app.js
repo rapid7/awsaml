@@ -80,6 +80,8 @@ var Storage = require('./lib/storage')
 
 var mainWindow = null
 
+Application.commandLine.appendSwitch('disable-http-cache')
+
 Application.on('window-all-closed', function() {
   if (process.platform != 'darwin') {
     app.quit()
@@ -101,7 +103,10 @@ Application.on('ready', function() {
     y: lastWindowState.y,
     width: lastWindowState.width,
     height: lastWindowState.height,
-    show: false
+    show: false,
+    'web-preferences': {
+      'node-integration': false
+    }
   })
 
   mainWindow.on('close', function () {
