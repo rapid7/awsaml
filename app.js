@@ -1,56 +1,15 @@
 var express = require('express')
-  , Aws = require('aws-sdk')
-  , path = require('path')
-  , fs = require('fs')
-  , ini = require('ini')
-  , xmldom = require('xmldom')
-  , xpath = require('xpath.js')
-  , config = require('./config')
-  , Auth = require('./lib/auth')
-  , cachedSAMLAssertion = null
-  , app = express()
+var Aws = require('aws-sdk')
+var xmldom = require('xmldom')
+var xpath = require('xpath.js')
+var config = require('./config')
+var Auth = require('./lib/auth')
+var AwsCredentials = require('./lib/aws-credentials')
 
 var auth = new Auth(config.auth)
-
-function resolveHomePath () {
-  var env = process.env
-    , home = env.HOME ||
-      env.USERPROFILE ||
-      (env.HOMEPATH ? ((env.HOMEDRIVE || 'C:/') + env.HOMEPATH) : null)
-  return home
-}
-
-function saveCredentials (credentials, done) {
-  if (!credentials) {
-    return done(new Error('Invalid AWS credentials'))
-  }
-
-  var home = resolveHomePath()
-  if (!home) {
-    return done(new Error('Cannot save credentials, HOME path not set'))
-  }
-
-  var awsConfigFile = path.join(home, '.aws', 'credentials')
-  fs.readFile(awsConfigFile, 'utf8', function (err, data) {
-    if (err) {
-      return done(err)
-    }
-
-    var awsConfig = ini.parse(data)
-    awsConfig[config.aws.profile] = {}
-    awsConfig[config.aws.profile].aws_access_key_id = credentials.AccessKeyId
-    awsConfig[config.aws.profile].aws_secret_access_key = credentials.SecretAccessKey
-    awsConfig = ini.encode(awsConfig, { whitespace: true })
-
-    fs.writeFile(awsConfigFile, awsConfig, 'utf8', function (err) {
-      if (err) {
-        return done(err)
-      }
-      return done(null)
-    })
-  })
-}
-
+var credentials = new AwsCredentials(config.aws)
+var cachedSAMLAssertion = null
+var app = express()
 
 app.configure(function () {
   app.use(express.logger())
@@ -64,6 +23,7 @@ app.configure(function () {
 app.get('/', auth.guard, function (req, res) {
   var email = req.session.passport.user
   res.end('Hello '+email)
+
   process.nextTick(function () {
     auth.users.findByEmail (email, function (err, user) {
       if (err) {
@@ -87,7 +47,7 @@ app.get('/', auth.guard, function (req, res) {
         if (err) {
           return console.log(err, err.stack)
         }
-        saveCredentials(data.Credentials, function (err) {
+        credentials.save(data.Credentials, function (err) {
           if (err) {
             return console.log(err, err.stack)
           }
