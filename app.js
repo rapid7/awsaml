@@ -42,7 +42,7 @@ app.get('/', auth.guard, function (req, res) {
         PrincipalArn: arns[1],
         RoleArn: arns[0],
         SAMLAssertion: cachedSAMLAssertion,
-        DurationSeconds: 3600
+        DurationSeconds: config.aws.duration
       }, function (err, data) {
         if (err) {
           return console.log(err, err.stack)
@@ -121,4 +121,9 @@ Application.on('ready', function() {
 
   mainWindow.loadUrl(config.auth.entryPoint)
   mainWindow.show()
+
+  setInterval(function () {
+    console.log('Reloading...')
+    mainWindow.loadUrl('http://localhost:2600/login')
+  }, (config.aws.duration - 10) * 1000)
 })
