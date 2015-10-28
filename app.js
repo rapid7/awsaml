@@ -22,7 +22,7 @@ app.configure(function () {
 
 app.get('/', auth.guard, function (req, res) {
   var email = req.session.passport.user
-  res.end('Hello '+email)
+  res.end('Hello, '+req.user.firstName+'!')
 
   process.nextTick(function () {
     auth.users.findByEmail (email, function (err, user) {
@@ -74,19 +74,19 @@ app.get('/login', auth.authenticate('saml', {
 
 app.listen(2600)
 
-var app = require('app')
+var Application = require('app')
 var BrowserWindow = require('browser-window')
 var Storage = require('./lib/storage')
 
 var mainWindow = null
 
-app.on('window-all-closed', function() {
+Application.on('window-all-closed', function() {
   if (process.platform != 'darwin') {
     app.quit()
   }
 })
 
-app.on('ready', function() {
+Application.on('ready', function() {
   var lastWindowState = Storage.get('lastWindowState')
   if (lastWindowState === null) {
     lastWindowState = {
