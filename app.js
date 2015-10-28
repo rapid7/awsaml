@@ -1,5 +1,4 @@
 var express = require('express')
-  , passport = require('passport')
   , Aws = require('aws-sdk')
   , path = require('path')
   , fs = require('fs')
@@ -7,23 +6,11 @@ var express = require('express')
   , xmldom = require('xmldom')
   , xpath = require('xpath.js')
   , config = require('./config')
-  , SamlStrategy = require('passport-saml').Strategy
-  , users = []
+  , Auth = require('./lib/auth')
   , cachedSAMLAssertion = null
   , app = express()
 
-function findByEmail (email, done) {
-  var i = 0
-    , length = users.length
-    , user = null
-  for (i = 0; i < length; i += 1) {
-    user = users[i]
-    if (user.email === email) {
-      return done(null, user)
-    }
-  }
-  return done(null, null)
-}
+var auth = new Auth(config.auth)
 
 function resolveHomePath () {
   var env = process.env
@@ -64,62 +51,21 @@ function saveCredentials (credentials, done) {
   })
 }
 
-passport.serializeUser(function (user, done) {
-  done(null, user.email)
-})
-
-passport.deserializeUser(function (id, done) {
-  findByEmail(id, function (err, user) {
-    done(err, user)
-  })
-})
-
-passport.protected = function (req, res, next) {
-  if (req.isAuthenticated()) {
-    return next()
-  }
-  res.redirect('/login')
-}
-
-passport.use(new SamlStrategy({
-  path: '/login/callback',
-  issuer: config.auth.issuer,
-  entryPoint: config.auth.entryPoint,
-  cert: config.auth.cert
-}, function (profile, done) {
-  if (!profile.email) {
-    return done(new Error('No email found'), null)
-  }
-  process.nextTick(function () {
-    findByEmail(profile.email, function (err, user) {
-      if (err) {
-        return done(err)
-      }
-      if (!user) {
-        users.push(profile)
-        return done(null, profile)
-      }
-      return done(null, user)
-    })
-  })
-}))
 
 app.configure(function () {
   app.use(express.logger())
   app.use(express.cookieParser())
   app.use(express.bodyParser())
   app.use(express.session({secret: 'very secret'}))
-  app.use(passport.initialize())
-  app.use(passport.session())
+  app.use(auth.initialize())
+  app.use(auth.session())
 })
 
-app.get('/', passport.protected, function (req, res) {
+app.get('/', auth.guard, function (req, res) {
   var email = req.session.passport.user
   res.end('Hello '+email)
   process.nextTick(function () {
-    findByEmail (email, function (err, user) {
-      var assertion = null
-        , sts = new Aws.STS()
+    auth.users.findByEmail (email, function (err, user) {
       if (err) {
         return console.log(err)
       }
@@ -127,6 +73,7 @@ app.get('/', passport.protected, function (req, res) {
         return console.log('User not found: %s', email)
       }
 
+      var sts = new Aws.STS()
       var xml = user.getAssertionXml()
       var doc = new xmldom.DOMParser().parseFromString(xml)
       var arns = xpath(doc, "//saml2:Attribute[@Name='https://aws.amazon.com/SAML/Attributes/Role']/saml2:AttributeValue/text()")[0].data.split(',')
@@ -150,17 +97,17 @@ app.get('/', passport.protected, function (req, res) {
   })
 })
 
-app.post('/login/callback', passport.authenticate('saml', {
+app.post('/login/callback', auth.authenticate('saml', {
   failureRedirect: '/',
-  failureFlush: true
+  failureFlash: true
 }), function (req, res) {
   cachedSAMLAssertion = req.body.SAMLResponse
   res.redirect('/')
 })
 
-app.get('/login', passport.authenticate('saml', {
+app.get('/login', auth.authenticate('saml', {
   failureRedirect: '/',
-  failureFlush: true
+  failureFlash: true
 }), function (req, res) {
   res.redirect('/')
 })
