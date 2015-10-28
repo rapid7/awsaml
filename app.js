@@ -210,6 +210,6 @@ app.on('ready', function() {
     mainWindow = null
   })
 
-  mainWindow.loadUrl(config.auth.portalUrl)
+  mainWindow.loadUrl(config.auth.entryPoint)
   mainWindow.show()
 })
