@@ -4,6 +4,8 @@ var express = require('express')
   , path = require('path')
   , fs = require('fs')
   , ini = require('ini')
+  , xmldom = require('xmldom')
+  , xpath = require('xpath.js')
   , config = require('./config')
   , SamlStrategy = require('passport-saml').Strategy
   , users = []
@@ -125,9 +127,13 @@ app.get('/', passport.protected, function (req, res) {
         return console.log('User not found: %s', email)
       }
 
+      var xml = user.getAssertionXml()
+      var doc = new xmldom.DOMParser().parseFromString(xml)
+      var arns = xpath(doc, "//saml2:Attribute[@Name='https://aws.amazon.com/SAML/Attributes/Role']/saml2:AttributeValue/text()")[0].data.split(',')
+
       sts.assumeRoleWithSAML({
-        PrincipalArn: config.aws.principalArn,
-        RoleArn: config.aws.roleArn,
+        PrincipalArn: arns[1],
+        RoleArn: arns[0],
         SAMLAssertion: cachedSAMLAssertion,
         DurationSeconds: 3600
       }, function (err, data) {
