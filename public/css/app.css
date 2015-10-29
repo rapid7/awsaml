@@ -1,0 +1,12 @@
+body {
+  padding: 10px;
+}
+.col-centered {
+  float: none;
+  margin: 0 auto;
+}
+.widget {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
