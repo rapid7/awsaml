@@ -8,7 +8,6 @@ var AwsCredentials = require('./lib/aws-credentials')
 
 var auth = new Auth(config.auth)
 var credentials = new AwsCredentials(config.aws)
-var cachedSAMLAssertion = null
 var app = express()
 
 app.configure(function () {
@@ -22,6 +21,7 @@ app.configure(function () {
 
 app.get('/', auth.guard, function (req, res) {
   var email = req.session.passport.user
+  var saml = req.session.passport.saml
   res.end('Hello, '+req.user.firstName+'!')
 
   process.nextTick(function () {
@@ -41,7 +41,7 @@ app.get('/', auth.guard, function (req, res) {
       sts.assumeRoleWithSAML({
         PrincipalArn: arns[1],
         RoleArn: arns[0],
-        SAMLAssertion: cachedSAMLAssertion,
+        SAMLAssertion: saml,
         DurationSeconds: config.aws.duration
       }, function (err, data) {
         if (err) {
@@ -61,7 +61,7 @@ app.post('/login/callback', auth.authenticate('saml', {
   failureRedirect: '/',
   failureFlash: true
 }), function (req, res) {
-  cachedSAMLAssertion = req.body.SAMLResponse
+  req.session.passport.saml = req.body.SAMLResponse
   res.redirect('/')
 })
 
