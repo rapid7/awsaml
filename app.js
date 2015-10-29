@@ -59,6 +59,6 @@ Application.on('ready', function() {
 
   setInterval(function () {
     console.log('Reloading...')
-    mainWindow.loadUrl('http://localhost:2600/login')
+    mainWindow.loadUrl(config.auth.entryPoint)
   }, (config.aws.duration - 10) * 1000)
 })
