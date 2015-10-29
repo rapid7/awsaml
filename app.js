@@ -15,7 +15,9 @@ Application.on('window-all-closed', function() {
 })
 
 Application.on('ready', function() {
-  Server.listen(2600)
+  Server.listen(Server.get('port'), function () {
+    console.log('Server server listening on port '+Server.get('port'))
+  })
 
   var lastWindowState = Storage.get('lastWindowState')
   if (lastWindowState === null) {
