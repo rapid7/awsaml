@@ -9,9 +9,7 @@ var mainWindow = null
 Application.commandLine.appendSwitch('disable-http-cache')
 
 Application.on('window-all-closed', function() {
-  if (process.platform != 'darwin') {
-    app.quit()
-  }
+  Application.quit()
 })
 
 Application.on('ready', function() {
