@@ -25,7 +25,7 @@ app.get('/', auth.guard, function (req, res) {
   res.end('Hello, '+req.user.firstName+'!')
 
   process.nextTick(function () {
-    auth.users.findByEmail (email, function (err, user) {
+    auth.users.select (email, function (err, user) {
       if (err) {
         return console.log(err)
       }
