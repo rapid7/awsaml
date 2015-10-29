@@ -1,5 +1,5 @@
 {
-  "name": "dev-aws-keys",
+  "name": "Awsaml",
   "version": "0.1.0",
   "description": "Periodically local refreshes AWS access keys",
   "main": "app.js",
