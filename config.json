@@ -1,4 +1,8 @@
 {
+  "server": {
+    "host": "localhost",
+    "port": 2600
+  },
   "auth": {
     "path": "/sso/saml",
     "issuer": "http://www.okta.com/exk5atka0w4soA5wl0h7",

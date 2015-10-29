@@ -13,8 +13,10 @@ Application.on('window-all-closed', function() {
 })
 
 Application.on('ready', function() {
-  Server.listen(Server.get('port'), function () {
-    console.log('Server server listening on port '+Server.get('port'))
+  var host = Server.get('host')
+  var port = Server.get('port')
+  Server.listen(port, host, function () {
+    console.log('Server server listening on http://%s:%s', host, port)
   })
 
   var lastWindowState = Storage.get('lastWindowState')
