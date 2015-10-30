@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "app": "electron ."
+    "app": "electron .",
+    "build-osx": "electron-packager . Awsaml --platform=darwin --arch=x64 --version=0.34.1"
   },
   "dependencies": {
     "aws-sdk": "2.2.11",
