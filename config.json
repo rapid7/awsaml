@@ -11,6 +11,6 @@
   },
   "aws": {
     "profile": "temp-aws-keys",
-    "duration": 900
+    "duration": 3600
   }
 }
