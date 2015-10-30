@@ -13,6 +13,8 @@ Application.on('window-all-closed', function() {
 })
 
 Application.on('ready', function() {
+  require('./app-menu')
+
   var host = Server.get('host')
   var port = Server.get('port')
   Server.listen(port, host, function () {
