@@ -19,6 +19,7 @@ body {
   border: 1px solid rgb(203, 203, 203);
   padding: 30px;
   box-shadow: rgba(175, 175, 175, 0.2) 0px 1px 2px 0px;
+  max-width: 640px;
 }
 .logo {
   margin-bottom: 15px;
@@ -27,5 +28,5 @@ body {
   background: rgb(249, 249, 249);
   border: 1px solid rgb(230, 230, 230);
   padding: 20px;
-  overflow: hidden;
+  word-wrap: break-word;
 }
