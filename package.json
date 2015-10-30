@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node app.js",
     "app": "electron .",
-    "build:osx": "electron-packager . Awsaml --asar --overwrite --platform=darwin --arch=x64 --version=0.34.1 --app-version=0.1.0 --app-bundle-id=com.rapid7.awsaml --helper-bundle-id=com.rapid7.awsaml.helper"
+    "prebuild:osx": "rm -f awsaml-v0.1.0-darwin-x64.zip",
+    "build:osx": "electron-packager . Awsaml --asar --overwrite --platform=darwin --arch=x64 --version=0.34.1 --app-version=0.1.0 --app-bundle-id=com.rapid7.awsaml --helper-bundle-id=com.rapid7.awsaml.helper",
+    "postbuild:osx": "cd Awsaml-darwin-x64 && zip -q -r ../awsaml-v0.1.0-darwin-x64.zip ."
   },
   "dependencies": {
     "aws-sdk": "2.2.11",
