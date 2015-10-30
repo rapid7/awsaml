@@ -1,15 +1,30 @@
+html {
+  height: 100%;
+}
 body {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
   background: rgb(249, 249, 249);
 }
 .col-centered {
   float: none;
   margin: 0 auto;
 }
-.widget {
+.rounded-6 {
+  border-radius: 6px;
+}
+.wrapper {
   background: rgb(255, 255, 255);
   border: 1px solid rgb(203, 203, 203);
   padding: 30px;
-  margin-top: 20px;
-  border-radius: 6px;
+}
+.logo {
+  margin-bottom: 15px;
+}
+.content {
+  background: rgb(249, 249, 249);
+  border: 1px solid rgb(230, 230, 230);
+  padding: 20px;
   overflow: hidden;
 }
