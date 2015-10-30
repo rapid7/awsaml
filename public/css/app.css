@@ -1,12 +1,15 @@
 body {
-  padding: 10px;
+  background: rgb(249, 249, 249);
 }
 .col-centered {
   float: none;
   margin: 0 auto;
 }
 .widget {
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  background: rgb(255, 255, 255);
+  border: 1px solid rgb(203, 203, 203);
+  padding: 30px;
+  margin-top: 20px;
+  border-radius: 6px;
+  overflow: hidden;
 }

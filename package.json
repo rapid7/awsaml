@@ -1,11 +1,11 @@
 {
-  "name": "Awsaml",
+  "name": "awsaml",
   "version": "0.1.0",
-  "description": "Periodically local refreshes AWS access keys",
+  "description": "Periodically refreshes AWS access keys",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "app": "./node_modules/.bin/electron ."
+    "app": "electron ."
   },
   "dependencies": {
     "aws-sdk": "2.2.11",
@@ -23,8 +23,5 @@
     "react-dom": "0.14.1",
     "xmldom": "0.1.19",
     "xpath.js": "1.0.6"
-  },
-  "devDependencies": {
-    "electron-prebuilt": "0.34.1"
   }
 }
