@@ -7,7 +7,7 @@
     "start": "node app.js",
     "app": "electron .",
     "prebuild": "rm -rf dist/",
-    "build": "electron-packager . Awsaml --asar --ignore=dist --out=dist --platform=all --arch=x64 --version=0.34.1 --app-version=${npm_package_version} --app-bundle-id=com.rapid7.awsaml --helper-bundle-id=com.rapid7.awsaml.helper",
+    "build": "electron-packager . Awsaml --asar --ignore=node_modules/electron --ignore=dist --out=dist --platform=all --arch=x64 --version=0.34.1 --app-version=${npm_package_version} --app-bundle-id=com.rapid7.awsaml --helper-bundle-id=com.rapid7.awsaml.helper",
     "postbuild": "export platform=darwin; npm run zip & export platform=linux; npm run zip & export platform=win32; npm run zip",
     "zip": "cd dist/Awsaml-${platform}-x64 && zip -q -FS -r ../awsaml-v${npm_package_version}-${platform}-x64.zip ."
   },
@@ -27,5 +27,9 @@
     "react-dom": "0.14.1",
     "xmldom": "0.1.19",
     "xpath.js": "1.0.6"
+  },
+  "devDependencies": {
+    "electron-prebuilt": "0.34.2",
+    "electron-packager": "5.1.1"
   }
 }
