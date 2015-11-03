@@ -1,5 +1,4 @@
 node_modules/
+dist/
 *.log
-Awsaml-darwin-x64/
-*.zip
 .DS_Store
