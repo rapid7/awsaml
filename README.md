@@ -111,7 +111,7 @@ following attributes.
 ### Attribute Statements
 
 | Name                                                   | Name Format | Value                                 |
-|--------------------------------------------------------|-----------------------------------------------------|
+|--------------------------------------------------------|-------------|---------------------------------------|
 | https://aws.amazon.com/SAML/Attributes/Role            | Unspecified | arn:aws:iam:role,arn:aws:iam:provider |
 | https://aws.amazon.com/SAML/Attributes/RoleSessionName | Unspecified | ${user.email}                         |
 
