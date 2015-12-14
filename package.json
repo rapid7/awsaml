@@ -4,7 +4,7 @@
   "description": "Periodically refreshes AWS access keys",
   "main": "app.js",
   "scripts": {
-    "debug": "./node_modules/.bin/electron . --debug",
+    "debug": "electron . --debug",
     "start": "node app.js",
     "app": "electron .",
     "prebuild": "rm -rf dist/",
