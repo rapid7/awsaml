@@ -1,0 +1,12 @@
+{
+  "server": {
+    "host": "localhost",
+    "port": 2600
+  },
+  "auth": {
+    "path": "/sso/saml"
+  },
+  "aws": {
+    "duration": 3600
+  }
+}
