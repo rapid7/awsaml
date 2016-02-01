@@ -1,6 +1,6 @@
 {
   "name": "awsaml",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Periodically refreshes AWS access keys",
   "license": "MIT",
   "repository": {
@@ -15,7 +15,10 @@
     "prebuild": "rm -rf dist/",
     "build": "electron-packager . Awsaml --asar --ignore=node_modules/electron --ignore=dist --out=dist --platform=all --arch=x64 --version=0.34.1 --app-version=${npm_package_version} --app-bundle-id=com.rapid7.awsaml --helper-bundle-id=com.rapid7.awsaml.helper",
     "postbuild": "export platform=darwin; npm run zip & export platform=linux; npm run zip & export platform=win32; npm run zip",
-    "zip": "cd dist/Awsaml-${platform}-x64 && zip -q -FS -r ../awsaml-v${npm_package_version}-${platform}-x64.zip ."
+    "zip": "cd dist/Awsaml-${platform}-x64 && zip -q -FS -r ../awsaml-v${npm_package_version}-${platform}-x64.zip .",
+    "awsaml-darwin": "cd dist/Awsaml-darwin-x64 && ./Awsaml",
+    "awsaml-linux": "cd dist/Awsaml-linux-x64 && ./Awsaml",
+    "awsaml-win32": "cd dist/Awsaml-win32-x64 && ./Awsaml"
   },
   "dependencies": {
     "aws-sdk": "2.2.11",
