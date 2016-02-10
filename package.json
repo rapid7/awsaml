@@ -15,7 +15,8 @@
     "prebuild": "rm -rf dist/",
     "build": "electron-packager . Awsaml --asar --ignore=node_modules/electron --ignore=dist --out=dist --platform=all --arch=x64 --version=0.34.1 --app-version=${npm_package_version} --app-bundle-id=com.rapid7.awsaml --helper-bundle-id=com.rapid7.awsaml.helper",
     "postbuild": "export platform=darwin; npm run zip & export platform=linux; npm run zip & export platform=win32; npm run zip",
-    "zip": "cd dist/Awsaml-${platform}-x64 && zip -q -FS -r ../awsaml-v${npm_package_version}-${platform}-x64.zip ."
+    "zip": "cd dist/Awsaml-${platform}-x64 && zip -q -FS -r ../awsaml-v${npm_package_version}-${platform}-x64.zip .",
+    "lint": "eslint *.js views/*/** lib/*/**"
   },
   "dependencies": {
     "aws-sdk": "2.2.11",
@@ -36,7 +37,12 @@
     "xpath.js": "1.0.6"
   },
   "devDependencies": {
+    "electron-packager": "5.1.1",
     "electron-prebuilt": "0.34.2",
-    "electron-packager": "5.1.1"
+    "eslint": "^1.10.3",
+    "eslint-config-airbnb": "^5.0.0",
+    "eslint-config-rapid7": "0.0.15",
+    "eslint-plugin-rapid7": "^5.0.1",
+    "eslint-plugin-react": "^3.16.1"
   }
 }

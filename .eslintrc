@@ -1,0 +1,6 @@
+{
+    "plugins": [
+        "rapid7"
+    ],
+    "extends": "rapid7"
+}
