@@ -4,7 +4,7 @@ const React = require('react');
 const DefaultLayout = require('./layouts/default');
 
 const propTypes = {
-  error: React.PropTypes.bool.isRequired,
+  error: React.PropTypes.string,
   title: React.PropTypes.string.isRequired,
   metadataUrl: React.PropTypes.string.isRequired
 };
