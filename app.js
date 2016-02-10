@@ -1,32 +1,39 @@
-var Application = require('app')
-var BrowserWindow = require('browser-window')
-var Storage = require('./lib/storage')
-var Server = require('./lib/server')
-var config = require('./config')
+'use strict';
 
-var mainWindow = null
+const Application = require('app');
+const BrowserWindow = require('browser-window');
+const Storage = require('./lib/storage');
+const Server = require('./lib/server');
+const config = require('./config');
 
-Application.commandLine.appendSwitch('disable-http-cache')
+const WindowWidth = 800;
+const WindowHeight = 700;
 
-Application.on('window-all-closed', function() {
-  Application.quit()
-})
+let mainWindow = null;
 
-Application.on('ready', function() {
-  require('./app-menu')
+Application.commandLine.appendSwitch('disable-http-cache');
 
-  var host = Server.get('host')
-  var port = Server.get('port')
-  Server.listen(port, host, function () {
-    console.log('Server listening on http://%s:%s', host, port)
-  })
+Application.on('window-all-closed', () => {
+  Application.quit();
+});
 
-  var lastWindowState = Storage.get('lastWindowState')
+Application.on('ready', () => {
+  require('./app-menu');
+
+  const host = Server.get('host');
+  const port = Server.get('port');
+
+  Server.listen(port, host, () => {
+    console.log('Server listening on http://%s:%s', host, port); // eslint-disable-line no-console
+  });
+
+  let lastWindowState = Storage.get('lastWindowState');
+
   if (lastWindowState === null) {
     lastWindowState = {
-      width: 800,
-      height: 700
-    }
+      width: WindowWidth,
+      height: WindowHeight
+    };
   }
 
   mainWindow = new BrowserWindow({
@@ -39,28 +46,29 @@ Application.on('ready', function() {
     'web-preferences': {
       'node-integration': false
     }
-  })
+  });
 
-  mainWindow.on('close', function () {
-    var bounds = mainWindow.getBounds()
+  mainWindow.on('close', () => {
+    const bounds = mainWindow.getBounds();
+
     Storage.set('lastWindowState', {
       x: bounds.x,
       y: bounds.y,
       width: bounds.width,
       height: bounds.height,
       version: 1
-    })
-  })
+    });
+  });
 
-  mainWindow.on('closed', function() {
-    mainWindow = null
-  })
+  mainWindow.on('closed', () => {
+    mainWindow = null;
+  });
 
-  mainWindow.loadUrl(Server.get('configureUrl'))
-  mainWindow.show()
+  mainWindow.loadUrl(Server.get('configureUrl'));
+  mainWindow.show();
 
-  setInterval(function () {
-    console.log('Reloading...')
-    mainWindow.loadUrl(Server.get('entryPointUrl'))
-  }, (config.aws.duration - 10) * 1000)
-})
+  setInterval(() => {
+    console.log('Reloading...'); // eslint-disable-line no-console
+    mainWindow.loadUrl(Server.get('entryPointUrl'));
+  }, (config.aws.duration - 10) * 1000); // eslint-disable-line rapid7/static-magic-numbers
+});
