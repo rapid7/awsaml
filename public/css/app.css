@@ -1,32 +1,52 @@
 html {
   height: 100%;
 }
+
 body {
   min-height: 100%;
   display: flex;
   align-items: center;
   background: rgb(249, 249, 249);
 }
+
 .col-centered {
   float: none;
   margin: 0 auto;
 }
+
 .rounded-6 {
   border-radius: 6px;
 }
+
 .wrapper {
   background: rgb(255, 255, 255);
   border: 1px solid rgb(203, 203, 203);
   padding: 30px;
   box-shadow: rgba(175, 175, 175, 0.2) 0px 1px 2px 0px;
   max-width: 640px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
+
 .logo {
   margin-bottom: 15px;
 }
+
 .content {
   background: rgb(249, 249, 249);
   border: 1px solid rgb(230, 230, 230);
   padding: 20px;
   word-wrap: break-word;
 }
+
+.env-var {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+}
+
+dd {
+  margin-bottom: 10px;
+}
+
+

@@ -9,7 +9,7 @@ const propTypes = {
   metadataUrl: React.PropTypes.string.isRequired
 };
 
-class Configure extends React.Component { // eslint-disable-line react/display-name
+class Configure extends React.Component {
   render() {
     let urlGroupClass = 'form-group';
 
@@ -49,5 +49,6 @@ class Configure extends React.Component { // eslint-disable-line react/display-n
 }
 
 Configure.propTypes = propTypes;
+Configure.displayName = 'Configure';
 
 module.exports = Configure;
