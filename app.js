@@ -7,7 +7,7 @@ const Server = require('./lib/server');
 const config = require('./config');
 
 const WindowWidth = 800;
-const WindowHeight = 700;
+const WindowHeight = 800;
 
 let mainWindow = null;
 
