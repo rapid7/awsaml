@@ -4,10 +4,10 @@ const React = require('react');
 
 const propTypes = {
   title: React.PropTypes.string.isRequired,
-  children: React.PropTypes.element.isRequired
+  children: React.PropTypes.object.isRequired
 };
 
-class DefaultLayout extends React.Component { // eslint-disable-line react/display-name
+class DefaultLayout extends React.Component {
   render() {
     return (
       <html lang='en'>
@@ -22,6 +22,7 @@ class DefaultLayout extends React.Component { // eslint-disable-line react/displ
             integrity='sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX'
             rel='stylesheet'
           />
+          <link href='https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.js' rel='stylesheet' />
           <link href='/css/app.css' rel='stylesheet' />
         </head>
         <body>
@@ -30,6 +31,7 @@ class DefaultLayout extends React.Component { // eslint-disable-line react/displ
               {this.props.children}
             </div>
           </div>
+          <script src='https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.js'></script>
         </body>
       </html>
     );
@@ -37,5 +39,6 @@ class DefaultLayout extends React.Component { // eslint-disable-line react/displ
 }
 
 DefaultLayout.propTypes = propTypes;
+DefaultLayout.displayName = 'DefaultLayout';
 
 module.exports = DefaultLayout;
