@@ -1,7 +1,9 @@
 'use strict';
 
-const Application = require('app');
-const BrowserWindow = require('browser-window');
+const electron = require('electron');
+const Application = electron.app;
+const BrowserWindow = electron.BrowserWindow;
+
 const Storage = require('./lib/storage');
 const Server = require('./lib/server');
 const config = require('./config');
@@ -64,11 +66,11 @@ Application.on('ready', () => {
     mainWindow = null;
   });
 
-  mainWindow.loadUrl(Server.get('configureUrl'));
+  mainWindow.loadURL(Server.get('configureUrl'));
   mainWindow.show();
 
   setInterval(() => {
     console.log('Reloading...'); // eslint-disable-line no-console
-    mainWindow.loadUrl(Server.get('entryPointUrl'));
+    mainWindow.loadURL(Server.get('entryPointUrl'));
   }, (config.aws.duration - 10) * 1000); // eslint-disable-line rapid7/static-magic-numbers
 });

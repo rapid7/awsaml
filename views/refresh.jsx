@@ -1,7 +1,9 @@
 const React = require('react');
 const DefaultLayout = require('./layouts/default');
+const Error = require('./error');
 
 const propTypes = {
+  error: React.PropTypes.string,
   title: React.PropTypes.string.isRequired,
   accountId: React.PropTypes.string.isRequired,
   accessKey: React.PropTypes.string.isRequired,
@@ -11,6 +13,12 @@ const propTypes = {
 };
 
 class Refresh extends React.Component {
+  get errorMessage() {
+    if (this.props.error) {
+      return <Error msg={this.props.error} />;
+    }
+    return '';
+  }
 
   get platform() {
     return this.props.platform;
@@ -37,6 +45,7 @@ class Refresh extends React.Component {
             src='https://rapid7.okta.com/bc/image/fileStoreRecord?id=fs011ume6fjY7HcEE0i8'
           />
           <div className='col-centered rounded-6 content'>
+            {this.errorMessage}
             <dl>
               <dt>Account ID:</dt>
               <dd>{this.props.accountId}</dd>

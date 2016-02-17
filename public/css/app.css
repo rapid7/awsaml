@@ -49,4 +49,6 @@ dd {
   margin-bottom: 10px;
 }
 
-
+.has-error .form-control, :invalid input {
+  border: 2px solid red;
+}
