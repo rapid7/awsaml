@@ -2,18 +2,31 @@
 
 const React = require('react');
 const DefaultLayout = require('./layouts/default');
+const Error = require('./error');
 
 const propTypes = {
   error: React.PropTypes.string,
   title: React.PropTypes.string.isRequired,
-  metadataUrl: React.PropTypes.string.isRequired
+  metadataUrl: React.PropTypes.string.isRequired,
+  metadataUrlValid: React.PropTypes.bool
 };
 
 class Configure extends React.Component {
+  get errorMessage() {
+    if (this.hasError()) {
+      return (!this.props.error) ? '' : <Error msg={this.props.error} />;
+    }
+    return '';
+  }
+
+  hasError() {
+    return (this.props.error || this.props.metadataUrlValid === false);
+  }
+
   render() {
     let urlGroupClass = 'form-group';
 
-    if (this.props.error) {
+    if (this.hasError()) {
       urlGroupClass += ' has-error';
     }
     return (
@@ -27,6 +40,7 @@ class Configure extends React.Component {
             <form method='post'>
               <fieldset>
                 <legend>Configure</legend>
+                {this.errorMessage}
                 <div className={urlGroupClass}>
                   <label htmlFor='metadataUrl'>SAML Metadata URL</label>
                   <input className='form-control'
