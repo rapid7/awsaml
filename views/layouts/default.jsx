@@ -22,7 +22,7 @@ class DefaultLayout extends React.Component {
             integrity='sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX'
             rel='stylesheet'
           />
-          <link href='https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.js' rel='stylesheet' />
+          <link href='https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.css' rel='stylesheet' />
           <link href='/css/app.css' rel='stylesheet' />
         </head>
         <body>

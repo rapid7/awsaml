@@ -16,6 +16,10 @@ class Refresh extends React.Component {
     return this.props.platform;
   }
 
+  get lang() {
+    return (this.platform === 'win32') ? 'language-batch' : 'language-bash';
+  }
+
   get term() {
     return (this.platform === 'win32') ? 'command prompt' : 'terminal';
   }
@@ -46,8 +50,8 @@ class Refresh extends React.Component {
             <div className='col-centered rounded-12 content env-var'>
               <p>Run these commands from a {this.term} to use the AWS CLI:</p>
               <pre>
-                <code className='language-powershell'>
-                  {this.export} AWS_PROFILE=awsaml-{this.props.accountId}<br/>
+                <code className={this.lang}>
+                  {this.export} AWS_PROFILE=awsaml-{this.props.accountId}{'\n'}
                   {this.export} AWS_DEFAULT_PROFILE=awsaml-{this.props.accountId}
                 </code>
               </pre>
