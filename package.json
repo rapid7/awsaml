@@ -7,6 +7,9 @@
     "type": "git",
     "url": "https://github.com/rapid7/awsaml.git"
   },
+  "bugs": {
+    "url": "https://github.com/rapid7/awsaml/issues"
+  },
   "main": "app.js",
   "scripts": {
     "debug": "electron . --debug",
