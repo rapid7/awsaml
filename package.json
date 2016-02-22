@@ -1,11 +1,14 @@
 {
   "name": "awsaml",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Periodically refreshes AWS access keys",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/rapid7/awsaml.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rapid7/awsaml/issues"
   },
   "main": "app.js",
   "scripts": {
