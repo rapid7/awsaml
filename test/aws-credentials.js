@@ -4,7 +4,7 @@ const AwsCredentials = require('../lib/aws-credentials');
 const should = require('should');
 
 describe('AwsCredentials#saveAsIniFile', function () {
-  it("returns an error if credentials aren't given", function (done) {
+  it('returns an error when credentials are null', function (done) {
     const aws = new AwsCredentials();
 
     aws.saveAsIniFile(null, 'profile', (error, data) => {
@@ -14,7 +14,7 @@ describe('AwsCredentials#saveAsIniFile', function () {
     });
   });
 
-  it("returns an error if a profile isn't given", function (done) {
+  it('returns an error when profile is null', function (done) {
     const aws = new AwsCredentials();
 
     aws.saveAsIniFile({}, null, (error, data) => {
@@ -24,7 +24,7 @@ describe('AwsCredentials#saveAsIniFile', function () {
     });
   });
 
-  it("returns an error if a $HOME path isn't resolved", function (done) {
+  it('returns an error when $HOME path is unresolved', function (done) {
     const aws = new AwsCredentials();
 
     delete process.env.HOME;
