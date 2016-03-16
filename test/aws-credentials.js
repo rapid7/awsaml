@@ -22,8 +22,7 @@ describe('AwsCredentials#saveAsIniFile', function () {
   it('returns an error when credentials are null', function (done) {
     const aws = new AwsCredentials();
 
-    aws.saveAsIniFile(null, 'profile', (error, data) => {
-      should(data).be.undefined();
+    aws.saveAsIniFile(null, 'profile', (error) => {
       error.toString().should.not.eql('');
       done();
     });
@@ -32,8 +31,7 @@ describe('AwsCredentials#saveAsIniFile', function () {
   it('returns an error when profile is null', function (done) {
     const aws = new AwsCredentials();
 
-    aws.saveAsIniFile({}, null, (error, data) => {
-      should(data).be.undefined();
+    aws.saveAsIniFile({}, null, (error) => {
       error.toString().should.not.eql('');
       done();
     });
@@ -47,8 +45,7 @@ describe('AwsCredentials#saveAsIniFile', function () {
     delete process.env.HOMEPATH;
     delete process.env.HOMEDRIVE;
 
-    aws.saveAsIniFile({}, 'profile', (error, data) => {
-      should(data).be.undefined();
+    aws.saveAsIniFile({}, 'profile', (error) => {
       error.toString().should.not.eql('');
       done();
     });
@@ -59,8 +56,7 @@ describe('AwsCredentials#saveAsIniFile', function () {
 
     process.env.HOME = '';
 
-    aws.saveAsIniFile({}, 'profile', (error, data) => {
-      should(data).be.undefined();
+    aws.saveAsIniFile({}, 'profile', (error) => {
       error.toString().should.not.eql('');
       done();
     });
