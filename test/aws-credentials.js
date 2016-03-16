@@ -38,6 +38,18 @@ describe('AwsCredentials#saveAsIniFile', function () {
       done();
     });
   });
+
+  it('returns an error when $HOME path is empty', function (done) {
+    const aws = new AwsCredentials();
+
+    process.env.HOME = '';
+
+    aws.saveAsIniFile({}, 'profile', (error, data) => {
+      should(data).be.undefined();
+      error.toString().should.not.eql('');
+      done();
+    });
+  });
 });
 
 describe('AwsCredentials#resolveHomePath', function () {
