@@ -2,8 +2,23 @@
 
 const AwsCredentials = require('../lib/aws-credentials');
 const should = require('should');
+const Path = require('path');
+const FS = require('fs');
 
 describe('AwsCredentials#saveAsIniFile', function () {
+  const awsFolder = Path.resolve(__dirname, '.aws');
+  const awsCredentials = Path.resolve(awsFolder, 'credentials');
+
+  beforeEach(function () {
+    if (FS.existsSync(awsCredentials)) {
+      FS.unlinkSync(awsCredentials);
+    }
+
+    if (FS.existsSync(awsFolder)) {
+      FS.rmdirSync(awsFolder);
+    }
+  });
+
   it('returns an error when credentials are null', function (done) {
     const aws = new AwsCredentials();
 
@@ -47,6 +62,18 @@ describe('AwsCredentials#saveAsIniFile', function () {
     aws.saveAsIniFile({}, 'profile', (error, data) => {
       should(data).be.undefined();
       error.toString().should.not.eql('');
+      done();
+    });
+  });
+
+  it('creates a $HOME/.aws folder when none exists', function (done) {
+    const aws = new AwsCredentials();
+
+    process.env.HOME = __dirname;
+
+    aws.saveAsIniFile({}, 'profile', (error) => {
+      should(FS.existsSync(awsFolder)).be.true();
+      should(error).be.null();
       done();
     });
   });
