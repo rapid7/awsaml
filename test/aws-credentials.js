@@ -3,6 +3,43 @@
 const AwsCredentials = require('../lib/aws-credentials');
 const should = require('should');
 
+describe('AwsCredentials#saveAsIniFile', function () {
+  it("returns an error if credentials aren't given", function (done) {
+    const aws = new AwsCredentials();
+
+    aws.saveAsIniFile(null, 'profile', (error, data) => {
+      should(data).be.undefined();
+      error.toString().should.not.eql('');
+      done();
+    });
+  });
+
+  it("returns an error if a profile isn't given", function (done) {
+    const aws = new AwsCredentials();
+
+    aws.saveAsIniFile({}, null, (error, data) => {
+      should(data).be.undefined();
+      error.toString().should.not.eql('');
+      done();
+    });
+  });
+
+  it("returns an error if a $HOME path isn't resolved", function (done) {
+    const aws = new AwsCredentials();
+
+    delete process.env.HOME;
+    delete process.env.USERPROFILE;
+    delete process.env.HOMEPATH;
+    delete process.env.HOMEDRIVE;
+
+    aws.saveAsIniFile({}, 'profile', (error, data) => {
+      should(data).be.undefined();
+      error.toString().should.not.eql('');
+      done();
+    });
+  });
+});
+
 describe('AwsCredentials#resolveHomePath', function () {
   beforeEach(function () {
     delete process.env.HOME;
