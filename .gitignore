@@ -1,5 +1,6 @@
 node_modules/
 dist/
+test/.aws/
 *.log
 .DS_Store
 test/data/test.json
