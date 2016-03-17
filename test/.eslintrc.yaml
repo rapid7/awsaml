@@ -1,0 +1,8 @@
+---
+env:
+  mocha: true
+rules:
+  # Arrow functions are discouraged since they can't access the Mocha context.
+  # https://mochajs.org/#arrow-functions
+  func-names: 0
+  prefer-arrow-callback: 0
