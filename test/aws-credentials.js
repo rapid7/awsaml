@@ -73,6 +73,18 @@ describe('AwsCredentials#saveAsIniFile', function () {
       done();
     });
   });
+
+  it('creates a $HOME/.aws folder with 0700 permissions', function (done) {
+    const aws = new AwsCredentials();
+
+    process.env.HOME = __dirname;
+
+    aws.saveAsIniFile({}, 'profile', (error) => {
+      should(FS.statSync(awsFolder).mode & 0x0700).eql(256);
+      should(error).be.null();
+      done();
+    });
+  });
 });
 
 describe('AwsCredentials#resolveHomePath', function () {
