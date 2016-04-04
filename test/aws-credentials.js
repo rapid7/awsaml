@@ -104,6 +104,24 @@ describe('AwsCredentials#saveAsIniFile', function () {
       done();
     });
   });
+
+  it('saves the secret key in the credentials file', function (done) {
+    const aws = new AwsCredentials();
+    const credentials = {
+      SecretAccessKey: 'SecretAccessKey'
+    };
+
+    process.env.HOME = __dirname;
+
+    aws.saveAsIniFile(credentials, 'profile', (error) => {
+      const data = FS.readFileSync(awsCredentials, 'utf-8');
+      const config = ini.parse(data);
+
+      should(error).be.null();
+      should(config.profile.aws_secret_access_key).eql(credentials.SecretAccessKey);
+      done();
+    });
+  });
 });
 
 describe('AwsCredentials#resolveHomePath', function () {
