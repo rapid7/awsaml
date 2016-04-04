@@ -4,6 +4,7 @@ const AwsCredentials = require('../lib/aws-credentials');
 const should = require('should');
 const Path = require('path');
 const FS = require('fs');
+const ini = require('ini');
 
 describe('AwsCredentials#saveAsIniFile', function () {
   const awsFolder = Path.resolve(__dirname, '.aws');
@@ -82,6 +83,24 @@ describe('AwsCredentials#saveAsIniFile', function () {
     aws.saveAsIniFile({}, 'profile', (error) => {
       should(FS.statSync(awsFolder).mode & 0x0700).eql(256);
       should(error).be.null();
+      done();
+    });
+  });
+
+  it('saves the access key in the credentials file', function (done) {
+    const aws = new AwsCredentials();
+    const credentials = {
+      AccessKeyId: 'AccessKeyId'
+    };
+
+    process.env.HOME = __dirname;
+
+    aws.saveAsIniFile(credentials, 'profile', (error) => {
+      const data = FS.readFileSync(awsCredentials, 'utf-8');
+      const config = ini.parse(data);
+
+      should(error).be.null();
+      should(config.profile.aws_access_key_id).eql(credentials.AccessKeyId);
       done();
     });
   });
