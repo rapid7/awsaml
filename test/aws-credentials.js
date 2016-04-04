@@ -140,6 +140,24 @@ describe('AwsCredentials#saveAsIniFile', function () {
       done();
     });
   });
+
+  it('saves the session token as a security token in the credentials file', function (done) {
+    const aws = new AwsCredentials();
+    const credentials = {
+      SessionToken: 'SessionToken'
+    };
+
+    process.env.HOME = __dirname;
+
+    aws.saveAsIniFile(credentials, 'profile', (error) => {
+      const data = FS.readFileSync(awsCredentials, 'utf-8');
+      const config = ini.parse(data);
+
+      should(error).be.null();
+      should(config.profile.aws_security_token).eql(credentials.SessionToken);
+      done();
+    });
+  });
 });
 
 describe('AwsCredentials#resolveHomePath', function () {
