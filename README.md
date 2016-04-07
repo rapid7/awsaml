@@ -40,7 +40,7 @@ need to create a SAML 2.0 application in Okta with the following settings
 | Single Sign On URL         | http://localhost:2600/sso/saml         |
 | Recipient URL              | http://localhost:2600/sso/saml         |
 | Destination URL            | http://localhost:2600/sso/saml         |
-| Audience Restriction       | http://localhost:2600/sso/smal         |
+| Audience Restriction       | http://localhost:2600/sso/saml         |
 | Default Relay State        |                                        |
 | Name ID Format             | EmailAddress                           |
 | Response                   | Signed                                 |
