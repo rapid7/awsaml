@@ -158,6 +158,44 @@ describe('AwsCredentials#saveAsIniFile', function () {
       done();
     });
   });
+
+  it('keeps existing profiles', function (done) {
+    const aws = new AwsCredentials();
+    const credentials1 = {
+      AccessKeyId: 'AccessKeyId1',
+      SecretAccessKey: 'SecretAccessKey1',
+      SessionToken: 'SessionToken1'
+    };
+    const credentials2 = {
+      AccessKeyId: 'AccessKeyId2',
+      SecretAccessKey: 'SecretAccessKey2',
+      SessionToken: 'SessionToken2'
+    };
+
+    process.env.HOME = __dirname;
+
+    aws.saveAsIniFile(credentials1, 'profile1', () => {
+      aws.saveAsIniFile(credentials2, 'profile2', () => {
+        const data = FS.readFileSync(awsCredentials, 'utf-8');
+        const config = ini.parse(data);
+
+        should(config.profile1).eql({
+          aws_access_key_id: credentials1.AccessKeyId,
+          aws_secret_access_key: credentials1.SecretAccessKey,
+          aws_session_token: credentials1.SessionToken,
+          aws_security_token: credentials1.SessionToken
+        });
+        should(config.profile2).eql({
+          aws_access_key_id: credentials2.AccessKeyId,
+          aws_secret_access_key: credentials2.SecretAccessKey,
+          aws_session_token: credentials2.SessionToken,
+          aws_security_token: credentials2.SessionToken
+        });
+
+        done();
+      });
+    });
+  });
 });
 
 describe('AwsCredentials#resolveHomePath', function () {
