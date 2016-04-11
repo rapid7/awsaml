@@ -65,8 +65,8 @@ class Refresh extends React.Component {
                 </code>
               </pre>
             </div>
-            <a className='btn btn-default' href='/refresh' role='button'>Refresh</a>
-            <a className='btn btn-default' href='/logout' role='button'>Logout</a>
+            <a className='btn btn-default button-margin' href='/refresh' role='button'>Refresh</a>
+            <a className='btn btn-default button-margin' href='/logout' role='button'>Logout</a>
           </div>
         </div>
       </DefaultLayout>
