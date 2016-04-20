@@ -52,3 +52,7 @@ dd {
 .has-error .form-control, :invalid input {
   border: 2px solid red;
 }
+
+.button-margin {
+  margin-left: 10px;
+}
