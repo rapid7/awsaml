@@ -45,8 +45,8 @@ Application.on('ready', () => {
     width: lastWindowState.width,
     height: lastWindowState.height,
     show: false,
-    'web-preferences': {
-      'node-integration': false
+    'webPreferences': {
+      'nodeIntegration': false
     }
   });
 
