@@ -3,10 +3,13 @@
 const electron = require('electron');
 const Application = electron.app;
 const BrowserWindow = electron.BrowserWindow;
-
-const Storage = require('./lib/storage');
+const app = require('app');
+const path = require('path');
 const Server = require('./lib/server');
 const config = require('./config');
+const storagePath = path.join(app.getPath('userData'), 'data.json');
+
+global.Storage = require('./lib/storage')(storagePath);
 
 const WindowWidth = 800;
 const WindowHeight = 800;
@@ -45,8 +48,8 @@ Application.on('ready', () => {
     width: lastWindowState.width,
     height: lastWindowState.height,
     show: false,
-    'webPreferences': {
-      'nodeIntegration': false
+    webPreferences: {
+      nodeIntegration: false
     }
   });
 
@@ -73,5 +76,6 @@ Application.on('ready', () => {
     console.log('Reloading...'); // eslint-disable-line no-console
     mainWindow.loadURL(Server.get('entryPointUrl'));
   }, (config.aws.duration - 10) * 1000); // eslint-disable-line rapid7/static-magic-numbers
+
   Server.set('tokenRefreshInterval', tokenRefreshInterval);
 });
