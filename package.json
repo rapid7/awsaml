@@ -12,9 +12,9 @@
   },
   "main": "app.js",
   "scripts": {
-    "debug": "electron . --debug",
-    "start": "node app.js",
-    "app": "electron .",
+    "electron-debug": "electron . --debug",
+    "electron-start": "electron .",
+    "local-start": "node local.js",
     "prebuild": "rm -rf dist/",
     "build": "electron-packager . Awsaml --asar --ignore=node_modules/electron --ignore=dist --out=dist --platform=darwin,linux,win32 --arch=x64 --version=0.37.8 --app-version=${npm_package_version} --app-bundle-id=com.rapid7.awsaml --helper-bundle-id=com.rapid7.awsaml.helper",
     "postbuild": "export platform=darwin; npm run zip & export platform=linux; npm run zip & export platform=win32; npm run zip",
