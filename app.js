@@ -73,8 +73,12 @@ Application.on('ready', () => {
   mainWindow.show();
 
   const tokenRefreshInterval = setInterval(() => {
-    console.log('Reloading...'); // eslint-disable-line no-console
-    mainWindow.loadURL(Server.get('entryPointUrl'));
+    const entryPointUrl = Server.get('entryPointUrl');
+
+    if (entryPointUrl) {
+      console.log('Reloading...'); // eslint-disable-line no-console
+      mainWindow.loadURL(entryPointUrl);
+    }
   }, (config.aws.duration - 10) * 1000); // eslint-disable-line rapid7/static-magic-numbers
 
   Server.set('tokenRefreshInterval', tokenRefreshInterval);
