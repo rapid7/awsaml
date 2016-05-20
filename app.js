@@ -72,10 +72,12 @@ Application.on('ready', () => {
   mainWindow.loadURL(Server.get('configureUrl'));
   mainWindow.show();
 
-  const tokenRefreshInterval = setInterval(() => {
-    console.log('Reloading...'); // eslint-disable-line no-console
-    mainWindow.loadURL(Server.get('entryPointUrl'));
-  }, (config.aws.duration - 10) * 1000); // eslint-disable-line rapid7/static-magic-numbers
+  setInterval(() => {
+    const entryPointUrl = Server.get('entryPointUrl');
 
-  Server.set('tokenRefreshInterval', tokenRefreshInterval);
+    if (entryPointUrl) {
+      console.log('Reloading...'); // eslint-disable-line no-console
+      mainWindow.loadURL(entryPointUrl);
+    }
+  }, (config.aws.duration - 10) * 1000); // eslint-disable-line rapid7/static-magic-numbers
 });
