@@ -49,6 +49,7 @@
     "eslint-plugin-rapid7": "^5.0.1",
     "eslint-plugin-react": "^3.16.1",
     "mocha": "^2.4.5",
-    "should": "^8.2.2"
+    "should": "^8.2.2",
+    "typings": "^1.0.4"
   }
 }
