@@ -1,7 +1,4 @@
 {
   "parser":"babel-eslint",
-  "extends": "rapid7",
-  "env": {
-    "es6": true
-  }
+  "extends": "rapid7/base"
 }
