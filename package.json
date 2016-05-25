@@ -20,7 +20,9 @@
     "postbuild": "export platform=darwin; npm run zip & export platform=linux; npm run zip & export platform=win32; npm run zip",
     "zip": "cd dist/Awsaml-${platform}-x64 && zip -q -FS -r ../awsaml-v${npm_package_version}-${platform}-x64.zip .",
     "test": "mocha",
-    "lint": "eslint *.js views/*/** lib/*/** test/**"
+    "lint": "eslint *.js views/*/** lib/*/** test/**",
+    "watch": "webpack-dev-server",
+    "pack": "webpack --progress --colors --config=webpack.config.pack.js"
   },
   "dependencies": {
     "aws-sdk": "2.2.11",
