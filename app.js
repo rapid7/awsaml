@@ -3,11 +3,10 @@
 const electron = require('electron');
 const Application = electron.app;
 const BrowserWindow = electron.BrowserWindow;
-const app = require('app');
 const path = require('path');
 const Server = require('./lib/server');
 const config = require('./config');
-const storagePath = path.join(app.getPath('userData'), 'data.json');
+const storagePath = path.join(Application.getPath('userData'), 'data.json');
 
 global.Storage = require('./lib/storage')(storagePath);
 
