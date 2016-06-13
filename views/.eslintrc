@@ -1,0 +1,7 @@
+{
+  "parser":"babel-eslint",
+  "extends": "rapid7",
+  "ecmaFeatures": {
+    "jsx": true
+  }
+}

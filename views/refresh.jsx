@@ -40,7 +40,8 @@ class Refresh extends React.Component {
     return (
       <DefaultLayout title={this.props.title}>
         <div className='col-centered rounded-6 wrapper'>
-          <img alt='Rapid7'
+          <img
+            alt='Rapid7'
             className='logo'
             src='https://rapid7.okta.com/bc/image/fileStoreRecord?id=fs011ume6fjY7HcEE0i8'
           />

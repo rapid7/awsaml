@@ -1,5 +1,3 @@
-'use strict';
-
 const React = require('react');
 const DefaultLayout = require('./layouts/default');
 const Error = require('./error');
@@ -32,7 +30,8 @@ class Configure extends React.Component {
     return (
       <DefaultLayout title={this.props.title}>
         <div className='col-centered rounded-6 wrapper'>
-          <img alt='Rapid7'
+          <img
+            alt='Rapid7'
             className='logo'
             src='https://rapid7.okta.com/bc/image/fileStoreRecord?id=fs011ume6fjY7HcEE0i8'
           />
@@ -43,7 +42,8 @@ class Configure extends React.Component {
                 {this.errorMessage}
                 <div className={urlGroupClass}>
                   <label htmlFor='metadataUrl'>SAML Metadata URL</label>
-                  <input className='form-control'
+                  <input
+                    className='form-control'
                     defaultValue={this.props.metadataUrl}
                     id='metadataUrl'
                     name='metadataUrl'

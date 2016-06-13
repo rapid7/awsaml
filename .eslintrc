@@ -1,6 +1,4 @@
 {
-    "plugins": [
-        "rapid7"
-    ],
-    "extends": "rapid7"
+  "parser":"babel-eslint",
+  "extends": "rapid7/base"
 }

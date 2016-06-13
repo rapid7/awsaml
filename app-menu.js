@@ -1,7 +1,8 @@
 'use strict';
 
-const Menu = require('menu');
-const Application = require('app');
+const electron = require('electron');
+const Menu = electron.Menu;
+const Application = electron.app;
 
 const template = [{
   label: 'Edit',
