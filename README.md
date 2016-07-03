@@ -198,6 +198,7 @@ make sure you've got a compatible versions installed. Then run NPM to install
 dependencies and build Awsaml.
 
 ~~~bash
+rm -rf node_modules/
 npm install --production
 npm run build
 ~~~
