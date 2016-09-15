@@ -205,6 +205,11 @@ npm run build
 
 Those commnds will create a "dist" folder with zipped binaries.
 
+## Setup on OSX with Homebrew
+A caskfile is bundled with the repository, to install Awsaml with brew simply run:
+
+`brew cask install https://raw.githubusercontent.com/rapid7/awsaml/add_caskfile/brew/cask/awsaml.rb`
+
 ## License
 
 Awsaml is licensed under a MIT License. See the "LICENSE.md" file for more
