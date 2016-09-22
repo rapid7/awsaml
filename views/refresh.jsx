@@ -47,16 +47,22 @@ class Refresh extends React.Component {
           />
           <div className='col-centered rounded-6 content'>
             {this.errorMessage}
-            <dl>
-              <dt>Account ID:</dt>
-              <dd>{this.props.accountId}</dd>
-              <dt>Access Key:</dt>
-              <dd>{this.props.accessKey}</dd>
-              <dt>Secret Key:</dt>
-              <dd>{this.props.secretKey}</dd>
-              <dt>Session Token:</dt>
-              <dd>{this.props.sessionToken}</dd>
-            </dl>
+            <details>
+              <summary>Account ID:</summary>
+              {this.props.accountId}
+            </details>
+            <details>
+              <summary>Access Key:</summary>
+              {this.props.accessKey}
+            </details>
+            <details>
+              <summary>Secret Key:</summary>
+              {this.props.secretKey}
+            </details>
+            <details>
+              <summary>Session Token:</summary>
+              {this.props.sessionToken}
+            </details>
             <div className='col-centered rounded-12 content env-var'>
               <p>Run these commands from a {this.term} to use the AWS CLI:</p>
               <pre>
