@@ -47,7 +47,7 @@ class Refresh extends React.Component {
           />
           <div className='col-centered rounded-6 content'>
             {this.errorMessage}
-            <details>
+            <details open>
               <summary>Account ID:</summary>
               <pre>{this.props.accountId}</pre>
             </details>
