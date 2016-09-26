@@ -48,11 +48,11 @@ class Refresh extends React.Component {
           <div className='col-centered rounded-6 content'>
             {this.errorMessage}
             <details open>
-              <summary>Account ID:</summary>
+              <summary>Account ID</summary>
               <pre>{this.props.accountId}</pre>
             </details>
             <details>
-              <summary>Access Key, Secret Key, and Session Token:</summary>
+              <summary>Credentials</summary>
               <dl>
                 <dt>Access Key:</dt>
                 <dd><pre>{this.props.accessKey}</pre></dd>
