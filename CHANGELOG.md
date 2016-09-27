@@ -2,6 +2,22 @@
 
 ## [Unreleased]
 
+## [1.3.0] - 2016-09-28
+### Added
+- Homebrew cask support by @fpedrini.
+- Tests for the AwsCredentials class by @onefrankguy.
+- Transpiler tooling to make frontend/backend splitting easier by @dgreene-r7.
+- .nvmrc file to pin to the latest LTS release by @davepgreene.
+
+### Changed
+- Credentials so they default to hidden in the UI by @erran.
+- Electron packaging so tests are excluded from releases by @onefrankguy.
+- Routes and server config to reside in their own source files by @davepgreene.
+
+### Fixed
+- Issue where empty storage files caused uncaught exceptions by @erran.
+- Issue where automatic token renewal failed after logout by @onefrankguy.
+
 ## [1.2.0] - 2016-05-13
 ### Added
 - Ability to run server backend locally without Electron by @dgreene-r7.
@@ -31,7 +47,8 @@
 ### Added
 - Initial release by @onefrankguy.
 
-[Unreleased]: https://github.com/rapid7/awsaml/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/rapid7/awsaml/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/rapid7/awsaml/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/rapid7/awsaml/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/rapid7/awsaml/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/rapid7/awsaml/tree/v1.0.0
