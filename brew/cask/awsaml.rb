@@ -4,7 +4,7 @@ cask 'awsaml' do
 
   url "https://github.com/rapid7/awsaml/releases/download/v#{version}/awsaml-v#{version}-darwin-x64.zip"
   appcast 'https://github.com/rapid7/awsaml/releases.atom',
-          checkpoint: '57a816fdd5e8a7013f4b011671867b6a9de10f80bd1e6e0872baedb955cc0498'
+          checkpoint: 'e6d9e30a41aa77bd8cd9248e4f58076d6820f3f733b92a1fa84284d4119aa4b5'
   name 'awsaml'
   homepage 'https://github.com/rapid7/awsaml'
   license :mit
