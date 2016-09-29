@@ -206,7 +206,7 @@ npm run build
 Those commnds will create a "dist" folder with zipped binaries.
 
 ## Setup on OSX with Homebrew
-A caskfile is bundled with the repository, to install Awsaml with brew simply run:
+A caskfile is bundled with the repository, to install Awsaml with [Homebrew][] simply run:
 
 `brew cask install https://raw.githubusercontent.com/rapid7/awsaml/master/brew/cask/awsaml.rb`
 
@@ -224,3 +224,4 @@ details.
 [NPM]: https://www.npmjs.com
 [saml-provider]: http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_saml.html
 [iam-role]: http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp_saml.html
+[Homebrew]: http://brew.sh/
