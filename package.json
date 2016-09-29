@@ -22,7 +22,8 @@
     "test": "mocha",
     "lint": "eslint *.js views/** lib/** test/**",
     "watch": "webpack-dev-server",
-    "pack": "webpack --progress --colors --config=webpack.config.pack.js"
+    "pack": "webpack --progress --colors --config=webpack.config.pack.js",
+    "show-appcast-checkpoint": "curl --compressed --location --user-agent 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36' 'https://github.com/rapid7/awsaml/releases.atom' | /usr/bin/sed 's|<pubDate>[^<]*</pubDate>||g' | shasum --algorithm 256"
   },
   "dependencies": {
     "aws-sdk": "2.2.11",
