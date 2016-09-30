@@ -5,3 +5,4 @@ test/.aws/
 .DS_Store
 test/data/test.json
 typings/
+coverage/

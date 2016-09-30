@@ -1,4 +1,6 @@
 # Awsaml
+[![Build Status](https://api.travis-ci.org/rapid7/awsaml.svg?branch=master)](https://travis-ci.org/rapid7/awsaml) [![Coverage Status](https://coveralls.io/repos/github/rapid7/awsaml/badge.svg?branch=master)](https://coveralls.io/github/rapid7/awsaml?branch=master)
+
 Awsaml is an application for providing automatically rotated temporary [AWS][]
 credentials. Credentials are stored in `~/.aws/credentials` so they can be used
 with AWS SDKs. Credentials are valid for one hour and are rotated every hour
