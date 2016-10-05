@@ -63,7 +63,7 @@ class Configure extends React.Component {
             </form>
             <div id='recent-logins'>
               <h4>Recent Logins</h4>
-              <ul id='recent-logins' className='list-group'>{
+              <ul className='list-group' id='recent-logins'>{
                 Object.keys(this.props.metadataUrls).map((key) => {
                   const pretty = this.props.metadataUrls[key];
                   const prettyId = `#${pretty}`;
@@ -75,13 +75,16 @@ class Configure extends React.Component {
 
                         <br/>
 
-                        <div className="input-group">
-                          <input id={pretty} className="form-control" readonly value={key}/>
-
-                          <span className="input-group-btn">
-                            <button className="btn btn-default copy-to-clipboard-button" data-clipboard-target={prettyId}>
-                              <span className="glyphicon glyphicon-copy"/>
-                            </button>
+                        <div className='input-group'>
+                          <input
+                            className='form-control' id={pretty}
+                            readonly value={key} // eslint-disable-line react/no-unknown-property
+                          />
+                          <span className='input-group-btn'>
+                            <button
+                              className='btn btn-default copy-to-clipboard-button'
+                              data-clipboard-target={prettyId}
+                            ><span className='glyphicon glyphicon-copy'/></button>
                           </span>
                         </div>
                       </details>

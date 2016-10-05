@@ -79,7 +79,6 @@ class Refresh extends React.Component {
     );
   }
 }
-
 Refresh.propTypes = propTypes;
 Refresh.displayName = 'Refresh';
 
