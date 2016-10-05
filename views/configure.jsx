@@ -78,7 +78,7 @@ class Configure extends React.Component {
                         <div className='input-group'>
                           <input
                             className='form-control' id={pretty}
-                            readonly value={key} // eslint-disable-line react/no-unknown-property
+                            readonly defaultValue={key} // eslint-disable-line react/no-unknown-property
                           />
                           <span className='input-group-btn'>
                             <button
