@@ -3,9 +3,9 @@ const DefaultLayout = require('./layouts/default');
 const Error = require('./error');
 
 const propTypes = {
+  defaultMetadataUrl: React.PropTypes.string.isRequired,
   error: React.PropTypes.string,
   title: React.PropTypes.string.isRequired,
-  metadataUrl: React.PropTypes.string.isRequired,
   metadataUrls: React.PropTypes.object.isRequired,
   metadataUrlValid: React.PropTypes.bool
 };
@@ -16,11 +16,6 @@ class Configure extends React.Component {
       return (!this.props.error) ? '' : <Error msg={this.props.error} />;
     }
     return '';
-  }
-
-  // @return the default metadata url to display. The metadataUrl property will be used if specified.
-  get defaultMetadataUrl() {
-    return this.props.metadataUrl || this.props.metadataUrls[0];
   }
 
   hasError() {
@@ -50,7 +45,7 @@ class Configure extends React.Component {
                   <label htmlFor='metadataUrl'>SAML Metadata URL</label>
                   <input
                     className='form-control'
-                    defaultValue={this.defaultMetadataUrl}
+                    defaultValue={this.props.defaultMetadataUrl}
                     id='metadataUrl'
                     name='metadataUrl'
                     pattern='https://.+'
