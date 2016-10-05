@@ -18,7 +18,8 @@ class Configure extends React.Component {
     return '';
   }
 
-  get previousMetadataUrl() {
+  // @return the default metadata url to display. The metadataUrl property will be used if specified.
+  get defaultMetadataUrl() {
     return this.props.metadataUrl || this.props.metadataUrls[0];
   }
 
@@ -49,7 +50,7 @@ class Configure extends React.Component {
                   <label htmlFor='metadataUrl'>SAML Metadata URL</label>
                   <input
                     className='form-control'
-                    defaultValue={this.previousMetadataUrl}
+                    defaultValue={this.defaultMetadataUrl}
                     id='metadataUrl'
                     name='metadataUrl'
                     pattern='https://.+'
