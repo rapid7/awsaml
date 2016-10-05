@@ -56,3 +56,11 @@ dd {
 .button-margin {
   margin-left: 10px;
 }
+
+.scrollable-list {
+  overflow-x: hidden;
+}
+
+#recent-logins .scrollable-list {
+  height: 150px;
+}

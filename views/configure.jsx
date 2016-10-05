@@ -63,7 +63,7 @@ class Configure extends React.Component {
             </form>
             <div id='recent-logins'>
               <h4>Recent Logins</h4>
-              <ul className='list-group' id='recent-logins'>{
+              <ul className='list-group scrollable-list' id='recent-logins'>{
                 Object.keys(this.props.metadataUrls).map((key) => {
                   const pretty = this.props.metadataUrls[key];
                   const prettyId = `#${pretty}`;
