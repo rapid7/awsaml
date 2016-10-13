@@ -3,9 +3,10 @@ const DefaultLayout = require('./layouts/default');
 const Error = require('./error');
 
 const propTypes = {
+  defaultMetadataUrl: React.PropTypes.string.isRequired,
   error: React.PropTypes.string,
   title: React.PropTypes.string.isRequired,
-  metadataUrl: React.PropTypes.string.isRequired,
+  metadataUrls: React.PropTypes.object.isRequired,
   metadataUrlValid: React.PropTypes.bool
 };
 
@@ -44,7 +45,7 @@ class Configure extends React.Component {
                   <label htmlFor='metadataUrl'>SAML Metadata URL</label>
                   <input
                     className='form-control'
-                    defaultValue={this.props.metadataUrl}
+                    defaultValue={this.props.defaultMetadataUrl}
                     id='metadataUrl'
                     name='metadataUrl'
                     pattern='https://.+'
@@ -52,9 +53,42 @@ class Configure extends React.Component {
                     type='url'
                   />
                 </div>
+
                 <button className='btn btn-default' type='submit'>Done</button>
               </fieldset>
             </form>
+            <div id='recent-logins'>
+              <h4>Recent Logins</h4>
+              <ul className='list-group scrollable-list' id='recent-logins'>{
+                Object.keys(this.props.metadataUrls).map((key) => {
+                  const pretty = this.props.metadataUrls[key];
+                  const prettyId = `#${pretty}`;
+
+                  return (
+                    <li className='list-group-item' key={key}>
+                      <details>
+                        <summary>{pretty}</summary>
+
+                        <br/>
+
+                        <div className='input-group'>
+                          <input
+                            className='form-control' defaultValue={key}
+                            id={pretty} readonly // eslint-disable-line react/no-unknown-property
+                          />
+                          <span className='input-group-btn'>
+                            <button
+                              className='btn btn-default copy-to-clipboard-button'
+                              data-clipboard-target={prettyId}
+                            ><span className='glyphicon glyphicon-copy'/></button>
+                          </span>
+                        </div>
+                      </details>
+                    </li>
+                  );
+                })
+              }</ul>
+            </div>
           </div>
         </div>
       </DefaultLayout>

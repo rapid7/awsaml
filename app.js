@@ -71,6 +71,9 @@ Application.on('ready', () => {
   mainWindow.loadURL(Server.get('configureUrl'));
   mainWindow.show();
 
+  // TODO: A global clipboard instance must be loaded. Investigate how to load it within the .jsx code.
+  mainWindow.webContents.executeJavaScript('new Clipboard(".copy-to-clipboard-button");');
+
   setInterval(() => {
     const entryPointUrl = Server.get('entryPointUrl');
 

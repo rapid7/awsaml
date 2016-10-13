@@ -32,6 +32,7 @@ const DefaultLayout = function render(props) {
             {props.children}
           </div>
         </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.12/clipboard.min.js"></script>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.js'></script>
       </body>
     </html>
