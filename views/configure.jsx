@@ -62,7 +62,7 @@ class Configure extends React.Component {
               <ul className='list-group scrollable-list' id='recent-logins'>{
                 Object.keys(this.props.metadataUrls).map((key) => {
                   const pretty = this.props.metadataUrls[key];
-                  const prettyId = `#${pretty}`;
+                  const urlSelector = `[name="${pretty}"]`;
 
                   return (
                     <li className='list-group-item' key={key}>
@@ -74,12 +74,12 @@ class Configure extends React.Component {
                         <div className='input-group'>
                           <input
                             className='form-control' defaultValue={key}
-                            id={pretty} readonly // eslint-disable-line react/no-unknown-property
+                            name={pretty} readonly // eslint-disable-line react/no-unknown-property
                           />
                           <span className='input-group-btn'>
                             <button
                               className='btn btn-default copy-to-clipboard-button'
-                              data-clipboard-target={prettyId}
+                              data-clipboard-target={urlSelector}
                             ><span className='glyphicon glyphicon-copy'/></button>
                           </span>
                         </div>
