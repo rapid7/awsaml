@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [1.4.0] - 2016-11-21
+### Added
+- :construction_worker: Enable TravisCI builds for continuous integration by @erran!
+- Support a list of "recent logins" on the configure page by @erran.
+
 ## [1.3.0] - 2016-09-28
 ### Added
 - Homebrew cask support by @fpedrini.
@@ -47,7 +52,8 @@
 ### Added
 - Initial release by @onefrankguy.
 
-[Unreleased]: https://github.com/rapid7/awsaml/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/rapid7/awsaml/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/rapid7/awsaml/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/rapid7/awsaml/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/rapid7/awsaml/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/rapid7/awsaml/compare/v1.0.0...v1.1.0
