@@ -205,7 +205,17 @@ npm install --production
 npm run build
 ~~~
 
-Those commnds will create a "dist" folder with zipped binaries.
+Those commnds will create a "dist" folder with zipped binaries. If you only want
+to create binaries for specific platforms, you can set a `PLATFORM` environment
+variable before building.
+
+~~~bash
+export PLATFORM=linux
+npm run build
+~~~
+
+Allowed values for `PLATFORM` are `darwin`, `linux` and `win32`. You can build
+binaries for multiple platforms by using a comma-delimited string.
 
 ## Setup on OSX with Homebrew
 A caskfile is bundled with the repository, to install Awsaml with [Homebrew][] simply run:
