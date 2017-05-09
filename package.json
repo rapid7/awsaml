@@ -46,7 +46,7 @@
     "passport": "0.3.0",
     "passport-saml": "0.13.0",
     "react": "^15.1.0",
-    "react-dom": "0.14.1",
+    "react-dom": "^15.5.4",
     "xmldom": "0.1.19",
     "xpath.js": "1.0.6"
   },
