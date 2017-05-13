@@ -42,6 +42,7 @@
     "morgan": "1.6.1",
     "passport": "0.3.0",
     "passport-saml": "0.13.0",
+    "prop-types": "^15.5.10",
     "react": "^15.1.0",
     "react-dom": "^15.5.4",
     "xmldom": "0.1.19",

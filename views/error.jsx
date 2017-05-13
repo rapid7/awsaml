@@ -1,7 +1,8 @@
 const React = require('react');
+const PropTypes = require('prop-types');
 
 const propTypes = {
-  msg: React.PropTypes.string.isRequired
+  msg: PropTypes.string.isRequired
 };
 
 const Error = function render(props) {

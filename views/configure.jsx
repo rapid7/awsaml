@@ -1,13 +1,14 @@
 const React = require('react');
+const PropTypes = require('prop-types');
 const DefaultLayout = require('./layouts/default');
 const Error = require('./error');
 
 const propTypes = {
-  defaultMetadataUrl: React.PropTypes.string.isRequired,
-  error: React.PropTypes.string,
-  title: React.PropTypes.string.isRequired,
-  metadataUrls: React.PropTypes.object.isRequired,
-  metadataUrlValid: React.PropTypes.bool
+  defaultMetadataUrl: PropTypes.string.isRequired,
+  error: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  metadataUrls: PropTypes.object.isRequired,
+  metadataUrlValid: PropTypes.bool
 };
 
 class Configure extends React.Component {
