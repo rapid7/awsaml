@@ -18,6 +18,7 @@ class Refresh extends React.Component {
     if (this.props.error) {
       return <Error msg={this.props.error} />;
     }
+
     return '';
   }
 
@@ -40,13 +41,13 @@ class Refresh extends React.Component {
   render() {
     return (
       <DefaultLayout title={this.props.title}>
-        <div className='col-centered rounded-6 wrapper'>
+        <div className="col-centered rounded-6 wrapper">
           <img
-            alt='Rapid7'
-            className='logo'
-            src='https://rapid7.okta.com/bc/image/fileStoreRecord?id=fs011ume6fjY7HcEE0i8'
+            alt="Rapid7"
+            className="logo"
+            src="https://rapid7.okta.com/bc/image/fileStoreRecord?id=fs011ume6fjY7HcEE0i8"
           />
-          <div className='col-centered rounded-6 content'>
+          <div className="col-centered rounded-6 content">
             {this.errorMessage}
             <details open>
               <summary>Account ID</summary>
@@ -63,7 +64,7 @@ class Refresh extends React.Component {
                 <dd><pre>{this.props.sessionToken}</pre></dd>
               </dl>
             </details>
-            <div className='col-centered rounded-12 content env-var'>
+            <div className="col-centered rounded-12 content env-var">
               <p>Run these commands from a {this.term} to use the AWS CLI:</p>
               <pre>
                 <code className={this.lang}>
@@ -72,8 +73,16 @@ class Refresh extends React.Component {
                 </code>
               </pre>
             </div>
-            <a className='btn btn-default button-margin' href='/refresh' role='button'>Refresh</a>
-            <a className='btn btn-danger button-margin' href='/logout' role='button'>Logout</a>
+            <a
+              className="btn btn-default button-margin"
+              href="/refresh"
+              role="button"
+            >Refresh</a>
+            <a
+              className="btn btn-danger button-margin"
+              href="/logout"
+              role="button"
+            >Logout</a>
           </div>
         </div>
       </DefaultLayout>
