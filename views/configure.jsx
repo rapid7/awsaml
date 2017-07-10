@@ -67,7 +67,21 @@ class Configure extends React.Component {
                   return (
                     <li className='list-group-item' key={key}>
                       <details>
-                        <summary>{pretty}</summary>
+                        <summary>{pretty}
+                          <form className='login-button' method='post'>
+                            <input
+                              className='form-control'
+                              id='metadataUrl'
+                              name='metadataUrl'
+                              type='hidden'
+                              value={key}
+                            />
+                            <span>
+                              <button className='btn btn-default' type='submit'>Login</button>
+                            </span>
+                          </form>
+
+                        </summary>
 
                         <br/>
 

@@ -64,3 +64,13 @@ dd {
 #recent-logins .scrollable-list {
   height: 150px;
 }
+
+summary {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+.login-button {
+  margin-left: auto;
+}
