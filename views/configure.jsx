@@ -69,7 +69,9 @@ class Configure extends React.Component {
                       <form method='post'>
                         <details>
                           <summary>
-                            <input name='profileName' type='text' value={pretty} />
+                            <div className='profile'>
+                              <input className='form-control' name='profileName' type='text' value={pretty} />
+                            </div>
                             <input
                               className='form-control'
                               id='metadataUrl'
