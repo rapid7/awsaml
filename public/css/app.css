@@ -74,3 +74,9 @@ summary {
 .login-button {
   margin-left: auto;
 }
+
+div.profile {
+  width: 80%;
+  height: 2.5em;
+  line-height: 2.5em;
+}
