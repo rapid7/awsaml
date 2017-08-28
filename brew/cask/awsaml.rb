@@ -7,7 +7,6 @@ cask 'awsaml' do
           checkpoint: '3d2a662d80c619406bac6682158d8b89320b9d5359863cfbeddd574b00019e9a'
   name 'awsaml'
   homepage 'https://github.com/rapid7/awsaml'
-  license :mit
 
   app 'Awsaml.app'
 end
