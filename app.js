@@ -7,6 +7,8 @@ const path = require('path');
 const Server = require('./lib/server');
 const config = require('./config');
 const storagePath = path.join(Application.getPath('userData'), 'data.json');
+const TouchBar = electron.TouchBar
+const {TouchBarLabel, TouchBarButton, TouchBarSpacer} = electron.TouchBar
 
 global.Storage = require('./lib/storage')(storagePath);
 
@@ -69,6 +71,22 @@ Application.on('ready', () => {
   });
 
   mainWindow.loadURL(Server.get('configureUrl'));
+  const refreshButton = new TouchBarButton({
+    label: '♻️ Refresh',
+    backgroundColor: '#595959',
+    click: () => {
+      mainWindow.loadURL(Server.get('refreshUrl'))
+    }
+  });
+  const logoutButton = new TouchBarButton({
+    label: '😴 Logout',
+    backgroundColor: '#d43f3a',
+    click: () => {
+      mainWindow.loadURL(Server.get('logoutUrl'))
+    }
+  });
+  const touchbar = new TouchBar([refreshButton, new TouchBarSpacer({size: 'small'}),, logoutButton]);
+  mainWindow.setTouchBar(touchbar);
   mainWindow.show();
 
   // TODO: A global clipboard instance must be loaded. Investigate how to load it within the .jsx code.
