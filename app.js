@@ -86,6 +86,7 @@ Application.on('ready', () => {
     }
   });
   const touchbar = new TouchBar([refreshButton, new TouchBarSpacer({size: 'small'}),, logoutButton]);
+
   mainWindow.setTouchBar(touchbar);
   mainWindow.show();
 
