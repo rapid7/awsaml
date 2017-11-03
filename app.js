@@ -23,7 +23,7 @@ const buttonForProfileWithUrl = (browserWindow, profile, url) => {
     backgroundColor: '#3B86CE',
     click: () => {
       browserWindow.loadURL(Server.get('configureUrl'), {
-        postData: [{ type: 'rawData', bytes: Buffer.from(`metadataUrl=${url}`) }],
+        postData: [{type: 'rawData', bytes: Buffer.from(`metadataUrl=${url}`)}],
         extraHeaders: 'Content-Type: application/x-www-form-urlencoded'
       });
     }
@@ -44,8 +44,8 @@ const loadTouchBar = (browserWindow) => {
   const touchbar = new TouchBar({
     items: [
       refreshButton,
-      new TouchBarGroup({ items: profileButtons.slice(0, 3) }),
-      new TouchBarSpacer({ size: 'flexible' }),
+      new TouchBarGroup({items: profileButtons.slice(0, 3)}),
+      new TouchBarSpacer({size: 'flexible'}),
       new TouchBarPopover({
         label: '👥 More Profiles',
         items: profileButtons
