@@ -74,30 +74,42 @@ class Configure extends React.Component {
                   const urlSelector = `[name="${pretty}"]`;
 
                   return (
-                    <li
-                      className="list-group-item"
-                      key={key}
-                    >
-                      <details>
-                        <summary>{pretty}</summary>
+                    <li className='list-group-item' key={key}>
+                      <form method='post'>
+                        <details>
+                          <summary>
+                            <div className='profile'>
+                              <input className='form-control' name='profileName' type='text' value={pretty} />
+                            </div>
+                            <input
+                              className='form-control'
+                              id='metadataUrl'
+                              name='metadataUrl'
+                              type='hidden'
+                              value={key}
+                            />
+                            <span className='login-button'>
+                              <button className='login-button btn btn-default' type='submit'>Login</button>
+                            </span>
+                          </summary>
 
-                        <br/>
+                          <br/>
 
-                        <div className="input-group">
-                          <input
-                            className="form-control"
-                            defaultValue={key}
-                            name={pretty}
-                            readonly // eslint-disable-line react/no-unknown-property
-                          />
-                          <span className="input-group-btn">
-                            <button
-                              className="btn btn-default copy-to-clipboard-button"
-                              data-clipboard-target={urlSelector}
-                            ><span className="glyphicon glyphicon-copy"/></button>
-                          </span>
-                        </div>
-                      </details>
+                          <div className='input-group'>
+                            <input
+                              className='form-control' defaultValue={key}
+                              name={pretty} readonly // eslint-disable-line react/no-unknown-property
+                            />
+                            <span className='input-group-btn'>
+                              <button
+                                className='btn btn-default copy-to-clipboard-button'
+                                data-clipboard-target={urlSelector}
+                                type='button'
+                              ><span className='glyphicon glyphicon-copy'/></button>
+                            </span>
+                          </div>
+                        </details>
+                      </form>
                     </li>
                   );
                 })

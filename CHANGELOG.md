@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+## [1.5.0] - 2017-08-25
+### Added
+- Ability to use custom names for "Recent Logins" profiles by @udangel-r7.
+- Login button for "Recent Logins" profiles by @udangel-r7.
+- yarn.lock file to pin package version changes by @davepgreene.
+
+### Changed
+- Electron to pin version at 1.6.11 by @onefrankguy.
+- Build process to allow platform to be set at run time by @onefrankguy.
+- Build process to use "electron" instead of "electron-prebuilt" by @erran.
+
 ## [1.4.0] - 2016-11-21
 ### Added
 - :construction_worker: Enable TravisCI builds for continuous integration by @erran!
@@ -52,7 +63,8 @@
 ### Added
 - Initial release by @onefrankguy.
 
-[Unreleased]: https://github.com/rapid7/awsaml/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/rapid7/awsaml/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/rapid7/awsaml/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/rapid7/awsaml/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/rapid7/awsaml/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/rapid7/awsaml/compare/v1.1.0...v1.2.0
