@@ -1,13 +1,14 @@
 const React = require('react');
+const PropTypes = require('prop-types');
 const DefaultLayout = require('./layouts/default');
 const Error = require('./error');
 
 const propTypes = {
-  defaultMetadataUrl: React.PropTypes.string.isRequired,
-  error: React.PropTypes.string,
-  title: React.PropTypes.string.isRequired,
-  metadataUrls: React.PropTypes.object.isRequired,
-  metadataUrlValid: React.PropTypes.bool
+  defaultMetadataUrl: PropTypes.string.isRequired,
+  error: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  metadataUrls: PropTypes.object.isRequired,
+  metadataUrlValid: PropTypes.bool
 };
 
 class Configure extends React.Component {
@@ -15,6 +16,7 @@ class Configure extends React.Component {
     if (this.hasError()) {
       return (!this.props.error) ? '' : <Error msg={this.props.error} />;
     }
+
     return '';
   }
 
@@ -28,38 +30,45 @@ class Configure extends React.Component {
     if (this.hasError()) {
       urlGroupClass += ' has-error';
     }
+
     return (
       <DefaultLayout title={this.props.title}>
-        <div className='col-centered rounded-6 wrapper'>
+        <div className="col-centered rounded-6 wrapper">
           <img
-            alt='Rapid7'
-            className='logo'
-            src='https://rapid7.okta.com/bc/image/fileStoreRecord?id=fs011ume6fjY7HcEE0i8'
+            alt="Rapid7"
+            className="logo"
+            src="https://rapid7.okta.com/bc/image/fileStoreRecord?id=fs011ume6fjY7HcEE0i8"
           />
-          <div className='col-centered rounded-6 content'>
-            <form method='post'>
+          <div className="col-centered rounded-6 content">
+            <form method="post">
               <fieldset>
                 <legend>Configure</legend>
                 {this.errorMessage}
                 <div className={urlGroupClass}>
-                  <label htmlFor='metadataUrl'>SAML Metadata URL</label>
+                  <label htmlFor="metadataUrl">SAML Metadata URL</label>
                   <input
-                    className='form-control'
+                    className="form-control"
                     defaultValue={this.props.defaultMetadataUrl}
-                    id='metadataUrl'
-                    name='metadataUrl'
-                    pattern='https://.+'
+                    id="metadataUrl"
+                    name="metadataUrl"
+                    pattern="https://.+"
                     required
-                    type='url'
+                    type="url"
                   />
                 </div>
 
-                <button className='btn btn-default' type='submit'>Done</button>
+                <button
+                  className="btn btn-default"
+                  type="submit"
+                >Done</button>
               </fieldset>
             </form>
-            <div id='recent-logins'>
+            <div id="recent-logins">
               <h4>Recent Logins</h4>
-              <ul className='list-group scrollable-list' id='recent-logins'>{
+              <ul
+                className="list-group scrollable-list"
+                id="recent-logins"
+              >{
                 Object.keys(this.props.metadataUrls).map((key) => {
                   const pretty = this.props.metadataUrls[key];
                   const urlSelector = `[name="${pretty}"]`;
@@ -82,7 +91,6 @@ class Configure extends React.Component {
                             <span className='login-button'>
                               <button className='login-button btn btn-default' type='submit'>Login</button>
                             </span>
-
                           </summary>
 
                           <br/>
