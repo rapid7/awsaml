@@ -35,7 +35,7 @@
     "body-parser": "1.14.1",
     "cookie-parser": "1.4.0",
     "electron": "1.7.9",
-    "electron-packager": "^8.7.0",
+    "electron-packager": "10.1.0",
     "errorhandler": "1.4.2",
     "express": "4.13.3",
     "express-react-views": "^0.10.0",
