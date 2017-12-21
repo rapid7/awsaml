@@ -18,7 +18,7 @@
     "prebuild": "rm -rf dist/",
     "build": "export PLATFORM=${PLATFORM:=darwin,linux,win32}; electron-packager . Awsaml --asar --ignore=node_modules/electron --ignore=test --ignore=dist --out=dist --platform=$PLATFORM --arch=x64 --app-version=${npm_package_version} --app-bundle-id=com.rapid7.awsaml --helper-bundle-id=com.rapid7.awsaml.helper",
     "postbuild": "for platform in `echo $PLATFORM | sed 's/,/ /g'`; do export platform=$platform; npm run zip; done",
-    "zip": "cd dist/Awsaml-${platform}-x64 && zip -q -FS -r ../awsaml-v${npm_package_version}-${platform}-x64.zip .",
+    "zip": "cd dist/Awsaml-${platform}-x64 && zip -q -y -FS -r ../awsaml-v${npm_package_version}-${platform}-x64.zip .",
     "test": "mocha",
     "cover": "rm -Rf coverage/* && istanbul cover _mocha -- -R spec",
     "lint": "eslint *.js views/** lib/** test/**",
