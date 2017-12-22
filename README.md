@@ -195,14 +195,14 @@ the URL's valid, it will prompt you to login to your identity provider. If the
 login's successful, you'll see temporary AWS credentials in the UI.
 
 ## Building
-Awsaml is built using [Node.js][] version 4.1.1 and [NPM][] version 2.14.4, so
-make sure you've got a compatible versions installed. Then run NPM to install
+Awsaml is built using [Node][] version 7.4.0 and [Yarn][] version 1.3.2, so
+make sure you've got a compatible versions installed. Then run Yarn to install
 dependencies and build Awsaml.
 
 ~~~bash
 rm -rf node_modules/
-npm install --production
-npm run build
+yarn install --production
+yarn run build
 ~~~
 
 Those commnds will create a "dist" folder with zipped binaries. If you only want
@@ -211,7 +211,7 @@ variable before building.
 
 ~~~bash
 export PLATFORM=linux
-npm run build
+yarn run build
 ~~~
 
 Allowed values for `PLATFORM` are `darwin`, `linux` and `win32`. You can build
@@ -219,7 +219,7 @@ binaries for multiple platforms by using a comma separated list.
 
 ~~~bash
 export PLATFORM=darwin,linux
-npm run build
+yarn run build
 ~~~
 
 ## Setup on OSX with Homebrew
@@ -237,8 +237,8 @@ details.
 [AssumeRoleWithSAML]: http://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoleWithSAML.html
 [releases]: https://github.com/rapid7/awsaml/releases
 [Okta]: https://www.okta.com
-[Node.js]: https://nodejs.org
-[NPM]: https://www.npmjs.com
+[Node]: https://nodejs.org
+[Yarn]: https://yarnpkg.com
 [saml-provider]: http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_saml.html
 [iam-role]: http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp_saml.html
 [Homebrew]: http://brew.sh/
