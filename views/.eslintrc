@@ -1,7 +1,7 @@
 {
   "parser":"babel-eslint",
   "extends": "rapid7",
-  "ecmaFeatures": {
-    "jsx": true
+  "rules": {
+    "react/jsx-filename-extension": [0]
   }
 }
