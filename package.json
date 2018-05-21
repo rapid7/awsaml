@@ -21,7 +21,7 @@
     "zip": "cd dist/Awsaml-${platform}-x64 && zip -q -y -FS -r ../awsaml-v${npm_package_version}-${platform}-x64.zip .",
     "test": "mocha",
     "cover": "rm -Rf coverage/* && istanbul cover _mocha -- -R spec",
-    "lint": "eslint *.js views/** lib/** test/**",
+    "lint": "eslint '*.js' 'views/**/*.jsx' 'lib/**/*.js' 'test/**/*.js'",
     "report": "coveralls < ./coverage/lcov.info",
     "watch": "webpack-dev-server",
     "pack": "webpack --progress --colors --config=webpack.config.pack.js",
