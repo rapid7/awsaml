@@ -1,20 +1,14 @@
-const React = require('react');
-const DefaultLayout = require('./layouts/default');
-const Error = require('./error');
-
-const propTypes = {
-  defaultMetadataUrl: React.PropTypes.string.isRequired,
-  error: React.PropTypes.string,
-  title: React.PropTypes.string.isRequired,
-  metadataUrls: React.PropTypes.object.isRequired,
-  metadataUrlValid: React.PropTypes.bool
-};
+import React from 'react';
+import PropTypes from 'prop-types';
+import DefaultLayout from './layouts/default';
+import Error from './error';
 
 class Configure extends React.Component {
   get errorMessage() {
     if (this.hasError()) {
       return (!this.props.error) ? '' : <Error msg={this.props.error} />;
     }
+
     return '';
   }
 
@@ -70,14 +64,14 @@ class Configure extends React.Component {
                         <details>
                           <summary>
                             <div className='profile'>
-                              <input className='form-control' name='profileName' type='text' value={pretty} />
+                              <input className='form-control' name='profileName' type='text' defaultValue={pretty} />
                             </div>
                             <input
                               className='form-control'
                               id='metadataUrl'
                               name='metadataUrl'
                               type='hidden'
-                              value={key}
+                              defaultValue={key}
                             />
                             <span className='login-button'>
                               <button className='login-button btn btn-default' type='submit'>Login</button>
@@ -89,8 +83,10 @@ class Configure extends React.Component {
 
                           <div className='input-group'>
                             <input
-                              className='form-control' defaultValue={key}
-                              name={pretty} readonly // eslint-disable-line react/no-unknown-property
+                              className='form-control'
+                              defaultValue={key}
+                              name={pretty}
+                              readOnly
                             />
                             <span className='input-group-btn'>
                               <button
@@ -114,7 +110,13 @@ class Configure extends React.Component {
   }
 }
 
-Configure.propTypes = propTypes;
+Configure.propTypes = {
+  defaultMetadataUrl: PropTypes.string.isRequired,
+  error: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  metadataUrls: PropTypes.object.isRequired,
+  metadataUrlValid: PropTypes.bool
+};
 Configure.displayName = 'Configure';
 
 module.exports = Configure;

@@ -1,16 +1,7 @@
-const React = require('react');
-const DefaultLayout = require('./layouts/default');
-const Error = require('./error');
-
-const propTypes = {
-  error: React.PropTypes.string,
-  title: React.PropTypes.string.isRequired,
-  accountId: React.PropTypes.string.isRequired,
-  accessKey: React.PropTypes.string.isRequired,
-  secretKey: React.PropTypes.string.isRequired,
-  sessionToken: React.PropTypes.string.isRequired,
-  platform: React.PropTypes.string.isRequired
-};
+import React from 'react';
+import PropTypes from 'prop-types';
+import DefaultLayout from './layouts/default';
+import Error from './error';
 
 class Refresh extends React.Component {
   get errorMessage() {
@@ -79,7 +70,15 @@ class Refresh extends React.Component {
     );
   }
 }
-Refresh.propTypes = propTypes;
+Refresh.propTypes = {
+  error: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  accountId: PropTypes.string.isRequired,
+  accessKey: PropTypes.string.isRequired,
+  secretKey: PropTypes.string.isRequired,
+  sessionToken: PropTypes.string.isRequired,
+  platform: PropTypes.string.isRequired
+};
 Refresh.displayName = 'Refresh';
 
 module.exports = Refresh;

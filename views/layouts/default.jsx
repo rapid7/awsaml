@@ -1,9 +1,5 @@
-const React = require('react');
-
-const propTypes = {
-  title: React.PropTypes.string.isRequired,
-  children: React.PropTypes.object.isRequired
-};
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const DefaultLayout = function render(props) {
   return (
@@ -39,7 +35,10 @@ const DefaultLayout = function render(props) {
   );
 };
 
-DefaultLayout.propTypes = propTypes;
+DefaultLayout.propTypes = {
+  title: PropTypes.string.isRequired,
+  children: PropTypes.object.isRequired
+};
 DefaultLayout.displayName = 'DefaultLayout';
 
 module.exports = DefaultLayout;

@@ -1,8 +1,5 @@
-const React = require('react');
-
-const propTypes = {
-  msg: React.PropTypes.string.isRequired
-};
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const Error = function render(props) {
   return (
@@ -13,7 +10,9 @@ const Error = function render(props) {
   );
 };
 
-Error.propTypes = propTypes;
+Error.propTypes = {
+  msg: PropTypes.string.isRequired
+};
 Error.displayName = 'Error';
 
 module.exports = Error;
