@@ -28,7 +28,7 @@
     "show-appcast-checkpoint": "curl --compressed --location --user-agent 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36' 'https://github.com/rapid7/awsaml/releases.atom' | /usr/bin/sed 's|<pubDate>[^<]*</pubDate>||g' | shasum --algorithm 256"
   },
   "dependencies": {
-    "aws-sdk": "2.243.1",
+    "aws-sdk": "2.245.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "body-parser": "1.18.3",
@@ -56,7 +56,7 @@
     "babel-runtime": "^6.26.0",
     "coveralls": "^3.0.1",
     "css-loader": "^0.28.11",
-    "electron": "2.0.1",
+    "electron": "2.0.2",
     "electron-packager": "12.1.0",
     "electron-rebuild": "^1.7.3",
     "enzyme": "^3.3.0",
