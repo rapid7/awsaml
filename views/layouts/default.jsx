@@ -29,7 +29,7 @@ const DefaultLayout = function render(props) {
           integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
           rel="stylesheet"
         />
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/themes/prism.min.css" rel="stylesheet" />
         <link href="/css/app.css" rel="stylesheet" />
       </head>
       <body>
@@ -37,7 +37,7 @@ const DefaultLayout = function render(props) {
           {props.children}
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.1/clipboard.min.js" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/prism.min.js" />
+        <script src="/js/prism.js" />
         <script dangerouslySetInnerHTML={{__html: clipboard}} type="text/javascript" />
       </body>
 
