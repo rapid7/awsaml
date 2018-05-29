@@ -29,6 +29,8 @@
   },
   "dependencies": {
     "aws-sdk": "2.245.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
     "body-parser": "1.18.3",
     "cookie-parser": "1.4.3",
     "errorhandler": "1.5.0",
@@ -50,8 +52,6 @@
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.3",
     "babel-loader": "^7.1.4",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
     "babel-preset-env": "^1.7.0",
     "babel-runtime": "^6.26.0",
     "coveralls": "^3.0.1",
