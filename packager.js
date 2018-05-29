@@ -18,7 +18,7 @@ packager({
   helperBundleId: 'com.rapid7.awsaml.helper',
   // Resolve issue where dependencies didn't get all of their sub-dependencies by forcing a rebuild
   afterCopy: [(buildPath, electronVersion, platform, arch, callback) => {
-    rebuild({buildPath, electronVersion, arch})
+    rebuild({buildPath, electronVersion, arch, types: 'prod'})
       .then(() => {
         return callback();
       }).catch((error) => {
