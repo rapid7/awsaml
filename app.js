@@ -1,5 +1,3 @@
-'use strict';
-
 const electron = require('electron');
 const Application = electron.app;
 const BrowserWindow = electron.BrowserWindow;
@@ -7,8 +5,8 @@ const path = require('path');
 const Server = require('./lib/server');
 const config = require('./config');
 const storagePath = path.join(Application.getPath('userData'), 'data.json');
-const TouchBar = electron.TouchBar
-const {TouchBarButton, TouchBarGroup, TouchBarPopover, TouchBarSpacer} = electron.TouchBar
+const TouchBar = electron.TouchBar;
+const {TouchBarButton, TouchBarGroup, TouchBarPopover, TouchBarSpacer} = electron.TouchBar;
 
 global.Storage = require('./lib/storage')(storagePath);
 
@@ -40,7 +38,9 @@ const loadTouchBar = (browserWindow) => {
   });
   const storedMetadataUrls = Storage.get('metadataUrls') || {};
   const keys = Object.keys(storedMetadataUrls);
-  const profileButtons = keys.map((url) => buttonForProfileWithUrl(browserWindow, storedMetadataUrls[url], url));
+  const profileButtons = keys.map((url) => {
+    return buttonForProfileWithUrl(browserWindow, storedMetadataUrls[url], url);
+  });
   const touchbar = new TouchBar({
     items: [
       refreshButton,
@@ -111,7 +111,9 @@ Application.on('ready', () => {
 
   mainWindow.loadURL(Server.get('configureUrl'));
   mainWindow.show();
-  mainWindow.webContents.on('did-finish-load', () => loadTouchBar(mainWindow));
+  mainWindow.webContents.on('did-finish-load', () => {
+    return loadTouchBar(mainWindow);
+  });
 
   // TODO: A global clipboard instance must be loaded. Investigate how to load it within the .jsx code.
   mainWindow.webContents.executeJavaScript('new Clipboard(".copy-to-clipboard-button");');

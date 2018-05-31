@@ -1,45 +1,54 @@
-const React = require('react');
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const propTypes = {
-  title: React.PropTypes.string.isRequired,
-  children: React.PropTypes.object.isRequired
-};
+const clipboard = `
+const clipboard = new ClipboardJS('.copy-to-clipboard-button');
+clipboard.on('success', (e) => {
+  console.log(e);
+});
+clipboard.on('error', (e) => {
+  console.log(e);
+});
+`;
 
 const DefaultLayout = function render(props) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <head>
         <title>{props.title}</title>
-        <meta content='width=device-width, initial-scale=1' name='viewport' />
+        <meta content="width=device-width, initial-scale=1" name="viewport" />
         <link
-          crossOrigin='anonymous'
-          href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'
-          integrity='sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ=='
-          rel='stylesheet'
+          crossOrigin="anonymous"
+          href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+          integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+          rel="stylesheet"
         />
         <link
-          crossOrigin='anonymous'
-          href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css'
-          integrity='sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX'
-          rel='stylesheet'
+          crossOrigin="anonymous"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+          integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+          rel="stylesheet"
         />
-        <link href='https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.css' rel='stylesheet' />
-        <link href='/css/app.css' rel='stylesheet' />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/themes/prism.min.css" rel="stylesheet" />
+        <link href="/css/app.css" rel="stylesheet" />
       </head>
       <body>
-        <div className='container'>
-          <div className='row'>
-            {props.children}
-          </div>
+        <div className="container">
+          {props.children}
         </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.12/clipboard.min.js"></script>
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.js'></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.1/clipboard.min.js" />
+        <script src="/js/prism.js" />
+        <script dangerouslySetInnerHTML={{__html: clipboard}} type="text/javascript" />
       </body>
+
     </html>
   );
 };
 
-DefaultLayout.propTypes = propTypes;
+DefaultLayout.propTypes = {
+  title: PropTypes.string.isRequired,
+  children: PropTypes.object.isRequired
+};
 DefaultLayout.displayName = 'DefaultLayout';
 
 module.exports = DefaultLayout;
