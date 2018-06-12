@@ -2,6 +2,29 @@
 
 ## [Unreleased]
 
+## [1.6.0] - 2018-06-13
+### Added
+- Add profile login buttons to touchbar
+- Add touchbar buttons for refresh/logout
+
+### Changed
+- Refresh credentials every half-duration
+- Rebuild only prod dependencies.
+- Refactor build script into stand-alone js file so we can use electron-packager hooks to force a dependency rebuild.
+- Bump aws-sdk and electron packages.
+- Load prism.js from local file for language compatibility.
+- Remove unneeded css.
+- Update jsx to work correctly with updated external dependencies.
+- Update external css and js dependencies.
+- Disable react/jsx-filename-extension as express-react-views requires views with .jsx extensions.
+- Use symlinks instead of copying files to make macOS zips smaller.
+- Update/pin dependencies to pick up security fixes.
+- Update docs to denote use of Yarn and Node v7.
+
+### Fixed
+- Fix code linting errors.
+- Fix issues around PropTypes being split from React core.
+
 ## [1.5.0] - 2017-08-25
 ### Added
 - Ability to use custom names for "Recent Logins" profiles by @udangel-r7.
@@ -63,7 +86,8 @@
 ### Added
 - Initial release by @onefrankguy.
 
-[Unreleased]: https://github.com/rapid7/awsaml/compare/v1.5.0...HEAD
+[Unreleased]: https://github.com/rapid7/awsaml/compare/v1.6.0...HEAD
+[1.6.0]: https://github.com/rapid7/awsaml/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/rapid7/awsaml/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/rapid7/awsaml/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/rapid7/awsaml/compare/v1.2.0...v1.3.0
