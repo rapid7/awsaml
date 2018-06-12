@@ -125,5 +125,5 @@ Application.on('ready', () => {
       console.log('Reloading...'); // eslint-disable-line no-console
       mainWindow.loadURL(entryPointUrl);
     }
-  }, (config.aws.duration - 10) * 1000); // eslint-disable-line rapid7/static-magic-numbers
+  }, (config.aws.duration / 2) * 1000); // eslint-disable-line rapid7/static-magic-numbers
 });

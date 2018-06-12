@@ -201,7 +201,7 @@ dependencies and build Awsaml.
 
 ~~~bash
 rm -rf node_modules/
-yarn install --production
+yarn install
 yarn run build
 ~~~
 
