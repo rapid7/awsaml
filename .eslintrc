@@ -1,4 +1,3 @@
 {
-  "parser":"babel-eslint",
-  "extends": "rapid7/base"
+  "extends": "react-app"
 }
