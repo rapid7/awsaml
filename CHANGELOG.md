@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [1.5.1] - 2018-06-13
+### Fixed
+ - Remove unused dependencies
+
 ## [1.6.0] - 2018-06-13
 ### Added
 - Add profile login buttons to touchbar
@@ -86,7 +90,8 @@
 ### Added
 - Initial release by @onefrankguy.
 
-[Unreleased]: https://github.com/rapid7/awsaml/compare/v1.6.0...HEAD
+[Unreleased]: https://github.com/rapid7/awsaml/compare/v1.6.1...HEAD
+[1.6.1]: https://github.com/rapid7/awsaml/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/rapid7/awsaml/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/rapid7/awsaml/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/rapid7/awsaml/compare/v1.3.0...v1.4.0
