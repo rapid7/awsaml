@@ -51,7 +51,7 @@ module.exports = (app) => {
 
       // If the stored metadataUrl label value is the same as the URL default to the profile name!
       metadataUrls = metadataUrls.map((p) => {
-        if (p.url === metadataUrl) {
+        if (p.url === metadataUrl && p.name === metadataUrl) {
           p.name = profileName;
         }
         return p;

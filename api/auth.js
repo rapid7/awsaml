@@ -19,7 +19,9 @@ class Auth {
       if (req.isAuthenticated()) {
         return next();
       }
-      res.redirect(options.entryPoint);
+      res.json({
+        redirect: options.entryPoint
+      });
     };
   }
 

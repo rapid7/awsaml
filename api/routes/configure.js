@@ -24,10 +24,10 @@ module.exports = (app, auth) => {
     //   3. Support the <= v1.3.0 storage key.
     //   4. Default the metadata url to empty string.
     let defaultMetadataUrl =
-        app.get('metadataUrl') ||
-        Storage.get('previousMetadataUrl') ||
-        Storage.get('metadataUrl') ||
-        '';
+      app.get('metadataUrl') ||
+      Storage.get('previousMetadataUrl') ||
+      Storage.get('metadataUrl') ||
+      '';
 
     if (!defaultMetadataUrl) {
       if (storedMetadataUrls.length > 0 && storedMetadataUrls[0].hasOwnProperty('url')) {
