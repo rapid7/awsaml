@@ -4,7 +4,7 @@ const router = express.Router();
 
 const xmldom = require('xmldom');
 const xpath = require('xpath.js');
-const config = require('../../config');
+const config = require('../config');
 
 const HTTP_OK = 200;
 
@@ -16,21 +16,26 @@ const ResponseObj = require('./../response');
 
 module.exports = (app, auth) => {
   router.get('/', (req, res) => {
-    const storedMetadataUrls = Storage.get('metadataUrls') || {};
+    const storedMetadataUrls = Storage.get('metadataUrls') || [];
 
     // We populate the value of the metadata url field on the following (in order of precedence):
     //   1. Use the current session's metadata url (may have been rejected).
     //   2. Use the latest validated metadata url.
     //   3. Support the <= v1.3.0 storage key.
     //   4. Default the metadata url to empty string.
-    const defaultMetadataUrl =
-      app.get('metadataUrl') ||
-      Storage.get('previousMetadataUrl') ||
-      Storage.get('metadataUrl') ||
-      Object.keys(storedMetadataUrls)[0] ||
-      '';
+    let defaultMetadataUrl =
+        app.get('metadataUrl') ||
+        Storage.get('previousMetadataUrl') ||
+        Storage.get('metadataUrl') ||
+        '';
 
-    res.render('configure', Object.assign(ResponseObj, {
+    if (!defaultMetadataUrl) {
+      if (storedMetadataUrls.length > 0 && storedMetadataUrls[0].hasOwnProperty('url')) {
+        defaultMetadataUrl = storedMetadataUrls[0].url;
+      }
+    }
+
+    res.json(Object.assign(ResponseObj, {
       defaultMetadataUrl,
       metadataUrls: storedMetadataUrls,
       metadataUrlValid: Storage.get('metadataUrlValid'),
@@ -40,19 +45,25 @@ module.exports = (app, auth) => {
 
   router.post('/', (req, res) => {
     const metadataUrl = req.body.metadataUrl;
+    const origin = req.body.origin;
     const metaDataResponseObj = Object.assign(ResponseObj, {defaultMetadataUrl: metadataUrl});
 
-    let storedMetadataUrls = Storage.get('metadataUrls') || {},
+    let storedMetadataUrls = Storage.get('metadataUrls') || [],
         profileName = req.body.profileName;
+
+    const profile = storedMetadataUrls.find((profile) => profile.url === metadataUrl);
 
     if (profileName === '') {
       profileName = metadataUrl;
     }
 
-    if (profileName && storedMetadataUrls[metadataUrl] && storedMetadataUrls[metadataUrl] !== profileName) {
-      storedMetadataUrls[metadataUrl] = profileName;
-      Storage.set(storedMetadataUrls);
-    }
+    storedMetadataUrls = storedMetadataUrls.map((p) => {
+      if (profileName && p.url === metadataUrl && p.name !== profileName) {
+        p.name = profileName;
+      }
+      return p;
+    });
+    Storage.set('metadataUrls', storedMetadataUrls);
     app.set('metadataUrl', metadataUrl);
 
     const xmlReq = https.get(metadataUrl, (xmlRes) => {
@@ -62,7 +73,7 @@ module.exports = (app, auth) => {
         Storage.set('metadataUrlValid', false);
         Storage.set('metadataUrlError', Errors.urlInvalidErr);
 
-        res.render('configure', Object.assign(metaDataResponseObj, {
+        res.json(Object.assign(metaDataResponseObj, {
           metadataUrlValid: false,
           error: Errors.urlInvalidErr
         }));
@@ -110,16 +121,25 @@ module.exports = (app, auth) => {
           Storage.set('previousMetadataUrl', metadataUrl);
           let metadataUrls = Storage.get('metadataUrls') || {};
 
-          if (!metadataUrls.hasOwnProperty(metadataUrl)) {
-            metadataUrls[metadataUrl] = profileName || metadataUrl;
+          if (!profile) {
+            metadataUrls.push({
+              name: profileName || metadataUrl,
+              url: metadataUrl
+            });
             Storage.set('metadataUrls', metadataUrls);
           }
 
           app.set('entryPointUrl', config.auth.entryPoint);
           auth.configure(config.auth);
-          res.redirect(config.auth.entryPoint);
+          if (origin === 'electron') {
+            res.redirect(config.auth.entryPoint);
+          } else {
+            res.json({
+              redirect: config.auth.entryPoint
+            });
+          }
         } else {
-          res.render('configure', Object.assign(metaDataResponseObj, {
+          res.json(Object.assign(metaDataResponseObj, {
             error: Errors.invalidMetadataErr
           }));
         }
@@ -127,7 +147,7 @@ module.exports = (app, auth) => {
     });
 
     xmlReq.on('error', (err) => {
-      res.render('configure', Object.assign(metaDataResponseObj, {
+      res.json(Object.assign(metaDataResponseObj, {
         error: err.message
       }));
     });

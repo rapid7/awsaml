@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const config = require('../../config');
+const config = require('../config');
 
 const Aws = require('aws-sdk');
-const AwsCredentials = require('../../lib/aws-credentials');
+const AwsCredentials = require('../aws-credentials');
 const credentials = new AwsCredentials(config.aws);
 
 const ResponseObj = require('./../response');
@@ -15,6 +15,9 @@ module.exports = (app) => {
     const session = req.session.passport;
 
     if (session === undefined) {
+      res.status(401).json({
+        error: 'Invalid session'
+      });
       return;
     }
 
@@ -29,7 +32,9 @@ module.exports = (app) => {
       DurationSeconds: config.aws.duration
     }, (assumeRoleErr, data) => {
       if (assumeRoleErr) {
-        res.redirect(config.auth.entryPoint);
+        res.json({
+          redirect: config.auth.entryPoint
+        });
 
         return;
       }
@@ -45,17 +50,21 @@ module.exports = (app) => {
       let metadataUrls = Storage.get('metadataUrls');
 
       // If the stored metadataUrl label value is the same as the URL default to the profile name!
-      if (metadataUrls[metadataUrl] === metadataUrl) {
-        metadataUrls[metadataUrl] = profileName;
-        Storage.set('metadataUrls', metadataUrls);
-      }
-      res.render('refresh', credentialResponseObj);
+      metadataUrls = metadataUrls.map((p) => {
+        if (p.url === metadataUrl) {
+          p.name = profileName;
+        }
+        return p;
+      });
+      Storage.set('metadataUrls', metadataUrls);
 
       credentials.save(data.Credentials, profileName, (credSaveErr) => {
         if (credSaveErr) {
-          res.render('refresh', Object.assign(credentialResponseObj, {
+          res.json(Object.assign(credentialResponseObj, {
             error: credSaveErr
           }));
+        } else {
+          res.json(credentialResponseObj);
         }
       });
     });
