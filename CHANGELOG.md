@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-## [1.5.1] - 2018-06-13
+## [1.6.1] - 2018-06-13
 ### Fixed
  - Remove unused dependencies
 
