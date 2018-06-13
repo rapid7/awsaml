@@ -1,27 +1,32 @@
 const electron = require('electron');
 const Application = electron.app;
 const BrowserWindow = electron.BrowserWindow;
+const isPlainObject = require('lodash.isplainobject');
 const path = require('path');
-const Server = require('./lib/server');
-const config = require('./config');
+const Server = require('../api/server');
+const config = require('../api/config');
 const storagePath = path.join(Application.getPath('userData'), 'data.json');
 const TouchBar = electron.TouchBar;
 const {TouchBarButton, TouchBarGroup, TouchBarPopover, TouchBarSpacer} = electron.TouchBar;
 
-global.Storage = require('./lib/storage')(storagePath);
+global.Storage = require('../api/storage')(storagePath);
 
 const WindowWidth = 800;
 const WindowHeight = 800;
 
 let mainWindow = null;
 
+const baseUrl = process.env.ELECTRON_START_URL || Server.get('baseUrl');
+const configureUrl = path.join(baseUrl, Server.get('configureUrlRoute'));
+const refreshUrl = path.join(baseUrl, Server.get('refreshUrlRoute'));
+
 const buttonForProfileWithUrl = (browserWindow, profile, url) => {
   return new TouchBarButton({
     label: profile.replace(/^awsaml-/, ''),
     backgroundColor: '#3B86CE',
     click: () => {
-      browserWindow.loadURL(Server.get('configureUrl'), {
-        postData: [{type: 'rawData', bytes: Buffer.from(`metadataUrl=${url}`)}],
+      browserWindow.loadURL(configureUrl, {
+        postData: [{type: 'rawData', bytes: Buffer.from(`metadataUrl=${url}&origin=electron`)}],
         extraHeaders: 'Content-Type: application/x-www-form-urlencoded'
       });
     }
@@ -33,13 +38,25 @@ const loadTouchBar = (browserWindow) => {
     label: '🔄',
     backgroundColor: '#62ac5b',
     click: () => {
-      browserWindow.loadURL(Server.get('refreshUrl'));
+      browserWindow.loadURL(refreshUrl);
     }
   });
-  const storedMetadataUrls = Storage.get('metadataUrls') || {};
-  const keys = Object.keys(storedMetadataUrls);
-  const profileButtons = keys.map((url) => {
-    return buttonForProfileWithUrl(browserWindow, storedMetadataUrls[url], url);
+  let storedMetadataUrls = Storage.get('metadataUrls') || [];
+
+  // Migrate from old metadata url storage schema to new one
+  if (isPlainObject(storedMetadataUrls)) {
+    storedMetadataUrls = Object.keys(storedMetadataUrls).map((k) => {
+      return {
+        name: storedMetadataUrls[k],
+        url: k
+      }
+    });
+
+    Storage.set('metadataUrls', storedMetadataUrls);
+  }
+
+  const profileButtons = storedMetadataUrls.map((storedMetadataUrl) => {
+    return buttonForProfileWithUrl(browserWindow, storedMetadataUrl.name, storedMetadataUrl.url);
   });
   const touchbar = new TouchBar({
     items: [
@@ -63,7 +80,7 @@ Application.on('window-all-closed', () => {
 });
 
 Application.on('ready', () => {
-  require('./app-menu');
+  require('./menu');
 
   const host = Server.get('host');
   const port = Server.get('port');
@@ -109,20 +126,20 @@ Application.on('ready', () => {
     mainWindow = null;
   });
 
-  mainWindow.on('reset', () => {
-    setImmediate(() => {
-      mainWindow.loadURL(Server.get('configureUrl'));
-      mainWindow.show();
-    });
-  });
+  if (process.env.NODE_ENV === 'development') {
+    const { default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = require('electron-devtools-installer');
+    installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
+        .then((name) => console.log(`Added Extension:  ${name}`))
+        .catch((err) => console.log('An error occurred: ', err));
 
+    mainWindow.openDevTools();
+  }
+
+  mainWindow.loadURL(baseUrl);
+  mainWindow.show();
   mainWindow.webContents.on('did-finish-load', () => {
     return loadTouchBar(mainWindow);
   });
-
-  mainWindow.emit('reset');
-  // TODO: A global clipboard instance must be loaded. Investigate how to load it within the .jsx code.
-  mainWindow.webContents.executeJavaScript('new Clipboard(".copy-to-clipboard-button");');
 
   setInterval(() => {
     const entryPointUrl = Server.get('entryPointUrl');
