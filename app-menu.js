@@ -44,12 +44,12 @@ const template = [{
       }
     }
   }, {
-      label: 'Reset',
-      click(item, focusedWindow) {
-          if (focusedWindow) {
-              focusedWindow.emit('reset');
-          }
+    label: 'Reset',
+    click(item, focusedWindow) {
+      if (focusedWindow) {
+        focusedWindow.emit('reset');
       }
+    }
   }, {
     label: 'Toggle Full Screen',
     accelerator: (function a() {

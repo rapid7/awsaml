@@ -110,10 +110,10 @@ Application.on('ready', () => {
   });
 
   mainWindow.on('reset', () => {
-      setImmediate(() => {
-          mainWindow.loadURL(Server.get('configureUrl'));
-          mainWindow.show();
-      });
+    setImmediate(() => {
+      mainWindow.loadURL(Server.get('configureUrl'));
+      mainWindow.show();
+    });
   });
 
   mainWindow.webContents.on('did-finish-load', () => {
