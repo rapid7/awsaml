@@ -6,3 +6,4 @@ test/.aws/
 test/data/test.json
 typings/
 coverage/
+*~

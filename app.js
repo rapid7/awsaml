@@ -109,12 +109,18 @@ Application.on('ready', () => {
     mainWindow = null;
   });
 
-  mainWindow.loadURL(Server.get('configureUrl'));
-  mainWindow.show();
+  mainWindow.on('reset', () => {
+      setImmediate(() => {
+          mainWindow.loadURL(Server.get('configureUrl'));
+          mainWindow.show();
+      });
+  });
+
   mainWindow.webContents.on('did-finish-load', () => {
     return loadTouchBar(mainWindow);
   });
 
+  mainWindow.emit('reset');
   // TODO: A global clipboard instance must be loaded. Investigate how to load it within the .jsx code.
   mainWindow.webContents.executeJavaScript('new Clipboard(".copy-to-clipboard-button");');
 
