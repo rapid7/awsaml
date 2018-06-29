@@ -79,7 +79,7 @@ Application.on('window-all-closed', () => {
   Application.quit();
 });
 
-Application.on('ready', () => {
+Application.on('ready', async () => {
   require('./menu');
 
   const host = Server.get('host');
@@ -128,9 +128,12 @@ Application.on('ready', () => {
 
   if (process.env.NODE_ENV === 'development') {
     const { default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = require('electron-devtools-installer');
-    installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
-      .then((name) => console.log(`Added Extension:  ${name}`))
-      .catch((err) => console.log('An error occurred: ', err));
+    try {
+      const name =await installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS]);
+      console.log(`Added Extension:  ${name}`);
+    } catch (err) {
+      console.log('An error occurred: ', err);
+    }
 
     mainWindow.openDevTools();
   }
