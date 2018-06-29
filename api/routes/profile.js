@@ -9,9 +9,7 @@ module.exports = (app) => {
 
     let metadataUrls = Storage.get('metadataUrls');
     metadataUrls = metadataUrls.map((metadataUrl, i) => {
-      if (i !== idx) {
-        return metadataUrl;
-      }
+      return (i !== idx) ? metadataUrl : null;
     }).filter((el) => !!el);
 
     Storage.set('metadataUrls', metadataUrls);
