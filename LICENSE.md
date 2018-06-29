@@ -1,4 +1,4 @@
-Copyright (c) 2015-2016 Frank Mitchell, Rapid7 LLC.
+Copyright (c) 2015-2018 Frank Mitchell, Rapid7 LLC.
 
 MIT License
 ===========
