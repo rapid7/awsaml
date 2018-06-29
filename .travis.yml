@@ -1,16 +1,9 @@
 language: node_js
-env:
-  - CXX=g++-4.8
-sudo: false
+node_js:
+  - "node"
 script:
-  - npm test
-  - npm run lint
-  - npm run cover
+  - yarn test
+  - yarn lint
+  - yarn cover
 after_success:
-  npm run report
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-4.8
+  - yarn report
