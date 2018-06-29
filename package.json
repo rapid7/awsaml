@@ -1,6 +1,6 @@
 {
   "name": "awsaml",
-  "version": "1.6.1",
+  "version": "2.0.0",
   "description": "Periodically refreshes AWS access keys",
   "license": "MIT",
   "repository": {
