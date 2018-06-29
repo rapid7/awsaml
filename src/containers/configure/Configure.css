@@ -1,0 +1,15 @@
+.col-centered {
+  float: none;
+  margin: 0 auto;
+}
+
+#recent-logins .scrollable-list {
+  overflow-x: hidden;
+  height: 300px;
+}
+
+#recent-logins h4 {
+  border-top: 2px solid rgb(203, 203, 203);
+  margin-top: 15px;
+  padding-top: 15px;
+}
