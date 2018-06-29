@@ -1,4 +1,4 @@
-const AwsCredentials = require('../lib/aws-credentials');
+const AwsCredentials = require('../api/aws-credentials');
 const should = require('should');
 const Path = require('path');
 const FS = require('fs');
