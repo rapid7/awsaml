@@ -2,7 +2,7 @@ const express = require('express');
 const url = require('url');
 const router = express.Router();
 
-module.exports = (app) => {
+module.exports = () => {
   router.delete('/', (req, res) => {
     let {profile} = url.parse(req.url, true).query;
     let idx = parseInt(profile, 10);

@@ -10,7 +10,6 @@
   "bugs": {
     "url": "https://github.com/rapid7/awsaml/issues"
   },
-  "main": "app.js",
   "scripts": {
     "electron": "electron electron/electron.js",
     "electron-dev": "NODE_ENV=development; ELECTRON_START_URL=http://localhost:3000 electron electron/electron.js",
@@ -26,6 +25,9 @@
     "zip": "cd dist/Awsaml-${platform}-x64 && zip -q -y -FS -r ../awsaml-v${npm_package_version}-${platform}-x64.zip .",
     "show-appcast-checkpoint": "curl --compressed --location --user-agent 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36' 'https://github.com/rapid7/awsaml/releases.atom' | /usr/bin/sed 's|<pubDate>[^<]*</pubDate>||g' | shasum --algorithm 256"
   },
+  "homepage": "./",
+  "proxy": "http://localhost:2600/",
+  "main": "electron/electron.js",
   "dependencies": {
     "aws-sdk": "^2.256.1",
     "body-parser": "^1.18.3",
