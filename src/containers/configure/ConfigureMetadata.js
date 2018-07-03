@@ -17,6 +17,12 @@ class ConfigureMetadataComponent extends ComponentWithError {
     });
   }
 
+  componentDidUpdate() {
+    if (this.props.redirect) {
+      window.location.href = this.props.redirect;
+    }
+  }
+
   handleInputChange = ({target: {name, value}}) => {
     this.setState({
       [name]: value
@@ -40,10 +46,6 @@ class ConfigureMetadataComponent extends ComponentWithError {
   };
 
   render() {
-    if (this.props.redirect) {
-      window.location = this.props.redirect;
-    }
-
     return (
       <fieldset>
         <legend>Configure</legend>

@@ -25,6 +25,12 @@ class Refresh extends ComponentWithError {
     }
   }
 
+  componentDidUpdate() {
+    if (this.props.redirect) {
+      window.location.href = this.props.redirect;
+    }
+  }
+
   componentWillUnmount() {
     this._isMounted = false;
   }
@@ -60,11 +66,6 @@ ${this.export} AWS_DEFAULT_PROFILE=awsaml-${this.props.accountId}
   render() {
     if (this.props.status === 401) {
       return <Redirect to="/" />
-    }
-
-    if (this.props.redirect) {
-      window.location = this.props.redirect;
-      return(<div />);
     }
 
     return (this.state.loaded) ? (
