@@ -22,7 +22,7 @@ const deleteProfileSuccess = (state) => {
 const deleteProfileFailure = (state, {payload}) => {
   return {
     ...state,
-    deleteFailure: Object.assign(payload, {
+    deleteFailure: Object.assign({}, payload, {
       ...payload,
       errorMessage: payload.error
     })

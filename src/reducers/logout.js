@@ -22,7 +22,7 @@ const logoutFetchSuccess = (state, {payload}) => {
 const logoutFetchFailure = (state, {payload}) => {
   return {
     ...state,
-    fetchFailure: Object.assign(payload, {
+    fetchFailure: Object.assign({}, payload, {
       ...payload,
       errorMessage: payload.error
     })
