@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {submitConfigure} from '../../actions/configure';
@@ -6,19 +6,14 @@ import {deleteProfile} from '../../actions/profile';
 import Clipboard from 'react-clipboard.js';
 import {InputGroup, InputGroupAddon, Input, ListGroupItem, Button} from 'reactstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import {ComponentWithTooltip} from '../components/ComponentWithTooltip';
+import {WithToolTip} from '../components/ComponentWithTooltip';
 import {CopyTooltip} from '../components/CopyTooltip';
 import './Login.css';
 
-class LoginComponent extends ComponentWithTooltip {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      ...this.state,
-      profileName: '',
-    };
-  }
+class LoginComponent extends Component {
+  state = {
+    profileName: '',
+  };
 
   handleInputChange = ({target: {name, value}}) => {
     this.setState({
@@ -90,12 +85,12 @@ class LoginComponent extends ComponentWithTooltip {
               readOnly
               type="url"
             />
-            <InputGroupAddon addonType="append" id={id} onClick={this.handleTooltipTargetClick}>
+            <InputGroupAddon addonType="append" id={id} onClick={this.props.handleTooltipTargetClick}>
               <Clipboard className="btn btn-outline-secondary copy-to-clipboard-button" data-clipboard-text={this.props.url}>
                 <FontAwesomeIcon icon={['far', 'copy']} />
               </Clipboard>
             </InputGroupAddon>
-            <CopyTooltip state={this.state.tooltipState} target={id} />
+            <CopyTooltip state={this.props.tooltipState} target={id} />
           </InputGroup>
         </details>
       </ListGroupItem>
@@ -117,4 +112,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export const Login = connect(mapStateToProps, mapDispatchToProps)(LoginComponent);
+export const Login = connect(mapStateToProps, mapDispatchToProps)(WithToolTip(LoginComponent));

@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {InputGroup, Input, InputGroupAddon} from 'reactstrap';
 import Clipboard from 'react-clipboard.js';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import {ComponentWithTooltip} from '../components/ComponentWithTooltip';
+import {WithToolTip} from '../components/ComponentWithTooltip';
 import {CopyTooltip} from '../components/CopyTooltip';
 
-export class CredentialItem extends ComponentWithTooltip {
+class klass extends Component {
   render() {
     const {title, value} = this.props;
     const id = title.toLowerCase().split(' ').join('-');
@@ -21,7 +21,7 @@ export class CredentialItem extends ComponentWithTooltip {
                 readOnly
                 type="text"
             />
-            <InputGroupAddon addonType="append" id={`${id}-icon`} onClick={this.handleTooltipTargetClick}>
+            <InputGroupAddon addonType="append" id={`${id}-icon`} onClick={this.props.handleTooltipTargetClick}>
               <Clipboard
                   className="btn btn-outline-secondary copy-to-clipboard-button"
                   data-clipboard-target={`#${id}`}
@@ -29,10 +29,12 @@ export class CredentialItem extends ComponentWithTooltip {
                 <FontAwesomeIcon icon={['far', 'copy']} />
               </Clipboard>
             </InputGroupAddon>
-            <CopyTooltip state={this.state.tooltipState} target={`${id}-icon`} />
+            <CopyTooltip state={this.props.tooltipState} target={`${id}-icon`} />
           </InputGroup>
         </dd>
       </div>
     );
   }
 }
+
+export const CredentialItem = WithToolTip(klass);
