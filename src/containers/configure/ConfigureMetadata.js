@@ -39,7 +39,7 @@ class ConfigureMetadataComponent extends ComponentWithError {
     this.props.submitConfigure(payload);
   };
 
-  handleKeyPress = (event) => {
+  handleKeyDown = (event) => {
     if (event.keyCode === 13) { // Enter key
       this.handleSubmit(event);
     }
@@ -58,7 +58,7 @@ class ConfigureMetadataComponent extends ComponentWithError {
             id="metadataUrl"
             name="metadataUrl"
             onChange={this.handleInputChange}
-            onKeyDown={this.handleKeyPress}
+            onKeyDown={this.handleKeyDown}
             pattern="https://.+"
             required
             type="url"

@@ -26,7 +26,7 @@ class LoginComponent extends ComponentWithTooltip {
     });
   };
 
-  handleKeyPress = (event) => {
+  handleKeyDown = (event) => {
     if (event.keyCode !== 32) { // Spacebar
       return;
     }
@@ -68,7 +68,7 @@ class LoginComponent extends ComponentWithTooltip {
                 name="profileName"
                 type="text"
                 onChange={this.handleInputChange}
-                onKeyDown={this.handleKeyPress}
+                onKeyDown={this.handleKeyDown}
               />
               <InputGroupAddon addonType="append">
                 <Button outline color="secondary" onClick={this.handleSubmit}>Login</Button>

@@ -51,7 +51,7 @@ class Configure extends ComponentWithError {
             <Logo />
             <div className="col-centered rounded-6 content">
               <ConfigureMetadata defaultMetadataUrl={this.props.defaultMetadataUrl} />
-              {(metadataUrls.length > 0) ? <RecentLogins metadataUrls={metadataUrls}/> : ''}
+              {!!metadataUrls.length && <RecentLogins metadataUrls={metadataUrls} />}
             </div>
           </div>
         </Row>

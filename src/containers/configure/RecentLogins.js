@@ -8,9 +8,9 @@ export const RecentLogins = ({metadataUrls}) => {
       <h4>Recent Logins</h4>
       <ListGroup className="scrollable-list">
         {
-          metadataUrls.map((metadataUrl, i) => {
+          metadataUrls.map(({url, name}, i) => {
             return (
-              <Login key={i} profileId={i} url={metadataUrl.url} pretty={metadataUrl.name} />
+              <Login key={url} profileId={i} url={url} pretty={name} />
             );
           })
         }
