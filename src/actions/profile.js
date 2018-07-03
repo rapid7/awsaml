@@ -1,6 +1,6 @@
 import {createAction} from 'redux-actions';
-import axios from '../apis';
 import {fetchConfigure} from './configure';
+import * as api from '../apis';
 
 export const DELETE_PROFILE_REQUEST = 'DELETE_PROFILE_REQUEST';
 export const DELETE_PROFILE_SUCCESS = 'DELETE_PROFILE_SUCCESS';
@@ -14,7 +14,7 @@ export const deleteProfile = (payload) => async (dispatch) => {
   dispatch(deleteProfileRequest());
 
   try {
-    const {data} = await axios.electron.delete('profile', {
+    const {data} = await api.deleteProfile({
       params: payload
     });
     dispatch(deleteProfileSuccess(data));

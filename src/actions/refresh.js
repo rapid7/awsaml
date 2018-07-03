@@ -1,5 +1,5 @@
 import {createAction} from 'redux-actions';
-import axios from "axios/index";
+import * as api from '../apis';
 
 export const FETCH_REFRESH_REQUEST = 'FETCH_REFRESH_REQUEST';
 export const FETCH_REFRESH_SUCCESS = 'FETCH_REFRESH_SUCCESS';
@@ -13,7 +13,7 @@ export const fetchRefresh = () => async (dispatch) => {
   dispatch(fetchRefreshRequest());
 
   try {
-    const {data} = await axios.get('refresh');
+    const data = await api.getRefresh();
 
     if (data.error) {
       return dispatch(fetchRefreshFailure(data));

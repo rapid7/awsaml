@@ -3,8 +3,6 @@ import {render} from 'react-dom';
 import {Provider} from 'react-redux';
 import {ConnectedRouter} from 'react-router-redux';
 import store, {history} from './store';
-import CONSTANTS from './constants';
-import {createAxiosInstances} from './apis';
 
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -15,8 +13,6 @@ import faTrashAlt from '@fortawesome/fontawesome-free-regular/faTrashAlt';
 import faExclamationTriangle from '@fortawesome/fontawesome-free-solid/faExclamationTriangle';
 
 import App from './containers/App';
-
-createAxiosInstances(CONSTANTS.endpoints);
 
 fontawesome.library.add(faCopy, faTrashAlt, faExclamationTriangle);
 

@@ -1,5 +1,5 @@
 import {createAction} from 'redux-actions';
-import axios from '../apis';
+import * as api from '../apis';
 
 export const FETCH_CONFIGURE_REQUEST = 'FETCH_CONFIGURE_REQUEST';
 export const FETCH_CONFIGURE_SUCCESS = 'FETCH_CONFIGURE_SUCCESS';
@@ -19,7 +19,7 @@ export const fetchConfigure = () => async (dispatch) => {
   dispatch(fetchConfigureRequest());
 
   try {
-    const {data} = await axios.electron.get('configure');
+    const data = await api.getConfigure();
 
     return dispatch(fetchConfigureSuccess(data));
   } catch (err) {
@@ -31,7 +31,7 @@ export const submitConfigure = (payload) => async (dispatch) => {
   dispatch(submitConfigureRequest());
 
   try {
-    const {data} = await axios.electron.post('configure', payload);
+    const data = await api.postConfigure(payload);
 
     if (data.error) {
       return dispatch(submitConfigureFailure(data));

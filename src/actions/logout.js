@@ -1,5 +1,5 @@
 import {createAction} from 'redux-actions';
-import axios from "axios/index";
+import * as api from '../apis';
 
 export const FETCH_LOGOUT_REQUEST = 'FETCH_LOGOUT_REQUEST';
 export const FETCH_LOGOUT_SUCCESS = 'FETCH_LOGOUT_SUCCESS';
@@ -13,7 +13,7 @@ export const fetchLogout = () => async (dispatch) => {
   dispatch(fetchLogoutRequest());
 
   try {
-    const {data} = await axios.get('logout');
+    const data = await api.getLogout();
 
     if (data.error) {
       return dispatch(fetchLogoutFailure(data));
