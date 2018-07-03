@@ -11,9 +11,6 @@ export const SUBMIT_CONFIGURE_FAILURE = 'SUBMIT_CONFIGURE_FAILURE';
 const fetchConfigureRequest = createAction(FETCH_CONFIGURE_REQUEST);
 const fetchConfigureSuccess = createAction(FETCH_CONFIGURE_SUCCESS);
 const fetchConfigureFailure = createAction(FETCH_CONFIGURE_FAILURE);
-const submitConfigureRequest = createAction(SUBMIT_CONFIGURE_REQUEST);
-const submitConfigureSuccess = createAction(SUBMIT_CONFIGURE_SUCCESS);
-const submitConfigureFailure = createAction(SUBMIT_CONFIGURE_FAILURE);
 
 export const fetchConfigure = () => async (dispatch) => {
   dispatch(fetchConfigureRequest());
@@ -26,6 +23,10 @@ export const fetchConfigure = () => async (dispatch) => {
     return dispatch(fetchConfigureFailure(err));
   }
 };
+
+const submitConfigureRequest = createAction(SUBMIT_CONFIGURE_REQUEST);
+const submitConfigureSuccess = createAction(SUBMIT_CONFIGURE_SUCCESS);
+const submitConfigureFailure = createAction(SUBMIT_CONFIGURE_FAILURE);
 
 export const submitConfigure = (payload) => async (dispatch) => {
   dispatch(submitConfigureRequest());
