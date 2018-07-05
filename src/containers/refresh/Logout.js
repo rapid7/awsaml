@@ -2,8 +2,12 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Button} from 'reactstrap';
 import {Redirect} from 'react-router';
+import styled from 'styled-components';
 import {bindActionCreators} from 'redux';
 import {fetchLogout} from '../../actions/logout';
+import {BUTTON_MARGIN} from '../../constants/styles';
+
+const ButtonWithMargin = styled(Button)`${BUTTON_MARGIN}`;
 
 class LogoutComponent extends Component {
   handleLogoutEvent = (event) => {
@@ -18,7 +22,7 @@ class LogoutComponent extends Component {
     }
 
     return (
-      <Button color="danger" className="button-margin" onClick={this.handleLogoutEvent}>Logout</Button>
+      <ButtonWithMargin color="danger" onClick={this.handleLogoutEvent}>Logout</ButtonWithMargin>
     );
   }
 }

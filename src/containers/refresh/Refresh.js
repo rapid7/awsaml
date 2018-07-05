@@ -1,19 +1,24 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import styled from 'styled-components';
 import {Container, Row} from 'reactstrap';
 import {Link, Redirect} from 'react-router-dom';
+import styled from 'styled-components';
 import {fetchRefresh} from '../../actions/refresh';
 import {ComponentWithError} from '../components/ComponentWithError';
 import {Logo} from '../components/Logo';
 import {Credentials} from './Credentials';
 import {Logout} from './Logout';
+import {RoundedContent, RoundedWrapper, BUTTON_MARGIN} from '../../constants/styles';
 
-const EnvVar = styled.div`
+const EnvVar = RoundedContent.extend`
   margin-top: 20px;
   margin-bottom: 20px;
   padding: 10px 20px;
+`;
+
+const LinkWithButtonMargin = styled(Link)`
+${BUTTON_MARGIN}
 `;
 
 class Refresh extends Component {
@@ -78,9 +83,9 @@ ${this.export} AWS_DEFAULT_PROFILE=awsaml-${this.props.accountId}
     return (this.state.loaded) ? (
       <Container>
         <Row className="d-flex p-2">
-          <div className="rounded-6 wrapper">
+          <RoundedWrapper>
             <Logo />
-            <div className="rounded-6 content">
+            <RoundedContent>
               {this.props.errorMessage}
               <details open>
                 <summary>Account ID</summary>
@@ -95,18 +100,18 @@ ${this.export} AWS_DEFAULT_PROFILE=awsaml-${this.props.accountId}
                 awsSecretKey={this.props.secretKey}
                 awsSessionToken={this.props.sessionToken}
               />
-              <EnvVar className="rounded-6 content">
+              <EnvVar>
                 <p>Run these commands from a {this.term} to use the AWS CLI:</p>
                 <pre className={this.lang}>
                   {this.envVars}
                 </pre>
               </EnvVar>
               <span className="ml-auto p-2">
-                <Link className="btn btn-secondary button-margin" onClick={this.handleRefreshClickEvent} role="button" to="/refresh">Refresh</Link>
+                <LinkWithButtonMargin className="btn btn-secondary" onClick={this.handleRefreshClickEvent} role="button" to="/refresh">Refresh</LinkWithButtonMargin>
                 <Logout/>
               </span>
-            </div>
-          </div>
+            </RoundedContent>
+          </RoundedWrapper>
         </Row>
       </Container>
     ) : '';

@@ -10,11 +10,16 @@ import {Container, Row} from 'reactstrap';
 import {Logo} from '../components/Logo';
 import {RecentLogins} from './RecentLogins';
 import {ConfigureMetadata} from './ConfigureMetadata';
+import {RoundedContent, RoundedWrapper} from '../../constants/styles';
 
 const CenteredDivColumn = styled.div`
   float: none;
   margin: 0 auto;
 `;
+
+const RoundedCenteredDivColumnContent = RoundedContent.extend(CenteredDivColumn);
+const RoundedCenteredDivColumnWrapper = RoundedWrapper.extend(CenteredDivColumn);
+
 
 class Configure extends Component {
   constructor(props) {
@@ -51,13 +56,13 @@ class Configure extends Component {
     return (this.state.loaded) ? (
       <Container>
         <Row>
-          <CenteredDivColumn className="rounded-6 wrapper">
+          <RoundedCenteredDivColumnWrapper>
             <Logo />
-            <CenteredDivColumn className="rounded-6 content">
+            <RoundedCenteredDivColumnContent>
               <ConfigureMetadata defaultMetadataUrl={this.props.defaultMetadataUrl} />
               {!!metadataUrls.length && <RecentLogins metadataUrls={metadataUrls} />}
-            </CenteredDivColumn>
-          </CenteredDivColumn>
+            </RoundedCenteredDivColumnContent>
+          </RoundedCenteredDivColumnWrapper>
         </Row>
       </Container>
     ) : '';

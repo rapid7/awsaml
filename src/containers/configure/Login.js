@@ -7,12 +7,16 @@ import {deleteProfile} from '../../actions/profile';
 import {InputGroup, InputGroupAddon, Input, ListGroupItem, Button} from 'reactstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import {InputGroupWithCopyButton} from '../components/InputGroupWithCopyButton';
+import {RoundedContent, RoundedWrapper} from '../../constants/styles';
 
 const ProfileInputGroup = styled(InputGroup)`
   width: 100%;
   height: 2.5em;
   line-height: 2.5em;
 `;
+
+const RoundedProfileInputGroupContent = RoundedContent.extend(ProfileInputGroup);
+const RoundedProfileInputGroupWrapper = RoundedWrapper.extend(ProfileInputGroup);
 
 class LoginComponent extends Component {
   state = {
