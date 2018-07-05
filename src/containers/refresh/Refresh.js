@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {Container, Row} from 'reactstrap';
@@ -9,7 +9,7 @@ import {Logo} from '../components/Logo';
 import {Credentials} from './Credentials';
 import {Logout} from './Logout';
 
-class Refresh extends ComponentWithError {
+class Refresh extends Component {
   state = {
     loaded: false
   };
@@ -74,7 +74,7 @@ ${this.export} AWS_DEFAULT_PROFILE=awsaml-${this.props.accountId}
           <div className="rounded-6 wrapper">
             <Logo />
             <div className="rounded-6 content">
-              {this.errorMessage}
+              {this.props.errorMessage}
               <details open>
                 <summary>Account ID</summary>
                 <div className="card card-body bg-light mb-3">
@@ -120,4 +120,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Refresh);
+export default connect(mapStateToProps, mapDispatchToProps)(ComponentWithError(Refresh));

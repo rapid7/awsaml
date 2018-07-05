@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {Redirect} from 'react-router';
@@ -6,13 +6,12 @@ import {getOr} from 'unchanged';
 import qs from 'querystring';
 import {fetchConfigure} from '../../actions/configure';
 import {Container, Row} from 'reactstrap';
-import {ComponentWithError} from '../components/ComponentWithError';
 import {Logo} from '../components/Logo';
 import {RecentLogins} from './RecentLogins';
 import {ConfigureMetadata} from './ConfigureMetadata';
 import './Configure.css';
 
-class Configure extends ComponentWithError {
+class Configure extends Component {
   constructor(props) {
     super(props);
 

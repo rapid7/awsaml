@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {submitConfigure} from '../../actions/configure';
@@ -6,7 +6,7 @@ import {Button} from 'reactstrap';
 import {ComponentWithError} from '../components/ComponentWithError';
 import './ConfigureMetadata.css';
 
-class ConfigureMetadataComponent extends ComponentWithError {
+class ConfigureMetadataComponent extends Component {
   state = {
     metadataUrl: ''
   };
@@ -33,7 +33,7 @@ class ConfigureMetadataComponent extends ComponentWithError {
     event.preventDefault();
     const {metadataUrl} = this.state;
     const payload = {
-      metadataUrl: (metadataUrl) ? metadataUrl : this.props.defaultMetadataUrl
+      metadataUrl: metadataUrl
     };
 
     this.props.submitConfigure(payload);
@@ -49,8 +49,8 @@ class ConfigureMetadataComponent extends ComponentWithError {
     return (
       <fieldset>
         <legend>Configure</legend>
-        {this.errorMessage}
-        <div className={this.urlGroupClass}>
+        {this.props.errorMessage}
+        <div className={this.props.urlGroupClass}>
           <label htmlFor="metadataUrl">SAML Metadata URL</label>
           <input
             className="form-control"
@@ -84,4 +84,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export const ConfigureMetadata = connect(mapStateToProps, mapDispatchToProps)(ConfigureMetadataComponent);
+export const ConfigureMetadata = connect(mapStateToProps, mapDispatchToProps)(ComponentWithError(ConfigureMetadataComponent));

@@ -35,7 +35,7 @@ module.exports = (app, auth) => {
       }
     }
 
-    res.json(Object.assign(ResponseObj, {
+    res.json(Object.assign({}, ResponseObj, {
       defaultMetadataUrl,
       metadataUrls: storedMetadataUrls,
       metadataUrlValid: Storage.get('metadataUrlValid'),
@@ -45,8 +45,19 @@ module.exports = (app, auth) => {
 
   router.post('/', (req, res) => {
     const metadataUrl = req.body.metadataUrl;
+
+    if (!metadataUrl) {
+      Storage.set('metadataUrlValid', false);
+      Storage.set('metadataUrlError', Errors.urlInvalidErr);
+
+      return res.json(Object.assign({}, ResponseObj, {
+        metadataUrlValid: false,
+        error: Errors.urlInvalidErr
+      }));
+    }
+
     const origin = req.body.origin;
-    const metaDataResponseObj = Object.assign(ResponseObj, {defaultMetadataUrl: metadataUrl});
+    const metaDataResponseObj = Object.assign({}, ResponseObj, {defaultMetadataUrl: metadataUrl});
 
     let storedMetadataUrls = Storage.get('metadataUrls') || [],
         profileName = req.body.profileName;
