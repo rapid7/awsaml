@@ -4,7 +4,6 @@ import {bindActionCreators} from 'redux';
 import {submitConfigure} from '../../actions/configure';
 import {Button} from 'reactstrap';
 import {ComponentWithError} from '../components/ComponentWithError';
-import './ConfigureMetadata.css';
 
 class ConfigureMetadataComponent extends Component {
   state = {

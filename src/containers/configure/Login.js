@@ -1,12 +1,18 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import styled from 'styled-components';
 import {submitConfigure} from '../../actions/configure';
 import {deleteProfile} from '../../actions/profile';
 import {InputGroup, InputGroupAddon, Input, ListGroupItem, Button} from 'reactstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import {InputGroupWithCopyButton} from '../components/InputGroupWithCopyButton';
-import './Login.css';
+
+const ProfileInputGroup = styled(InputGroup)`
+  width: 100%;
+  height: 2.5em;
+  line-height: 2.5em;
+`;
 
 class LoginComponent extends Component {
   state = {
@@ -52,7 +58,7 @@ class LoginComponent extends Component {
       <ListGroupItem key={this.props.url}>
         <details>
           <summary>
-            <InputGroup className="profile">
+            <ProfileInputGroup>
               <Input
                 className="form-control"
                 defaultValue={this.props.pretty}
@@ -67,7 +73,7 @@ class LoginComponent extends Component {
                   <FontAwesomeIcon icon={['far', 'trash-alt']}/>
                 </Button>
               </InputGroupAddon>
-            </InputGroup>
+            </ProfileInputGroup>
           </summary>
           <InputGroupWithCopyButton value={this.props.url} name={this.props.pretty} id={this.props.profileId} />
         </details>
