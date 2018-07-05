@@ -58,21 +58,16 @@ module.exports = (app, auth) => {
     const origin = req.body.origin;
     const metaDataResponseObj = Object.assign({}, ResponseObj, {defaultMetadataUrl: metadataUrl});
 
-    let storedMetadataUrls = Storage.get('metadataUrls') || [],
-        profileName = req.body.profileName;
-
+    let storedMetadataUrls = Storage.get('metadataUrls') || [];
+    const profileName = req.body.profileName === '' ? metadataUrl : req.body.profileName;
     const profile = storedMetadataUrls.find((profile) => profile.url === metadataUrl);
 
-    if (profileName === '') {
-      profileName = metadataUrl;
-    }
-
-    storedMetadataUrls = storedMetadataUrls.map((p) => {
-      if (profileName && p.url === metadataUrl && p.name !== profileName) {
-        p.name = profileName;
+    storedMetadataUrls = storedMetadataUrls.map((storedMetadataUrl) => {
+      if (profileName && storedMetadataUrl.url === metadataUrl && storedMetadataUrl.name !== profileName) {
+        storedMetadataUrl.name = profileName;
       }
 
-      return p;
+      return storedMetadataUrl;
     });
     Storage.set('metadataUrls', storedMetadataUrls);
     app.set('metadataUrl', metadataUrl);
@@ -130,15 +125,17 @@ module.exports = (app, auth) => {
 
         if (cert && issuer && entryPoint) {
           Storage.set('previousMetadataUrl', metadataUrl);
-          let metadataUrls = Storage.get('metadataUrls') || {};
+          const metadataUrls = Storage.get('metadataUrls') || [];
 
-          if (!profile) {
-            metadataUrls.push({
-              name: profileName || metadataUrl,
-              url: metadataUrl,
-            });
-            Storage.set('metadataUrls', metadataUrls);
-          }
+          Storage.set(
+            'metadataUrls',
+            profile ? metadataUrls : metadataUrls.concat([
+              {
+                name: profileName || metadataUrl,
+                url: metadataUrl,
+              }
+            ])
+          );
 
           app.set('entryPointUrl', config.auth.entryPoint);
           auth.configure(config.auth);
