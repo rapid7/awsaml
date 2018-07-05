@@ -5,7 +5,6 @@ import {submitConfigure} from '../../actions/configure';
 import {deleteProfile} from '../../actions/profile';
 import {InputGroup, InputGroupAddon, Input, ListGroupItem, Button} from 'reactstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import {WithToolTip} from '../components/ComponentWithTooltip';
 import {InputGroupWithCopyButton} from '../components/InputGroupWithCopyButton';
 import './Login.css';
 
@@ -91,4 +90,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export const Login = connect(mapStateToProps, mapDispatchToProps)(WithToolTip(LoginComponent));
+export const Login = connect(mapStateToProps, mapDispatchToProps)(LoginComponent);
