@@ -3,11 +3,10 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {submitConfigure} from '../../actions/configure';
 import {deleteProfile} from '../../actions/profile';
-import Clipboard from 'react-clipboard.js';
 import {InputGroup, InputGroupAddon, Input, ListGroupItem, Button} from 'reactstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import {WithToolTip} from '../components/ComponentWithTooltip';
-import {CopyTooltip} from '../components/CopyTooltip';
+import {InputGroupWithCopyButton} from '../components/InputGroupWithCopyButton';
 import './Login.css';
 
 class LoginComponent extends Component {
@@ -50,8 +49,6 @@ class LoginComponent extends Component {
   };
 
   render() {
-    const id = `icon-${this.props.profileId}`;
-
     return (
       <ListGroupItem key={this.props.url}>
         <details>
@@ -73,25 +70,7 @@ class LoginComponent extends Component {
               </InputGroupAddon>
             </InputGroup>
           </summary>
-
-          <br/>
-
-          <InputGroup className="mb-3">
-            <Input
-              className="form-control"
-              value={this.props.url}
-              id={this.props.pretty}
-              name={this.props.pretty}
-              readOnly
-              type="url"
-            />
-            <InputGroupAddon addonType="append" id={id} onClick={this.props.handleTooltipTargetClick}>
-              <Clipboard className="btn btn-outline-secondary copy-to-clipboard-button" data-clipboard-text={this.props.url}>
-                <FontAwesomeIcon icon={['far', 'copy']} />
-              </Clipboard>
-            </InputGroupAddon>
-            <CopyTooltip state={this.props.tooltipState} target={id} />
-          </InputGroup>
+          <InputGroupWithCopyButton value={this.props.url} name={this.props.pretty} id={this.props.profileId} />
         </details>
       </ListGroupItem>
     );
