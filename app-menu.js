@@ -44,6 +44,13 @@ const template = [{
       }
     }
   }, {
+    label: 'Reset',
+    click(item, focusedWindow) {
+      if (focusedWindow) {
+        focusedWindow.emit('reset');
+      }
+    }
+  }, {
     label: 'Toggle Full Screen',
     accelerator: (function a() {
       return (process.platform === 'darwin') ? 'Ctrl+Command+F' : 'F11';
