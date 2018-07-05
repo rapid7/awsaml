@@ -1,10 +1,13 @@
 import React from 'react';
-import './Logo.css';
+import styled from 'styled-components';
+
+const LogoImg = styled.img`
+  margin-bottom: 15px;
+`;
 
 export const Logo = () => {
-  return (<img
+  return (<LogoImg
     alt="Rapid7"
-    className="logo"
     src="https://rapid7.okta.com/bc/image/fileStoreRecord?id=fs011ume6fjY7HcEE0i8"
   />);
 };
