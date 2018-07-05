@@ -42,16 +42,15 @@ module.exports = (app) => {
 
       const profileName = `awsaml-${session.accountId}`;
       const metadataUrl = app.get('metadataUrl');
-      let metadataUrls = Storage.get('metadataUrls');
-
       // If the stored metadataUrl label value is the same as the URL default to the profile name!
-      metadataUrls = metadataUrls.map((p) => {
-        if (p.url === metadataUrl && p.name === metadataUrl) {
-          p.name = profileName;
+      const metadataUrls = Storage.get('metadataUrls', []).map((storedMetadataUrl) => {
+        if (storedMetadataUrl.url === metadataUrl && storedMetadataUrl.name === metadataUrl) {
+          storedMetadataUrl.name = profileName;
         }
 
-        return p;
+        return storedMetadataUrl;
       });
+
       Storage.set('metadataUrls', metadataUrls);
 
       credentials.save(data.Credentials, profileName, (credSaveErr) => {
