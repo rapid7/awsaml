@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {ListGroup} from 'reactstrap';
 import {Login} from './Login';
@@ -14,19 +15,28 @@ const RecentLoginsHeader = styled.h4`
   padding-top: 15px;
 `;
 
-export const RecentLogins = ({metadataUrls}) => {
-  return(
+export const RecentLogins = (({metadataUrls}) =>
+  (
     <div id="recent-logins">
       <RecentLoginsHeader>Recent Logins</RecentLoginsHeader>
       <ScrollableListGroup>
         {
-          metadataUrls.map(({url, name}, i) => {
-            return (
-              <Login key={url} profileId={i} url={url} pretty={name} />
-            );
-          })
+          metadataUrls.map(({url, name}, i) =>
+            (
+              <Login
+                key={url}
+                pretty={name}
+                profileId={i}
+                url={url}
+              />
+            )
+          )
         }
       </ScrollableListGroup>
     </div>
   )
+);
+
+RecentLogins.propTypes = {
+  metadataUrls: PropTypes.array.isRequired,
 };

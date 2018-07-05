@@ -2,15 +2,22 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {Redirect} from 'react-router';
+import PropTypes from 'prop-types';
 import {getOr} from 'unchanged';
 import qs from 'querystring';
 import styled from 'styled-components';
 import {fetchConfigure} from '../../actions/configure';
-import {Container, Row} from 'reactstrap';
+import {
+  Container,
+  Row
+} from 'reactstrap';
 import {Logo} from '../components/Logo';
 import {RecentLogins} from './RecentLogins';
 import {ConfigureMetadata} from './ConfigureMetadata';
-import {RoundedContent, RoundedWrapper} from '../../constants/styles';
+import {
+  RoundedContent,
+  RoundedWrapper
+} from '../../constants/styles';
 
 const CenteredDivColumn = styled.div`
   float: none;
@@ -29,7 +36,7 @@ class Configure extends Component {
 
     this.state = {
       auth: (params['?auth'] && params['?auth'] === 'true'),
-      loaded: false
+      loaded: false,
     };
   }
 
@@ -39,7 +46,7 @@ class Configure extends Component {
     await this.props.fetchConfigure();
     if (this._isMounted) {
       this.setState({
-        loaded: true
+        loaded: true,
       });
     }
   }
@@ -48,11 +55,18 @@ class Configure extends Component {
     this._isMounted = false;
   }
 
+  static propTypes = {
+    defaultMetadataUrl: PropTypes.string,
+    fetchConfigure: PropTypes.func.isRequired,
+    location: PropTypes.object.isRequired,
+  };
+
   render() {
     if (this.state.auth) {
-      return <Redirect to='/refresh' />
+      return <Redirect to="/refresh" />;
     }
     const metadataUrls = getOr([], 'metadataUrls', this.props);
+
     return (this.state.loaded) ? (
       <Container>
         <Row>
@@ -69,17 +83,13 @@ class Configure extends Component {
   }
 }
 
-const mapStateToProps = ({configure}) => {
-  return {
-    ...configure.fetchFailure,
-    ...configure.fetchSuccess
-  };
-};
+const mapStateToProps = ({configure}) => ({
+  ...configure.fetchFailure,
+  ...configure.fetchSuccess,
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchConfigure: bindActionCreators(fetchConfigure, dispatch)
-  };
-};
+const mapDispatchToProps = (dispatch) => ({
+  fetchConfigure: bindActionCreators(fetchConfigure, dispatch),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Configure);

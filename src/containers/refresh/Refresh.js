@@ -1,15 +1,26 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {Container, Row} from 'reactstrap';
-import {Link, Redirect} from 'react-router-dom';
+import PropTypes from 'prop-types';
+import {
+  Container,
+  Row
+} from 'reactstrap';
+import {
+  Link,
+  Redirect
+} from 'react-router-dom';
 import styled from 'styled-components';
 import {fetchRefresh} from '../../actions/refresh';
 import {ComponentWithError} from '../components/ComponentWithError';
 import {Logo} from '../components/Logo';
 import {Credentials} from './Credentials';
 import {Logout} from './Logout';
-import {RoundedContent, RoundedWrapper, BUTTON_MARGIN} from '../../constants/styles';
+import {
+  RoundedContent,
+  RoundedWrapper,
+  BUTTON_MARGIN
+} from '../../constants/styles';
 
 const EnvVar = RoundedContent.extend`
   margin-top: 20px;
@@ -23,7 +34,7 @@ ${BUTTON_MARGIN}
 
 class Refresh extends Component {
   state = {
-    loaded: false
+    loaded: false,
   };
 
   async componentDidMount() {
@@ -32,7 +43,7 @@ class Refresh extends Component {
     await this.props.fetchRefresh();
     if (this._isMounted) {
       this.setState({
-        loaded: true
+        loaded: true,
       });
     }
   }
@@ -46,6 +57,18 @@ class Refresh extends Component {
   componentWillUnmount() {
     this._isMounted = false;
   }
+
+  static propTypes = {
+    accessKey: PropTypes.string,
+    accountId: PropTypes.string,
+    errorMessage: PropTypes.string,
+    fetchRefresh: PropTypes.func,
+    platform: PropTypes.string,
+    redirect: PropTypes.bool,
+    secretKey: PropTypes.string,
+    sessionToken: PropTypes.string,
+    status: PropTypes.number,
+  };
 
   get platform() {
     return this.props.platform;
@@ -77,7 +100,7 @@ ${this.export} AWS_DEFAULT_PROFILE=awsaml-${this.props.accountId}
 
   render() {
     if (this.props.status === 401) {
-      return <Redirect to="/" />
+      return <Redirect to="/" />;
     }
 
     return (this.state.loaded) ? (
@@ -107,7 +130,14 @@ ${this.export} AWS_DEFAULT_PROFILE=awsaml-${this.props.accountId}
                 </pre>
               </EnvVar>
               <span className="ml-auto p-2">
-                <LinkWithButtonMargin className="btn btn-secondary" onClick={this.handleRefreshClickEvent} role="button" to="/refresh">Refresh</LinkWithButtonMargin>
+                <LinkWithButtonMargin
+                  className="btn btn-secondary"
+                  onClick={this.handleRefreshClickEvent}
+                  role="button"
+                  to="/refresh"
+                >
+                  Refresh
+                </LinkWithButtonMargin>
                 <Logout/>
               </span>
             </RoundedContent>
@@ -118,18 +148,13 @@ ${this.export} AWS_DEFAULT_PROFILE=awsaml-${this.props.accountId}
   }
 }
 
-const mapStateToProps = ({refresh}) => {
+const mapStateToProps = ({refresh}) => ({
+  ...refresh.fetchFailure,
+  ...refresh.fetchSuccess,
+});
 
-  return {
-    ...refresh.fetchFailure,
-    ...refresh.fetchSuccess
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchRefresh: bindActionCreators(fetchRefresh, dispatch)
-  };
-};
+const mapDispatchToProps = (dispatch) => ({
+  fetchRefresh: bindActionCreators(fetchRefresh, dispatch),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ComponentWithError(Refresh));

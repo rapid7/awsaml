@@ -5,7 +5,7 @@ const {endpoints} = CONSTANTS;
 
 const axiosClient = axios.create({
   baseURL: endpoints.electron,
-  timeout: 30000
+  timeout: 30000,
 });
 
 /**
@@ -18,9 +18,9 @@ const axiosClient = axios.create({
  */
 const executeRequest = async ({url, method = 'get', payload = null, client = axiosClient}) => {
   const {data} = await client.request({
-    url,
+    data: payload,
     method,
-    data: payload
+    url,
   });
 
   return data;
@@ -30,44 +30,52 @@ const executeRequest = async ({url, method = 'get', payload = null, client = axi
  * Execute GET request against the /configure endpoint
  * @returns {Promise<*>}
  */
-export const getConfigure = async () => {
-  return await executeRequest({url: 'configure'});
-};
+export const getConfigure = async () => await executeRequest({url: 'configure'});
 
 /**
  * Execute POST request against the /configure endpoint with payload
  * @param {Object} payload
  * @returns {Promise<*>}
  */
-export const postConfigure = async (payload) => {
-  return await executeRequest({url: 'configure', method: 'post', payload});
-};
+export const postConfigure = async (payload) => await executeRequest({
+  method: 'post',
+  payload,
+  url: 'configure',
+});
 
 /**
  * Execute GET request against the SPA /refresh endpoint
+ *
+ * Note: this call triggers the /refresh route on the SPA to make sure that
+ * we get routed to the right component.
+ *
  * @returns {Promise<*>}
  */
-export const getRefresh = async () => {
-  // Note: this call triggers the /refresh route on the SPA to make sure that
-  // we get routed to the right component.
-  return await executeRequest({url: 'refresh', client: axios});
-};
+export const getRefresh = async () => await executeRequest({
+  client: axios,
+  url: 'refresh',
+});
 
 /**
  * Execute GET request against the SPA /logout endpoint
+ *
+ * Note: this call triggers the /logout route on the SPA to make sure that
+ * we get routed to the right component.
+ *
  * @returns {Promise<*>}
  */
-export const getLogout = async () => {
-  // Note: this call triggers the /logout route on the SPA to make sure that
-  // we get routed to the right component.
-  return await executeRequest({url: 'logout', client: axios});
-};
+export const getLogout = async () => await executeRequest({
+  client: axios,
+  url: 'logout',
+});
 
 /**
  * Execute DELETE request against the /profile endpoint with payload
  * @param {Object} payload
  * @returns {Promise<*>}
  */
-export const deleteProfile = async (payload) => {
-  return await executeRequest({url: 'profile', method: 'delete', payload});
-};
+export const deleteProfile = async (payload) => await executeRequest({
+  method: 'delete',
+  payload,
+  url: 'profile',
+});

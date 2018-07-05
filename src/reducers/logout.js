@@ -5,38 +5,32 @@ import {
   FETCH_LOGOUT_FAILURE
 } from '../actions/logout';
 
-const logoutFetchRequest = (state, action) => {
-  return {
-    ...state,
-    fetchRequest: action
-  };
-};
+const logoutFetchRequest = (state, action) => ({
+  ...state,
+  fetchRequest: action,
+});
 
-const logoutFetchSuccess = (state, {payload}) => {
-  return {
-    ...state,
-    fetchSuccess: payload
-  };
-};
+const logoutFetchSuccess = (state, {payload}) => ({
+  ...state,
+  fetchSuccess: payload,
+});
 
-const logoutFetchFailure = (state, {payload}) => {
-  return {
-    ...state,
-    fetchFailure: Object.assign({}, payload, {
-      ...payload,
-      errorMessage: payload.error
-    })
-  };
-};
+const logoutFetchFailure = (state, {payload}) => ({
+  ...state,
+  fetchFailure: Object.assign({}, payload, {
+    ...payload,
+    errorMessage: payload.error,
+  }),
+});
 
 export const CONFIGURE_INITIAL_STATE = {
+  fetchFailure: {},
   fetchRequest: {},
   fetchSuccess: {},
-  fetchFailure: {},
 };
 
 export default handleActions({
+  [FETCH_LOGOUT_FAILURE]: logoutFetchFailure,
   [FETCH_LOGOUT_REQUEST]: logoutFetchRequest,
   [FETCH_LOGOUT_SUCCESS]: logoutFetchSuccess,
-  [FETCH_LOGOUT_FAILURE]: logoutFetchFailure
 }, CONFIGURE_INITIAL_STATE);

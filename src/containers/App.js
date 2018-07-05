@@ -1,7 +1,10 @@
+/*global process:true*/
 import React, {Component} from 'react';
-import {Route, Switch} from 'react-router';
+import {
+  Route,
+  Switch
+} from 'react-router';
 
-import './App.css';
 import Configure from './configure/Configure';
 import Refresh from './refresh/Refresh';
 import ErrorBoundary from './ErrorBoundary';
@@ -17,8 +20,15 @@ class App extends Component {
     return (
       <ErrorBoundary>
         <Switch>
-          <Route exact path="/" component={Configure} />
-          <Route path="/refresh" component={Refresh} />
+          <Route
+            component={Configure}
+            exact
+            path="/"
+          />
+          <Route
+            component={Refresh}
+            path="/refresh"
+          />
           {debug ? <Route component={DebugRoute} /> : ''}
         </Switch>
       </ErrorBoundary>

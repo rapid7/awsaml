@@ -1,13 +1,19 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {submitConfigure} from '../../actions/configure';
 import {deleteProfile} from '../../actions/profile';
-import {InputGroup, InputGroupAddon, Input, ListGroupItem, Button} from 'reactstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import {
+  InputGroup,
+  InputGroupAddon,
+  Input,
+  ListGroupItem,
+  Button
+} from 'reactstrap';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import {InputGroupWithCopyButton} from '../components/InputGroupWithCopyButton';
-import {RoundedContent, RoundedWrapper} from '../../constants/styles';
 
 const ProfileInputGroup = styled(InputGroup)`
   width: 100%;
@@ -15,17 +21,22 @@ const ProfileInputGroup = styled(InputGroup)`
   line-height: 2.5em;
 `;
 
-const RoundedProfileInputGroupContent = RoundedContent.extend(ProfileInputGroup);
-const RoundedProfileInputGroupWrapper = RoundedWrapper.extend(ProfileInputGroup);
-
 class LoginComponent extends Component {
   state = {
     profileName: '',
   };
 
+  static propTypes = {
+    deleteProfile: PropTypes.func.isRequired,
+    pretty: PropTypes.string,
+    profileId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    submitConfigure: PropTypes.func.isRequired,
+    url: PropTypes.string,
+  };
+
   handleInputChange = ({target: {name, value}}) => {
     this.setState({
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -42,7 +53,7 @@ class LoginComponent extends Component {
     const {profileName} = this.state;
     const payload = {
       metadataUrl: this.props.url,
-      profileName: (profileName) ? profileName : this.props.pretty
+      profileName: (profileName) ? profileName : this.props.pretty,
     };
 
     this.props.submitConfigure(payload);
@@ -51,7 +62,7 @@ class LoginComponent extends Component {
   handleDelete = (event) => {
     event.preventDefault();
     const payload = {
-      profile: this.props.profileId
+      profile: this.props.profileId,
     };
 
     this.props.deleteProfile(payload);
@@ -67,37 +78,47 @@ class LoginComponent extends Component {
                 className="form-control"
                 defaultValue={this.props.pretty}
                 name="profileName"
-                type="text"
                 onChange={this.handleInputChange}
                 onKeyDown={this.handleKeyDown}
+                type="text"
               />
               <InputGroupAddon addonType="append">
-                <Button outline color="secondary" onClick={this.handleSubmit}>Login</Button>
-                <Button outline color="danger" onClick={this.handleDelete}>
+                <Button
+                  color="secondary"
+                  onClick={this.handleSubmit}
+                  outline
+                >
+                  Login
+                </Button>
+                <Button
+                  color="danger"
+                  onClick={this.handleDelete}
+                  outline
+                >
                   <FontAwesomeIcon icon={['far', 'trash-alt']}/>
                 </Button>
               </InputGroupAddon>
             </ProfileInputGroup>
           </summary>
-          <InputGroupWithCopyButton value={this.props.url} name={this.props.pretty} id={this.props.profileId} />
+          <InputGroupWithCopyButton
+            id={this.props.profileId}
+            name={this.props.pretty}
+            value={this.props.url}
+          />
         </details>
       </ListGroupItem>
     );
   }
 }
 
-const mapStateToProps = ({profile}) => {
-  return {
-    ...profile.deleteFailure,
-    deleted: profile.deleteSuccess
-  }
-};
+const mapStateToProps = ({profile}) => ({
+  ...profile.deleteFailure,
+  deleted: profile.deleteSuccess,
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    submitConfigure: bindActionCreators(submitConfigure, dispatch),
-    deleteProfile: bindActionCreators(deleteProfile, dispatch)
-  };
-};
+const mapDispatchToProps = (dispatch) => ({
+  deleteProfile: bindActionCreators(deleteProfile, dispatch),
+  submitConfigure: bindActionCreators(submitConfigure, dispatch),
+});
 
 export const Login = connect(mapStateToProps, mapDispatchToProps)(LoginComponent);

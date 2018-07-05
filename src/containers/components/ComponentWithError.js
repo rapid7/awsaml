@@ -1,17 +1,23 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {Alert} from 'reactstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import hoistNonReactStatic from 'hoist-non-react-statics';
 
 export const ComponentWithError = (WrappedComponent) => {
   class ComponentWithError extends Component {
+    static propTypes = {
+      error: PropTypes.string,
+      metadataUrlValid: PropTypes.bool,
+    };
+
     get errorMessage() {
       if (this.hasError()) {
         return !!this.props.error && (
-            <Alert color="danger">
-              <FontAwesomeIcon icon="exclamation-triangle" />
-              &nbsp; {this.props.error}
-            </Alert>
+          <Alert color="danger">
+            <FontAwesomeIcon icon="exclamation-triangle" />
+            &nbsp; {this.props.error}
+          </Alert>
         );
       }
 
@@ -38,8 +44,9 @@ export const ComponentWithError = (WrappedComponent) => {
           {...this.props}
           {...this.state}
           errorMessage={this.errorMessage}
-          urlGroupClass={this.urlGroupClass}/>
-      )
+          urlGroupClass={this.urlGroupClass}
+        />
+      );
     }
   }
 

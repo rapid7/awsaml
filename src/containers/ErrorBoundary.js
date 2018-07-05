@@ -1,17 +1,21 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 
 class ErrorBoundary extends Component {
   state = {
-    hasError: false
+    hasError: false,
   };
 
   componentDidCatch() {
     // Display fallback UI
     this.setState({
-      hasError: true
+      hasError: true,
     });
-
   }
+
+  static propTypes = {
+    children: PropTypes.element.isRequired,
+  };
 
   render() {
     if (this.state.hasError) {
@@ -21,6 +25,7 @@ class ErrorBoundary extends Component {
         </div>
       );
     }
+
     return this.props.children;
   }
 }

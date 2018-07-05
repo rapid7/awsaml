@@ -6,9 +6,9 @@ import logoutReducer from './logout';
 import profileReducer from './profile';
 
 export default combineReducers({
-  routing: routerReducer,
   configure: configureReducer,
-  refresh: refreshReducer,
   logout: logoutReducer,
-  profile: profileReducer
+  profile: profileReducer,
+  refresh: refreshReducer,
+  routing: routerReducer,
 });

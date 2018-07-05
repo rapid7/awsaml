@@ -14,6 +14,7 @@ import faExclamationTriangle from '@fortawesome/fontawesome-free-solid/faExclama
 
 import App from './containers/App';
 
+/* eslint-disable no-unused-expressions */
 injectGlobal`
   html {
     height: 100%;
@@ -34,7 +35,7 @@ injectGlobal`
   }
   
   summary {
-    padding-bottom: 0.25rem;
+    padding: 0.25rem;
     display: flex;
     width: 100%;
     align-items: center;
@@ -51,6 +52,7 @@ injectGlobal`
     border: 2px solid red;
   }
 `;
+/* eslint-enable no-unused-expressions */
 
 fontawesome.library.add(faCopy, faTrashAlt, faExclamationTriangle);
 

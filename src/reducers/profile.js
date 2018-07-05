@@ -5,38 +5,32 @@ import {
   DELETE_PROFILE_FAILURE
 } from '../actions/profile';
 
-const deleteProfileRequest = (state, action) => {
-  return {
-    ...state,
-    deleteRequest: action
-  };
-};
+const deleteProfileRequest = (state, action) => ({
+  ...state,
+  deleteRequest: action,
+});
 
-const deleteProfileSuccess = (state) => {
-  return {
-    ...state,
-    deleteSuccess: true
-  };
-};
+const deleteProfileSuccess = (state) => ({
+  ...state,
+  deleteSuccess: true,
+});
 
-const deleteProfileFailure = (state, {payload}) => {
-  return {
-    ...state,
-    deleteFailure: Object.assign({}, payload, {
-      ...payload,
-      errorMessage: payload.error
-    })
-  };
-};
+const deleteProfileFailure = (state, {payload}) => ({
+  ...state,
+  deleteFailure: Object.assign({}, payload, {
+    ...payload,
+    errorMessage: payload.error,
+  }),
+});
 
 export const PROFILE_INITIAL_STATE = {
+  deleteFailure: {},
   deleteRequest: {},
   deleteSuccess: false,
-  deleteFailure: {},
 };
 
 export default handleActions({
+  [DELETE_PROFILE_FAILURE]: deleteProfileFailure,
   [DELETE_PROFILE_REQUEST]: deleteProfileRequest,
   [DELETE_PROFILE_SUCCESS]: deleteProfileSuccess,
-  [DELETE_PROFILE_FAILURE]: deleteProfileFailure
 }, PROFILE_INITIAL_STATE);

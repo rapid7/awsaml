@@ -1,18 +1,19 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import PropTypes from 'prop-types';
 import {submitConfigure} from '../../actions/configure';
 import {Button} from 'reactstrap';
 import {ComponentWithError} from '../components/ComponentWithError';
 
 class ConfigureMetadataComponent extends Component {
   state = {
-    metadataUrl: ''
+    metadataUrl: '',
   };
 
   componentDidMount() {
     this.setState({
-      metadataUrl: this.props.defaultMetadataUrl
+      metadataUrl: this.props.defaultMetadataUrl,
     });
   }
 
@@ -22,9 +23,17 @@ class ConfigureMetadataComponent extends Component {
     }
   }
 
+  static propTypes = {
+    defaultMetadataUrl: PropTypes.string.isRequired,
+    errorMessage: PropTypes.string,
+    redirect: PropTypes.string,
+    submitConfigure: PropTypes.func.isRequired,
+    urlGroupClass: PropTypes.string,
+  };
+
   handleInputChange = ({target: {name, value}}) => {
     this.setState({
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -32,7 +41,7 @@ class ConfigureMetadataComponent extends Component {
     event.preventDefault();
     const {metadataUrl} = this.state;
     const payload = {
-      metadataUrl: metadataUrl
+      metadataUrl,
     };
 
     this.props.submitConfigure(payload);
@@ -53,7 +62,6 @@ class ConfigureMetadataComponent extends Component {
           <label htmlFor="metadataUrl">SAML Metadata URL</label>
           <input
             className="form-control"
-            value={this.state.metadataUrl}
             id="metadataUrl"
             name="metadataUrl"
             onChange={this.handleInputChange}
@@ -61,26 +69,32 @@ class ConfigureMetadataComponent extends Component {
             pattern="https://.+"
             required
             type="url"
+            value={this.state.metadataUrl}
           />
         </div>
-        <Button outline color="primary" onClick={this.handleSubmit}>Done</Button>
+        <Button
+          color="primary"
+          onClick={this.handleSubmit}
+          outline
+        >
+          Done
+        </Button>
       </fieldset>
     );
   }
 }
 
-const mapStateToProps = ({configure}, ownProps) => {
-  return {
-    ...configure.submitFailure,
-    ...configure.submitSuccess,
-    ...ownProps
-  };
-};
+const mapStateToProps = ({configure}, ownProps) => ({
+  ...configure.submitFailure,
+  ...configure.submitSuccess,
+  ...ownProps,
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    submitConfigure: bindActionCreators(submitConfigure, dispatch)
-  };
-};
+const mapDispatchToProps = (dispatch) => ({
+  submitConfigure: bindActionCreators(submitConfigure, dispatch),
+});
 
-export const ConfigureMetadata = connect(mapStateToProps, mapDispatchToProps)(ComponentWithError(ConfigureMetadataComponent));
+export const ConfigureMetadata = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ComponentWithError(ConfigureMetadataComponent));

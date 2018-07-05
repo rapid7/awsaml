@@ -15,9 +15,11 @@ export const deleteProfile = (payload) => async (dispatch) => {
 
   try {
     const {data} = await api.deleteProfile({
-      params: payload
+      params: payload,
     });
+
     dispatch(deleteProfileSuccess(data));
+
     return dispatch(fetchConfigure());
   } catch (err) {
     return dispatch(deleteProfileFailure(err));
