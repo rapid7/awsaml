@@ -4,12 +4,17 @@ import {bindActionCreators} from 'redux';
 import {Redirect} from 'react-router';
 import {getOr} from 'unchanged';
 import qs from 'querystring';
+import styled from 'styled-components';
 import {fetchConfigure} from '../../actions/configure';
 import {Container, Row} from 'reactstrap';
 import {Logo} from '../components/Logo';
 import {RecentLogins} from './RecentLogins';
 import {ConfigureMetadata} from './ConfigureMetadata';
-import './Configure.css';
+
+const CenteredDivColumn = styled.div`
+  float: none;
+  margin: 0 auto;
+`;
 
 class Configure extends Component {
   constructor(props) {
@@ -46,13 +51,13 @@ class Configure extends Component {
     return (this.state.loaded) ? (
       <Container>
         <Row>
-          <div className="col-centered rounded-6 wrapper">
+          <CenteredDivColumn className="rounded-6 wrapper">
             <Logo />
-            <div className="col-centered rounded-6 content">
+            <CenteredDivColumn className="rounded-6 content">
               <ConfigureMetadata defaultMetadataUrl={this.props.defaultMetadataUrl} />
               {!!metadataUrls.length && <RecentLogins metadataUrls={metadataUrls} />}
-            </div>
-          </div>
+            </CenteredDivColumn>
+          </CenteredDivColumn>
         </Row>
       </Container>
     ) : '';
