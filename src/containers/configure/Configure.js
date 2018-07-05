@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import {Redirect} from 'react-router';
 import {getOr} from 'unchanged';
 import qs from 'querystring';
-import {fetchConfigure, submitConfigure} from '../../actions/configure';
+import {fetchConfigure} from '../../actions/configure';
 import {Container, Row} from 'reactstrap';
 import {ComponentWithError} from '../components/ComponentWithError';
 import {Logo} from '../components/Logo';
@@ -69,8 +69,7 @@ const mapStateToProps = ({configure}) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchConfigure: bindActionCreators(fetchConfigure, dispatch),
-    submitConfigure: bindActionCreators(submitConfigure, dispatch)
+    fetchConfigure: bindActionCreators(fetchConfigure, dispatch)
   };
 };
 
