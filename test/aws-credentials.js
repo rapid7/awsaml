@@ -88,7 +88,7 @@ describe('AwsCredentials#saveAsIniFile', function() {
   it('saves the access key in the credentials file', function(done) {
     const aws = new AwsCredentials();
     const credentials = {
-      AccessKeyId: 'AccessKeyId'
+      AccessKeyId: 'AccessKeyId',
     };
 
     process.env.HOME = __dirname;
@@ -106,7 +106,7 @@ describe('AwsCredentials#saveAsIniFile', function() {
   it('saves the secret key in the credentials file', function(done) {
     const aws = new AwsCredentials();
     const credentials = {
-      SecretAccessKey: 'SecretAccessKey'
+      SecretAccessKey: 'SecretAccessKey',
     };
 
     process.env.HOME = __dirname;
@@ -124,7 +124,7 @@ describe('AwsCredentials#saveAsIniFile', function() {
   it('saves the session token in the credentials file', function(done) {
     const aws = new AwsCredentials();
     const credentials = {
-      SessionToken: 'SessionToken'
+      SessionToken: 'SessionToken',
     };
 
     process.env.HOME = __dirname;
@@ -142,7 +142,7 @@ describe('AwsCredentials#saveAsIniFile', function() {
   it('saves the session token as a security token in the credentials file', function(done) {
     const aws = new AwsCredentials();
     const credentials = {
-      SessionToken: 'SessionToken'
+      SessionToken: 'SessionToken',
     };
 
     process.env.HOME = __dirname;
@@ -162,12 +162,12 @@ describe('AwsCredentials#saveAsIniFile', function() {
     const credentials1 = {
       AccessKeyId: 'AccessKeyId1',
       SecretAccessKey: 'SecretAccessKey1',
-      SessionToken: 'SessionToken1'
+      SessionToken: 'SessionToken1',
     };
     const credentials2 = {
       AccessKeyId: 'AccessKeyId2',
       SecretAccessKey: 'SecretAccessKey2',
-      SessionToken: 'SessionToken2'
+      SessionToken: 'SessionToken2',
     };
 
     process.env.HOME = __dirname;
@@ -180,14 +180,14 @@ describe('AwsCredentials#saveAsIniFile', function() {
         should(config.profile1).eql({
           aws_access_key_id: credentials1.AccessKeyId,
           aws_secret_access_key: credentials1.SecretAccessKey,
+          aws_security_token: credentials1.SessionToken,
           aws_session_token: credentials1.SessionToken,
-          aws_security_token: credentials1.SessionToken
         });
         should(config.profile2).eql({
           aws_access_key_id: credentials2.AccessKeyId,
           aws_secret_access_key: credentials2.SecretAccessKey,
+          aws_security_token: credentials2.SessionToken,
           aws_session_token: credentials2.SessionToken,
-          aws_security_token: credentials2.SessionToken
         });
 
         done();
