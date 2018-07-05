@@ -133,7 +133,7 @@ module.exports = (app, auth) => {
               {
                 name: profileName || metadataUrl,
                 url: metadataUrl,
-              }
+              },
             ])
           );
 
