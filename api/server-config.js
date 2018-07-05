@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const expressSession = require('express-session');
+
 const app = express();
 
 module.exports = (auth, config, secret) => {
@@ -17,9 +18,9 @@ module.exports = (auth, config, secret) => {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(expressSession({
-    secret,
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    secret,
   }));
   app.use(auth.initialize());
   app.use(auth.session());

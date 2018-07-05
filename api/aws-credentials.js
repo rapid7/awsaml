@@ -59,9 +59,9 @@ class AwsCredentials {
   static resolveHomePath() {
     const env = process.env;
 
-    return env.HOME ||
-        env.USERPROFILE ||
-        (env.HOMEPATH ? ((env.HOMEDRIVE || 'C:/') + env.HOMEPATH) : null);
+    return env.HOME
+      || env.USERPROFILE
+      || (env.HOMEPATH ? ((env.HOMEDRIVE || 'C:/') + env.HOMEPATH) : null);
   }
 }
 

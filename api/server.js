@@ -7,12 +7,25 @@ const auth = new Auth(config.auth);
 const app = require('./server-config')(auth, config, sessionSecret);
 
 [
-  {name: config.auth.path, route: require('./routes/auth')(app, auth)},
-  {name: '/configure', route: require('./routes/configure')(app, auth)},
-  {name: '/logout', route: require('./routes/logout')(app)},
-  {name: '/refresh', route: require('./routes/refresh')(app)},
-  {name: '/profile', route: require('./routes/profile')()},
-  {name: '/', route: require('./routes/static')()}
+  {
+    name: config.auth.path,
+    route: require('./routes/auth')(app, auth),
+  }, {
+    name: '/configure',
+    route: require('./routes/configure')(app, auth),
+  }, {
+    name: '/logout',
+    route: require('./routes/logout')(app),
+  }, {
+    name: '/refresh',
+    route: require('./routes/refresh')(app),
+  }, {
+    name: '/profile',
+    route: require('./routes/profile')(),
+  }, {
+    name: '/',
+    route: require('./routes/static')(),
+  },
 ].forEach((el) => {
   app.use(el.name, el.route);
 });

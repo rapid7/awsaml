@@ -11,16 +11,14 @@ class Auth {
       return done(null, user.nameID);
     });
 
-    this.passport.deserializeUser((id, done) => {
-      return done(null, this.users[id]);
-    });
+    this.passport.deserializeUser((id, done) => done(null, this.users[id]));
 
     this.guard = function guard(req, res, next) {
       if (req.isAuthenticated()) {
         return next();
       }
       res.json({
-        redirect: options.entryPoint
+        redirect: options.entryPoint,
       });
     };
   }
@@ -38,9 +36,7 @@ class Auth {
   }
 
   configure(options) {
-    const samlCallback = (profile, done) => {
-      return done(null, profile);
-    };
+    const samlCallback = (profile, done) => done(null, profile);
 
     this.passport.use(new SamlStrategy(options, samlCallback));
   }

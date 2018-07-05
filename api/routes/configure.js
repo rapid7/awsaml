@@ -1,16 +1,15 @@
 const https = require('https');
 const express = require('express');
-const router = express.Router();
-
 const xmldom = require('xmldom');
 const xpath = require('xpath.js');
 const config = require('../config');
 
+const router = express.Router();
 const HTTP_OK = 200;
 
 const Errors = {
+  invalidMetadataErr: 'The SAML metadata is invalid.',
   urlInvalidErr: 'The SAML metadata URL is invalid.',
-  invalidMetadataErr: 'The SAML metadata is invalid.'
 };
 const ResponseObj = require('./../response');
 
@@ -24,10 +23,10 @@ module.exports = (app, auth) => {
     //   3. Support the <= v1.3.0 storage key.
     //   4. Default the metadata url to empty string.
     let defaultMetadataUrl =
-      app.get('metadataUrl') ||
-      Storage.get('previousMetadataUrl') ||
-      Storage.get('metadataUrl') ||
-      '';
+      app.get('metadataUrl')
+      || Storage.get('previousMetadataUrl')
+      || Storage.get('metadataUrl')
+      || '';
 
     if (!defaultMetadataUrl) {
       if (storedMetadataUrls.length > 0 && storedMetadataUrls[0].hasOwnProperty('url')) {
@@ -37,9 +36,9 @@ module.exports = (app, auth) => {
 
     res.json(Object.assign({}, ResponseObj, {
       defaultMetadataUrl,
-      metadataUrls: storedMetadataUrls,
+      error: Storage.get('metadataUrlError'),
       metadataUrlValid: Storage.get('metadataUrlValid'),
-      error: Storage.get('metadataUrlError')
+      metadataUrls: storedMetadataUrls,
     }));
   });
 
@@ -51,8 +50,8 @@ module.exports = (app, auth) => {
       Storage.set('metadataUrlError', Errors.urlInvalidErr);
 
       return res.json(Object.assign({}, ResponseObj, {
+        error: Errors.urlInvalidErr,
         metadataUrlValid: false,
-        error: Errors.urlInvalidErr
       }));
     }
 
@@ -72,6 +71,7 @@ module.exports = (app, auth) => {
       if (profileName && p.url === metadataUrl && p.name !== profileName) {
         p.name = profileName;
       }
+
       return p;
     });
     Storage.set('metadataUrls', storedMetadataUrls);
@@ -84,9 +84,9 @@ module.exports = (app, auth) => {
         Storage.set('metadataUrlValid', false);
         Storage.set('metadataUrlError', Errors.urlInvalidErr);
 
-        res.json(Object.assign(metaDataResponseObj, {
+        res.json(Object.assign({}, metaDataResponseObj, {
+          error: Errors.urlInvalidErr,
           metadataUrlValid: false,
-          error: Errors.urlInvalidErr
         }));
 
         return;
@@ -135,7 +135,7 @@ module.exports = (app, auth) => {
           if (!profile) {
             metadataUrls.push({
               name: profileName || metadataUrl,
-              url: metadataUrl
+              url: metadataUrl,
             });
             Storage.set('metadataUrls', metadataUrls);
           }
@@ -146,20 +146,20 @@ module.exports = (app, auth) => {
             res.redirect(config.auth.entryPoint);
           } else {
             res.json({
-              redirect: config.auth.entryPoint
+              redirect: config.auth.entryPoint,
             });
           }
         } else {
-          res.json(Object.assign(metaDataResponseObj, {
-            error: Errors.invalidMetadataErr
+          res.json(Object.assign({}, metaDataResponseObj, {
+            error: Errors.invalidMetadataErr,
           }));
         }
       });
     });
 
     xmlReq.on('error', (err) => {
-      res.json(Object.assign(metaDataResponseObj, {
-        error: err.message
+      res.json(Object.assign({}, metaDataResponseObj, {
+        error: err.message,
       }));
     });
   });

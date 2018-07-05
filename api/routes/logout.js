@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 
 module.exports = (app) => {
@@ -6,7 +7,7 @@ module.exports = (app) => {
     app.set('entryPointUrl', null);
     req.session.destroy();
     res.json({
-      logout: true
+      logout: true,
     });
   });
 

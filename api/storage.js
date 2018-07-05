@@ -69,6 +69,4 @@ class Storage {
   }
 }
 
-module.exports = (path) => {
-  return new Storage(path);
-};
+module.exports = (path) => new Storage(path);
