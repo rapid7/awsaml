@@ -1,18 +1,3 @@
-html {
-  height: 100%;
-}
-
-body {
-  min-height: 100%;
-  display: flex;
-  align-items: center;
-  background: rgb(249, 249, 249);
-}
-
-body > * {
-  flex-grow: 1;
-}
-
 .rounded-6 {
   border-radius: 6px;
 }
@@ -33,12 +18,6 @@ body > * {
 }
 
 /* TO BE REFACTORED */
-.env-var {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  padding: 10px 20px;
-}
-
 details summary {
   padding-bottom: 0.25rem;
 }
@@ -59,10 +38,6 @@ summary {
   display: flex;
   width: 100%;
   align-items: center;
-}
-
-.login-button {
-  margin-left: auto;
 }
 
 input[type="text"], input[type="url"] {

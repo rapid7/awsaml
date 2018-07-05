@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import styled from 'styled-components';
 import {Container, Row} from 'reactstrap';
 import {Link, Redirect} from 'react-router-dom';
 import {fetchRefresh} from '../../actions/refresh';
@@ -8,6 +9,12 @@ import {ComponentWithError} from '../components/ComponentWithError';
 import {Logo} from '../components/Logo';
 import {Credentials} from './Credentials';
 import {Logout} from './Logout';
+
+const EnvVar = styled.div`
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+`;
 
 class Refresh extends Component {
   state = {
@@ -88,12 +95,12 @@ ${this.export} AWS_DEFAULT_PROFILE=awsaml-${this.props.accountId}
                 awsSecretKey={this.props.secretKey}
                 awsSessionToken={this.props.sessionToken}
               />
-              <div className="rounded-6 content env-var">
+              <EnvVar className="rounded-6 content">
                 <p>Run these commands from a {this.term} to use the AWS CLI:</p>
                 <pre className={this.lang}>
                   {this.envVars}
                 </pre>
-              </div>
+              </EnvVar>
               <span className="ml-auto p-2">
                 <Link className="btn btn-secondary button-margin" onClick={this.handleRefreshClickEvent} role="button" to="/refresh">Refresh</Link>
                 <Logout/>
