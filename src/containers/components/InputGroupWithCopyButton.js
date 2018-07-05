@@ -33,7 +33,7 @@ export class InputGroupWithCopyButton extends Component {
       <InputGroup className="mb-3 mt-3">
         <Input
           className="form-control"
-          defaultValue={this.props.value}
+          value={this.props.value}
           id={this.props.name}
           name={this.props.name}
           readOnly={this.props.readOnly}
