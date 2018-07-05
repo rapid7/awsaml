@@ -138,11 +138,18 @@ Application.on('ready', async () => {
     mainWindow.openDevTools();
   }
 
-  mainWindow.loadURL(baseUrl);
-  mainWindow.show();
+  mainWindow.on('reset', () => {
+    setImmediate(() => {
+      mainWindow.loadURL(baseUrl);
+      mainWindow.show();
+    });
+  });
+
   mainWindow.webContents.on('did-finish-load', () => {
     return loadTouchBar(mainWindow);
   });
+
+  mainWindow.emit('reset');
 
   setInterval(() => {
     const entryPointUrl = Server.get('entryPointUrl');
