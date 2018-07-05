@@ -1,55 +1,55 @@
 const electron = require('electron');
+
 const Menu = electron.Menu;
 const Application = electron.app;
 
 const template = [{
   label: 'Edit',
   submenu: [{
-    label: 'Undo',
     accelerator: 'CmdOrCtrl+Z',
-    role: 'undo'
+    label: 'Undo',
+    role: 'undo',
   }, {
-    label: 'Redo',
     accelerator: 'Shift+CmdOrCtrl+Z',
-    role: 'redo'
+    label: 'Redo',
+    role: 'redo',
   }, {
-    type: 'separator'
+    type: 'separator',
   }, {
-    label: 'Cut',
     accelerator: 'CmdOrCtrl+X',
-    role: 'cut'
+    label: 'Cut',
+    role: 'cut',
   }, {
-    label: 'Copy',
     accelerator: 'CmdOrCtrl+C',
-    role: 'copy'
+    label: 'Copy',
+    role: 'copy',
   }, {
-    label: 'Paste',
     accelerator: 'CmdOrCtrl+V',
-    role: 'paste'
+    label: 'Paste',
+    role: 'paste',
   }, {
-    label: 'Select All',
     accelerator: 'CmdOrCtrl+A',
-    role: 'selectall'
-  }]
+    label: 'Select All',
+    role: 'selectall',
+  }],
 }, {
   label: 'View',
   submenu: [{
-    label: 'Reload',
     accelerator: 'CmdOrCtrl+R',
     click(item, focusedWindow) {
       if (focusedWindow) {
         focusedWindow.reload();
       }
-    }
+    },
+    label: 'Reload',
   }, {
-    label: 'Reset',
     click(item, focusedWindow) {
       if (focusedWindow) {
         focusedWindow.emit('reset');
       }
-    }
+    },
+    label: 'Reset',
   }, {
-    label: 'Toggle Full Screen',
     accelerator: (function a() {
       return (process.platform === 'darwin') ? 'Ctrl+Command+F' : 'F11';
     }()),
@@ -57,9 +57,9 @@ const template = [{
       if (focusedWindow) {
         focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
       }
-    }
+    },
+    label: 'Toggle Full Screen',
   }, {
-    label: 'Toggle Developer Tools',
     accelerator: (function a() {
       return (process.platform === 'darwin') ? 'Alt+Command+I' : 'Ctrl+Shift+I';
     }()),
@@ -67,20 +67,21 @@ const template = [{
       if (focusedWindow) {
         focusedWindow.toggleDevTools();
       }
-    }
-  }]
+    },
+    label: 'Toggle Developer Tools',
+  }],
 }, {
   label: 'Window',
   role: 'window',
   submenu: [{
-    label: 'Minimize',
     accelerator: 'CmdOrCtrl+M',
-    role: 'minimize'
+    label: 'Minimize',
+    role: 'minimize',
   }, {
-    label: 'Close',
     accelerator: 'CmdOrCtrl+W',
-    role: 'close'
-  }]
+    label: 'Close',
+    role: 'close',
+  }],
 }];
 
 if (process.platform === 'darwin') {
@@ -90,43 +91,43 @@ if (process.platform === 'darwin') {
     label: name,
     submenu: [{
       label: `About ${name}`,
-      role: 'about'
+      role: 'about',
     }, {
-      type: 'separator'
+      type: 'separator',
     }, {
       label: 'Services',
       role: 'services',
-      submenu: []
+      submenu: [],
     }, {
-      type: 'separator'
+      type: 'separator',
     }, {
-      label: `Hide ${name}`,
       accelerator: 'Command+H',
-      role: 'hide'
+      label: `Hide ${name}`,
+      role: 'hide',
     }, {
-      label: 'Hide Others',
       accelerator: 'Command+Shift+H',
-      role: 'hideothers'
+      label: 'Hide Others',
+      role: 'hideothers',
     }, {
       label: 'Show All',
-      role: 'unhide'
+      role: 'unhide',
     }, {
-      type: 'separator'
+      type: 'separator',
     }, {
-      label: 'Quit',
       accelerator: 'Command+Q',
       click() {
         Application.quit();
-      }
-    }]
+      },
+      label: 'Quit',
+    }],
   });
 
   // Window menu.
   template[3].submenu.push({ // eslint-disable-line rapid7/static-magic-numbers
-    type: 'separator'
+    type: 'separator',
   }, {
     label: 'Bring All to Front',
-    role: 'front'
+    role: 'front',
   });
 }
 
