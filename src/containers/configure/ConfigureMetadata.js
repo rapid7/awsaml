@@ -47,11 +47,7 @@ class ConfigureMetadataComponent extends Component {
     this.props.submitConfigure(payload);
   };
 
-  handleKeyDown = (event) => {
-    if (event.keyCode === 13) { // Enter key
-      this.handleSubmit(event);
-    }
-  };
+  handleKeyDown = (event) => event.keyCode === 13 && this.handleSubmit(event);
 
   render() {
     return (

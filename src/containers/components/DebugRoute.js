@@ -9,18 +9,18 @@ import {
 
 const COLUMN_STYLE = {fontSize: '1.2rem'};
 
-const Child = ({pathname, search, hash}) => (
+const generateDebugReport = ({hash, pathname, search}) => `
+pathname: ${pathname}
+search: ${search}
+hash: ${hash}
+`.trim();
+
+const Child = (props) => (
   <Container>
     <Row>
       <Col style={COLUMN_STYLE}>
         Route:
-        <pre className="language-bash">
-          {`
-pathname: ${pathname}
-search: ${search}
-hash: ${hash}
-`.trim()
-          }
+        <pre className="language-bash">{generateDebugReport(props)}
         </pre>
       </Col>
     </Row>

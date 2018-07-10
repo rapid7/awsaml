@@ -40,16 +40,17 @@ export class InputGroupWithCopyButton extends Component {
   };
 
   render() {
-    const id = `icon-${this.props.id}`;
+    const {id: idFromProps, name, readOnly, value, message} = this.props;
+    const id = `icon-${idFromProps}`;
 
     return (
       <InputGroup className="mb-3 mt-3">
         <Input
           className="form-control"
-          id={this.props.name}
-          name={this.props.name}
-          readOnly={this.props.readOnly}
-          value={this.props.value}
+          id={name}
+          name={name}
+          readOnly={readOnly}
+          value={value}
         />
         <InputGroupAddon
           addonType="append"
@@ -62,11 +63,11 @@ export class InputGroupWithCopyButton extends Component {
             placement="top"
             target={id}
           >
-            {this.props.message}
+            {message}
           </Tooltip>
           <Clipboard
             className="btn btn-outline-secondary copy-to-clipboard-button"
-            data-clipboard-text={this.props.value}
+            data-clipboard-text={value}
           >
             <FontAwesomeIcon icon={['far', 'copy']}/>
           </Clipboard>

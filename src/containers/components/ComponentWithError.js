@@ -4,6 +4,8 @@ import {Alert} from 'reactstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import hoistNonReactStatic from 'hoist-non-react-statics';
 
+const getErrorClass = (error) => error ? 'form-group has-error' : 'form-group'
+
 export const ComponentWithError = (WrappedComponent) => {
   class ComponentWithError extends Component {
     static propTypes = {
@@ -25,17 +27,7 @@ export const ComponentWithError = (WrappedComponent) => {
     }
 
     hasError() {
-      return (this.props.error || this.props.metadataUrlValid === false);
-    }
-
-    get urlGroupClass() {
-      let urlGroupClass = 'form-group';
-
-      if (this.hasError()) {
-        urlGroupClass += ' has-error';
-      }
-
-      return urlGroupClass;
+      return this.props.error || this.props.metadataUrlValid === false;
     }
 
     render() {
@@ -44,7 +36,7 @@ export const ComponentWithError = (WrappedComponent) => {
           {...this.props}
           {...this.state}
           errorMessage={this.errorMessage}
-          urlGroupClass={this.urlGroupClass}
+          urlGroupClass={getErrorClass(this.hasError())}
         />
       );
     }

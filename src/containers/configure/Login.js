@@ -53,7 +53,7 @@ class LoginComponent extends Component {
     const {profileName} = this.state;
     const payload = {
       metadataUrl: this.props.url,
-      profileName: (profileName) ? profileName : this.props.pretty,
+      profileName: profileName ? profileName : this.props.pretty,
     };
 
     this.props.submitConfigure(payload);

@@ -1,47 +1,31 @@
 import axios from 'axios';
-import CONSTANTS from '../constants';
-
-const {endpoints} = CONSTANTS;
+import {ENDPOINTS} from '../constants';
 
 const axiosClient = axios.create({
-  baseURL: endpoints.electron,
+  baseURL: ENDPOINTS.electron,
   timeout: 30000,
 });
-
-/**
- * Generic HTTP request function to wrap axios operations
- * @param url
- * @param method
- * @param payload
- * @param client
- * @returns {Promise<void>}
- */
-const executeRequest = async ({url, method = 'get', payload = null, client = axiosClient}) => {
-  const {data} = await client.request({
-    data: payload,
-    method,
-    url,
-  });
-
-  return data;
-};
 
 /**
  * Execute GET request against the /configure endpoint
  * @returns {Promise<*>}
  */
-export const getConfigure = async () => await executeRequest({url: 'configure'});
+export const getConfigure = async () => {
+  const {data} = await axiosClient.get('configure');
+
+  return data;
+};
 
 /**
  * Execute POST request against the /configure endpoint with payload
  * @param {Object} payload
  * @returns {Promise<*>}
  */
-export const postConfigure = async (payload) => await executeRequest({
-  method: 'post',
-  payload,
-  url: 'configure',
-});
+export const postConfigure = async (payload) => {
+  const {data} = await axiosClient.post('configure', payload);
+
+  return data;
+};
 
 /**
  * Execute GET request against the SPA /refresh endpoint
@@ -51,10 +35,11 @@ export const postConfigure = async (payload) => await executeRequest({
  *
  * @returns {Promise<*>}
  */
-export const getRefresh = async () => await executeRequest({
-  client: axios,
-  url: 'refresh',
-});
+export const getRefresh = async () => {
+  const {data} = await axios.get('refresh');
+
+  return data;
+};
 
 /**
  * Execute GET request against the SPA /logout endpoint
@@ -64,18 +49,19 @@ export const getRefresh = async () => await executeRequest({
  *
  * @returns {Promise<*>}
  */
-export const getLogout = async () => await executeRequest({
-  client: axios,
-  url: 'logout',
-});
+export const getLogout = async () => {
+  const {data} = await axios.get('logout');
+
+  return data;
+};
 
 /**
  * Execute DELETE request against the /profile endpoint with payload
  * @param {Object} payload
  * @returns {Promise<*>}
  */
-export const deleteProfile = async (payload) => await executeRequest({
-  method: 'delete',
-  payload,
-  url: 'profile',
-});
+export const deleteProfile = async (payload) => {
+  const {data} = await axiosClient.delete('profile', payload);
+
+  return data;
+};
