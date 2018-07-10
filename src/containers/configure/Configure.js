@@ -29,6 +29,12 @@ const RoundedCenteredDivColumnWrapper = RoundedWrapper.extend(CenteredDivColumn)
 
 
 class Configure extends Component {
+  static propTypes = {
+    defaultMetadataUrl: PropTypes.string,
+    fetchConfigure: PropTypes.func.isRequired,
+    location: PropTypes.object.isRequired,
+  };
+
   constructor(props) {
     super(props);
 
@@ -54,12 +60,6 @@ class Configure extends Component {
   componentWillUnmount() {
     this._isMounted = false;
   }
-
-  static propTypes = {
-    defaultMetadataUrl: PropTypes.string,
-    fetchConfigure: PropTypes.func.isRequired,
-    location: PropTypes.object.isRequired,
-  };
 
   render() {
     if (this.state.auth) {

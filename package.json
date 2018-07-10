@@ -62,6 +62,7 @@
     "eslint": "^5.0.1",
     "eslint-config-rapid7": "^3.0.2",
     "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-react": "^7.10.0",
     "history": "^4.7.2",
     "hoist-non-react-statics": "^2.5.5",
     "istanbul": "^0.4.5",

@@ -22,16 +22,16 @@ const ProfileInputGroup = styled(InputGroup)`
 `;
 
 class LoginComponent extends Component {
-  state = {
-    profileName: '',
-  };
-
   static propTypes = {
     deleteProfile: PropTypes.func.isRequired,
     pretty: PropTypes.string,
     profileId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     submitConfigure: PropTypes.func.isRequired,
     url: PropTypes.string,
+  };
+
+  state = {
+    profileName: '',
   };
 
   handleInputChange = ({target: {name, value}}) => {

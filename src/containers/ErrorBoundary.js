@@ -2,6 +2,10 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 class ErrorBoundary extends Component {
+  static propTypes = {
+    children: PropTypes.element.isRequired,
+  };
+
   state = {
     hasError: false,
   };
@@ -12,10 +16,6 @@ class ErrorBoundary extends Component {
       hasError: true,
     });
   }
-
-  static propTypes = {
-    children: PropTypes.element.isRequired,
-  };
 
   render() {
     if (this.state.hasError) {

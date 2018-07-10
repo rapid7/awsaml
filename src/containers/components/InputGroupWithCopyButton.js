@@ -10,8 +10,12 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import Clipboard from 'react-clipboard.js';
 
 export class InputGroupWithCopyButton extends Component {
-  state = {
-    tooltipState: false,
+  static propTypes = {
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    message: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+    name: PropTypes.string.isRequired,
+    readOnly: PropTypes.bool,
+    value: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -19,12 +23,8 @@ export class InputGroupWithCopyButton extends Component {
     readOnly: true,
   };
 
-  static propTypes = {
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    message: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-    name: PropTypes.string.isRequired,
-    readOnly: PropTypes.bool,
-    value: PropTypes.string.isRequired,
+  state = {
+    tooltipState: false,
   };
 
   handleTooltipTargetClick = () => {

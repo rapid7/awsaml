@@ -7,6 +7,14 @@ import {Button} from 'reactstrap';
 import {ComponentWithError} from '../components/ComponentWithError';
 
 class ConfigureMetadataComponent extends Component {
+  static propTypes = {
+    defaultMetadataUrl: PropTypes.string.isRequired,
+    errorMessage: PropTypes.string,
+    redirect: PropTypes.string,
+    submitConfigure: PropTypes.func.isRequired,
+    urlGroupClass: PropTypes.string,
+  };
+
   state = {
     metadataUrl: '',
   };
@@ -19,17 +27,9 @@ class ConfigureMetadataComponent extends Component {
 
   componentDidUpdate() {
     if (this.props.redirect) {
-      window.location.href = this.props.redirect;
+      document.location.replace(this.props.redirect);
     }
   }
-
-  static propTypes = {
-    defaultMetadataUrl: PropTypes.string.isRequired,
-    errorMessage: PropTypes.string,
-    redirect: PropTypes.string,
-    submitConfigure: PropTypes.func.isRequired,
-    urlGroupClass: PropTypes.string,
-  };
 
   handleInputChange = ({target: {name, value}}) => {
     this.setState({

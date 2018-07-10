@@ -33,6 +33,19 @@ ${BUTTON_MARGIN}
 `;
 
 class Refresh extends Component {
+  static propTypes = {
+    accessKey: PropTypes.string,
+    accountId: PropTypes.string,
+    errorMessage: PropTypes.string,
+    fetchRefresh: PropTypes.func,
+    platform: PropTypes.string,
+    redirect: PropTypes.bool,
+    secretKey: PropTypes.string,
+    sessionToken: PropTypes.string,
+    status: PropTypes.number,
+  };
+
+
   state = {
     loaded: false,
   };
@@ -58,16 +71,9 @@ class Refresh extends Component {
     this._isMounted = false;
   }
 
-  static propTypes = {
-    accessKey: PropTypes.string,
-    accountId: PropTypes.string,
-    errorMessage: PropTypes.string,
-    fetchRefresh: PropTypes.func,
-    platform: PropTypes.string,
-    redirect: PropTypes.bool,
-    secretKey: PropTypes.string,
-    sessionToken: PropTypes.string,
-    status: PropTypes.number,
+  handleRefreshClickEvent = (event) => {
+    event.preventDefault();
+    this.props.fetchRefresh();
   };
 
   get platform() {
@@ -92,11 +98,6 @@ ${this.export} AWS_PROFILE=awsaml-${this.props.accountId}
 ${this.export} AWS_DEFAULT_PROFILE=awsaml-${this.props.accountId}
 `.trim();
   }
-
-  handleRefreshClickEvent = (event) => {
-    event.preventDefault();
-    this.props.fetchRefresh();
-  };
 
   render() {
     if (this.props.status === 401) {
