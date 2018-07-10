@@ -4,7 +4,7 @@ import {Alert} from 'reactstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import hoistNonReactStatic from 'hoist-non-react-statics';
 
-const getErrorClass = (error) => error ? 'form-group has-error' : 'form-group'
+const getErrorClass = (error) => error ? 'form-group has-error' : 'form-group';
 
 export const ComponentWithError = (WrappedComponent) => {
   class ComponentWithError extends Component {
