@@ -16,6 +16,7 @@ import {ComponentWithError} from '../components/ComponentWithError';
 import {Logo} from '../components/Logo';
 import {Credentials} from './Credentials';
 import {Logout} from './Logout';
+import {RenderIfLoaded} from '../components/RenderIfLoaded';
 import {
   RoundedContent,
   RoundedWrapper,
@@ -31,6 +32,17 @@ const EnvVar = RoundedContent.extend`
 const LinkWithButtonMargin = styled(Link)`
 ${BUTTON_MARGIN}
 `;
+
+const getLang = (platform) => platform === 'win32' ? 'language-batch' : 'language-bash';
+
+const getTerm = (platform) => platform === 'win32' ? 'command prompt' : 'terminal';
+
+const getExport = (platform) => platform === 'win32' ? 'set' : 'export';
+
+const getEnvVars = ({platform, accountId}) => `
+${getExport(platform)} AWS_PROFILE=awsaml-${accountId}
+${getExport(platform)} AWS_DEFAULT_PROFILE=awsaml-${accountId}
+`.trim();
 
 class Refresh extends Component {
   static propTypes = {
@@ -76,76 +88,67 @@ class Refresh extends Component {
     this.props.fetchRefresh();
   };
 
-  get platform() {
-    return this.props.platform;
-  }
-
-  get lang() {
-    return (this.platform === 'win32') ? 'language-batch' : 'language-bash';
-  }
-
-  get term() {
-    return (this.platform === 'win32') ? 'command prompt' : 'terminal';
-  }
-
-  get export() {
-    return (this.platform === 'win32') ? 'set' : 'export';
-  }
-
-  get envVars() {
-    return `
-${this.export} AWS_PROFILE=awsaml-${this.props.accountId}
-${this.export} AWS_DEFAULT_PROFILE=awsaml-${this.props.accountId}
-`.trim();
-  }
-
   render() {
-    if (this.props.status === 401) {
+    const {
+      errorMessage,
+      status,
+      accountId,
+      accessKey,
+      secretKey,
+      sessionToken,
+      platform,
+    } = this.props;
+
+    if (status === 401) {
       return <Redirect to="/" />;
     }
 
-    return (this.state.loaded) ? (
-      <Container>
-        <Row className="d-flex p-2">
-          <RoundedWrapper>
-            <Logo />
-            <RoundedContent>
-              {this.props.errorMessage}
-              <details open>
-                <summary>Account ID</summary>
-                <div className="card card-body bg-light mb-3">
-                  <pre className="card-text language-markup">
-                    <code>{this.props.accountId}</code>
-                  </pre>
-                </div>
-              </details>
-              <Credentials
-                awsAccessKey={this.props.accessKey}
-                awsSecretKey={this.props.secretKey}
-                awsSessionToken={this.props.sessionToken}
-              />
-              <EnvVar>
-                <p>Run these commands from a {this.term} to use the AWS CLI:</p>
-                <pre className={this.lang}>
-                  {this.envVars}
-                </pre>
-              </EnvVar>
-              <span className="ml-auto p-2">
-                <LinkWithButtonMargin
-                  className="btn btn-secondary"
-                  onClick={this.handleRefreshClickEvent}
-                  role="button"
-                  to="/refresh"
-                >
-                  Refresh
-                </LinkWithButtonMargin>
-                <Logout/>
-              </span>
-            </RoundedContent>
-          </RoundedWrapper>
-        </Row>
-      </Container>
-    ) : '';
+    return (
+      <RenderIfLoaded isLoaded={this.state.loaded}>
+        {() => (
+          <Container>
+            <Row className="d-flex p-2">
+              <RoundedWrapper>
+                <Logo />
+                <RoundedContent>
+                  {errorMessage}
+                  <details open>
+                    <summary>Account ID</summary>
+                    <div className="card card-body bg-light mb-3">
+                      <pre className="card-text language-markup">
+                        <code>{accountId}</code>
+                      </pre>
+                    </div>
+                  </details>
+                  <Credentials
+                    awsAccessKey={accessKey}
+                    awsSecretKey={secretKey}
+                    awsSessionToken={sessionToken}
+                  />
+                  <EnvVar>
+                    <p>Run these commands from a {getTerm(platform)} to use the AWS CLI:</p>
+                    <pre className={getLang(platform)}>
+                      {getEnvVars(this.props)}
+                    </pre>
+                  </EnvVar>
+                  <span className="ml-auto p-2">
+                    <LinkWithButtonMargin
+                      className="btn btn-secondary"
+                      onClick={this.handleRefreshClickEvent}
+                      role="button"
+                      to="/refresh"
+                    >
+                      Refresh
+                    </LinkWithButtonMargin>
+                    <Logout/>
+                  </span>
+                </RoundedContent>
+              </RoundedWrapper>
+            </Row>
+          </Container>
+        )}
+      </RenderIfLoaded>
+    );
   }
 }
 
