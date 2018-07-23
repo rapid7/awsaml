@@ -1,30 +1,24 @@
 const packager = require('electron-packager');
-const rebuild = require('electron-rebuild').default;
 
 const platforms = (process.env.PLATFORM) ? process.env.PLATFORM.split(',') : ['darwin', 'linux', 'win32'];
+const ignoreRegex = new RegExp('^\\/(' +
+  // Insert files/directories in this project that should be ignored.
+  // Note: This regex is required because electron-packager's `ignore` property only accepts a regex
+  // See: https://github.com/electron-userland/electron-packager/blob/master/readme.md
+  // specifically: `You can use --ignore to ignore files and folders via a regular expression (not a glob pattern).`
+  'dist|src|test|public|.editorconfig|.eslintrc|.gitignore|.travis.yml|CHANGELOG.md|README.md' +
+  ')(\\/|$)', 'g');
 
 packager({
-  dir: __dirname,
-  out: 'dist',
-  arch: 'x64',
-  ignore: [
-    'test'
-  ],
-  asar: true,
-  name: 'Awsaml',
-  platform: platforms,
-  // Mac Options
   appBundleId: 'com.rapid7.awsaml',
+  arch: 'x64',
+  asar: true,
+  dir: __dirname,
   helperBundleId: 'com.rapid7.awsaml.helper',
-  // Resolve issue where dependencies didn't get all of their sub-dependencies by forcing a rebuild
-  afterCopy: [(buildPath, electronVersion, platform, arch, callback) => {
-    rebuild({buildPath, electronVersion, arch, types: 'prod'})
-      .then(() => {
-        return callback();
-      }).catch((error) => {
-        return callback(error);
-      });
-  }]
+  ignore: ignoreRegex,
+  name: 'Awsaml',
+  out: 'dist',
+  platform: platforms,
 }).catch((err) => {
   console.error(err);
 });

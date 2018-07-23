@@ -1,0 +1,3 @@
+{
+  "extends": ["rapid7/node"]
+}

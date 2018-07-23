@@ -1,8 +1,0 @@
-{
-  "parser":"babel-eslint",
-  "extends": "rapid7",
-  "rules": {
-    "react/jsx-filename-extension": [0],
-    "react/jsx-max-props-per-line": [1, {"maximum": 3}]
-  }
-}
