@@ -22,6 +22,18 @@ const baseUrl = process.env.ELECTRON_START_URL || Server.get('baseUrl');
 const configureUrl = path.join(baseUrl, Server.get('configureUrlRoute'));
 const refreshUrl = path.join(baseUrl, Server.get('refreshUrlRoute'));
 
+let storedMetadataUrls = Storage.get('metadataUrls') || [];
+
+// Migrate from old metadata url storage schema to new one
+if (isPlainObject(storedMetadataUrls)) {
+  storedMetadataUrls = Object.keys(storedMetadataUrls).map((k) => ({
+    name: storedMetadataUrls[k],
+    url: k,
+  }));
+
+  Storage.set('metadataUrls', storedMetadataUrls);
+}
+
 const buttonForProfileWithUrl = (browserWindow, profile, url) => new TouchBarButton({
   backgroundColor: '#3B86CE',
   click: () => {
@@ -45,17 +57,6 @@ const loadTouchBar = (browserWindow) => {
     },
     label: '🔄',
   });
-  let storedMetadataUrls = Storage.get('metadataUrls') || [];
-
-  // Migrate from old metadata url storage schema to new one
-  if (isPlainObject(storedMetadataUrls)) {
-    storedMetadataUrls = Object.keys(storedMetadataUrls).map((k) => ({
-      name: storedMetadataUrls[k],
-      url: k,
-    }));
-
-    Storage.set('metadataUrls', storedMetadataUrls);
-  }
 
   const profileButtons = storedMetadataUrls.map((storedMetadataUrl) =>
     buttonForProfileWithUrl(browserWindow, storedMetadataUrl.name, storedMetadataUrl.url));
