@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+## [2.0.0] - 2018-07-26
+This release represents a massive overhaul to how Awsaml's internals work. There are no changes to the way users
+interact with the tool aside from some nice bells and whistles. However, internally some of the changes include:
+
+### Changed
+- Created new SPA frontend app and deprecated express-react-views
+- Refactored the backend API to handle new SPA-based workflow
+- Frontend refresh; updated Bootstrap and added Font-Awesome for icons
+- Simplified and improved build process
+- Added "copy to clipboard" buttons where appropriate
+
 ## [1.6.1] - 2018-06-13
 ### Fixed
  - Remove unused dependencies
@@ -90,7 +101,8 @@
 ### Added
 - Initial release by @onefrankguy.
 
-[Unreleased]: https://github.com/rapid7/awsaml/compare/v1.6.1...HEAD
+[Unreleased]: https://github.com/rapid7/awsaml/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/rapid7/awsaml/compare/v1.6.1...v2.0.0
 [1.6.1]: https://github.com/rapid7/awsaml/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/rapid7/awsaml/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/rapid7/awsaml/compare/v1.4.0...v1.5.0
