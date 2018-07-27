@@ -1,6 +1,6 @@
 cask 'awsaml' do
-  version '1.6.1'
   sha256 '8840a68b2e1c2ce1fa46a3bb830dd1d2d997e1e7cd49fdc7bcfec40351df97e4'
+  version '2.0.0'
 
   url "https://github.com/rapid7/awsaml/releases/download/v#{version}/awsaml-v#{version}-darwin-x64.zip"
   appcast 'https://github.com/rapid7/awsaml/releases.atom',
