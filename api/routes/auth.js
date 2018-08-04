@@ -8,7 +8,13 @@ module.exports = (app, auth) => {
     failureFlash: true,
     failureRedirect: app.get('configureUrl'),
   }), (req, res) => {
-    const arns = req.user['https://aws.amazon.com/SAML/Attributes/Role'].split(',');
+
+    roles = req.user['https://aws.amazon.com/SAML/Attributes/Role']
+    if (!Array.isArray(roles)) {
+      roles = [roles]
+    }
+
+    const arns = roles[0].split(',');
 
     /* eslint-disable no-param-reassign */
     req.session.passport.samlResponse = req.body.SAMLResponse;
