@@ -42,8 +42,8 @@ class Configure extends Component {
 
     this.state = {
       auth: (params['?auth'] && params['?auth'] === 'true'),
-      selectRole: (params['?select-role'] && params['?select-role'] === 'true'),
       loaded: false,
+      selectRole: (params['?select-role'] && params['?select-role'] === 'true'),
     };
   }
 

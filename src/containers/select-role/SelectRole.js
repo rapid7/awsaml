@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {
   Container,
+  ListGroup,
   Row
 } from 'reactstrap';
 import {Redirect} from 'react-router-dom';
@@ -10,13 +11,12 @@ import PropTypes from 'prop-types';
 import {fetchSelectRole} from '../../actions/select-role';
 import {ComponentWithError} from '../components/ComponentWithError';
 import {RenderIfLoaded} from '../components/RenderIfLoaded';
-import {ListGroup} from 'reactstrap';
 import styled from 'styled-components';
 import {Role} from './Role';
 import {Logo} from '../components/Logo';
 import {
   RoundedContent,
-  RoundedWrapper,
+  RoundedWrapper
 } from '../../constants/styles';
 
 const SelectRoleHeader = styled.h4`
@@ -26,23 +26,25 @@ const SelectRoleHeader = styled.h4`
 
 class SelectRole extends Component {
   static propTypes = {
+    errorMessage: PropTypes.string,
+    fetchSelectRole: PropTypes.func,
     roles: PropTypes.array,
     status: PropTypes.string,
-    errorMessage: PropTypes.string,
   };
 
   state = {
     loaded: false,
   };
 
-  displayAccountId = true;
-
   async componentDidMount() {
     this._isMounted = true;
 
     await this.props.fetchSelectRole();
 
-    let uniqueAccountIds = new Set(this.props.roles.map(role => {return role.accountId;}));
+    let uniqueAccountIds = new Set(
+      this.props.roles.map((role) => role.accountId)
+    );
+
     if (uniqueAccountIds.size === 1) {
       this.displayAccountId = false;
     }
@@ -58,6 +60,8 @@ class SelectRole extends Component {
     this._isMounted = false;
   }
 
+  displayAccountId = true;
+
   render() {
     const {
       errorMessage,
@@ -66,7 +70,7 @@ class SelectRole extends Component {
     } = this.props;
 
     if (status === 'selected') {
-      return <Redirect to='/refresh' />;
+      return <Redirect to="/refresh" />;
     }
 
     return (
@@ -82,16 +86,16 @@ class SelectRole extends Component {
                   <SelectRoleHeader>Select a role:</SelectRoleHeader>
                   <ListGroup>
                     {
-                      roles.map(role =>
+                      roles.map((role) =>
                         (
                           <Role
-                            key={'role-item-' + role.index}
+                            accountId={role.accountId}
                             displayAccountId={this.displayAccountId}
                             index={role.index}
+                            key={`role-item-${role.index}`}
                             name={role.roleName}
-                            accountId={role.accountId}
-                            roleArn={role.roleArn}
                             principalArn={role.principalArn}
+                            roleArn={role.roleArn}
                           />
                         )
                       )

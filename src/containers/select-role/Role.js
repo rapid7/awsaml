@@ -12,13 +12,21 @@ const SelectRoleButton = styled(ListGroupItem)`
 `;
 
 class RoleComponent extends Component {
+  displayName = () => {
+    if (this.props.displayAccountId) {
+      return `${this.props.accountId}:${this.props.name}`;
+    }
+
+    return this.props.name;
+  };
+
   static propTypes = {
+    accountId: PropTypes.string,
     displayAccountId: PropTypes.bool,
     index: PropTypes.number,
     name: PropTypes.string,
-    accountId: PropTypes.string,
-    roleArn: PropTypes.string,
     principalArn: PropTypes.string,
+    roleArn: PropTypes.string,
     submitSelectRole: PropTypes.func.isRequired,
   };
 
@@ -27,24 +35,20 @@ class RoleComponent extends Component {
     this.props.submitSelectRole({index: this.props.index});
   };
 
-  displayName = () => {
-    if (this.props.displayAccountId) {
-      return this.props.accountId + ":" + this.props.name;
-    } else {
-      return this.props.name;
-    }
-  };
-
   render() {
     return (
-      <SelectRoleButton tag="button" action onClick={this.handleClick}>
-         {this.displayName()}
+      <SelectRoleButton
+        action
+        onClick={this.handleClick}
+        tag="button"
+      >
+        {this.displayName()}
       </SelectRoleButton>
     );
   }
 }
 
-const mapStateToProps = ({state}) => ({
+const mapStateToProps = () => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({

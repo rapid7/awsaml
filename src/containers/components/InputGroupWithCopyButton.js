@@ -13,16 +13,16 @@ export class InputGroupWithCopyButton extends Component {
   static propTypes = {
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     message: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+    multiLine: PropTypes.bool,
     name: PropTypes.string.isRequired,
     readOnly: PropTypes.bool,
     value: PropTypes.string.isRequired,
-    multiLine: PropTypes.bool,
   };
 
   static defaultProps = {
     message: 'Copied!',
-    readOnly: true,
     multiLine: false,
+    readOnly: true,
   };
 
   state = {
@@ -52,8 +52,8 @@ export class InputGroupWithCopyButton extends Component {
           id={name}
           name={name}
           readOnly={readOnly}
+          type={multiLine ? 'textarea' : 'text'}
           value={value}
-          type={multiLine ? "textarea" : "text"}
         />
         <InputGroupAddon
           addonType="append"

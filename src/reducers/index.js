@@ -11,6 +11,6 @@ export default combineReducers({
   logout: logoutReducer,
   profile: profileReducer,
   refresh: refreshReducer,
-  selectRole: selectRoleReducer,
   routing: routerReducer,
+  selectRole: selectRoleReducer,
 });

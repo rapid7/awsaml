@@ -5,7 +5,7 @@ import {
   FETCH_SELECT_ROLE_FAILURE,
   SUBMIT_SELECT_ROLE_REQUEST,
   SUBMIT_SELECT_ROLE_SUCCESS,
-  SUBMIT_SELECT_ROLE_FAILURE,
+  SUBMIT_SELECT_ROLE_FAILURE
 } from '../actions/select-role';
 
 const selectRoleFetchRequest = (state, action) => ({
@@ -38,10 +38,10 @@ const selectRoleSubmitSuccess = (state, {payload}) => ({
 
 const selectRoleSubmitFailure = (state, {payload}) => ({
   ...state,
-    submitFailure: Object.assign({}, payload, {
-      ...payload,
-      errorMessage: payload.error,
-    }),
+  submitFailure: Object.assign({}, payload, {
+    ...payload,
+    errorMessage: payload.error,
+  }),
 });
 
 export const SELECT_ROLE_INITIAL_STATE = {

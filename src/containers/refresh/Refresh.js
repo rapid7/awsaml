@@ -53,8 +53,10 @@ class Refresh extends Component {
     fetchRefresh: PropTypes.func,
     platform: PropTypes.string,
     redirect: PropTypes.bool,
+    roleName: PropTypes.string,
     secretKey: PropTypes.string,
     sessionToken: PropTypes.string,
+    showRole: PropTypes.bool,
     status: PropTypes.number,
   };
 
@@ -118,12 +120,40 @@ class Refresh extends Component {
                   <details open>
                     <summary>Account</summary>
                     <div className="card card-body bg-light mb-3">
-                      <dl className="mb-0 p-2 bg-dark text-light" style={{display: 'grid', gridTemplateColumns: 'auto 1fr'}}>
-                        <dt className="mr-2" style={{'gridColumn': 1}}>ID:</dt>
-                        <dd className="mb-0" style={{'gridColumn': 2}}>{accountId}</dd>
+                      <dl
+                        className="mb-0 p-2 bg-dark text-light"
+                        style={{
+                          display: 'grid',
+                          gridTemplateColumns: 'auto 1fr',
+                        }}
+                      >
+                        <dt
+                          className="mr-2"
+                          style={{gridColumn: 1}}
+                        >
+                          ID:
+                        </dt>
+                        <dd
+                          className="mb-0"
+                          style={{gridColumn: 2}}
+                        >
+                          {accountId}
+                        </dd>
                         {showRole && [
-                          <dt key="role-name-dt" className="mr-2" style={{gridColumn: 1}}>Role:</dt>,
-                          <dd key="role-name-dd" className="mb-0" style={{gridColumn: 2}}>{roleName}</dd>
+                          <dt
+                            className="mr-2"
+                            key="role-name-dt"
+                            style={{gridColumn: 1}}
+                          >
+                            Role:
+                          </dt>,
+                          <dd
+                            className="mb-0"
+                            key="role-name-dd"
+                            style={{gridColumn: 2}}
+                          >
+                            {roleName}
+                          </dd>,
                         ]}
                       </dl>
                     </div>
@@ -138,9 +168,9 @@ class Refresh extends Component {
                     <InputGroupWithCopyButton
                       className={getLang(platform)}
                       id="envvars"
+                      multiLine
                       name="input-envvars"
                       value={getEnvVars(this.props)}
-                      multiLine={true}
                     />
                   </EnvVar>
                   <span className="ml-auto p-2">

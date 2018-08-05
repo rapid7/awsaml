@@ -8,39 +8,41 @@ module.exports = (app, auth) => {
     failureFlash: true,
     failureRedirect: app.get('configureUrl'),
   }), (req, res) => {
+    let roleAttr = req.user['https://aws.amazon.com/SAML/Attributes/Role'];
+    let frontend = process.env.ELECTRON_START_URL || app.get('baseUrl');
 
-    roleAttr = req.user['https://aws.amazon.com/SAML/Attributes/Role']
+    frontend = new url.URL(frontend);
+
+    // Convert roleAttr to an array if it isn't already one
     if (!Array.isArray(roleAttr)) {
-      roleAttr = [roleAttr]
+      roleAttr = [roleAttr];
     }
 
-    let roles = roleAttr.map( (attr, i) => {
+    let roles = roleAttr.map((attr, i) => {
       let arns = attr.split(',');
+
       return {
+        accountId: arns[0].split(':')[4],
         index: i,
+        principalArn: arns[1],
         roleArn: arns[0],
         roleName: arns[0].split(':')[5].replace('role/', ''),
-        principalArn: arns[1],
-        accountId: arns[0].split(':')[4],
-      }
+      };
     });
 
     const session = req.session.passport;
+
     session.samlResponse = req.body.SAMLResponse;
     session.roles = roles;
-
-    let frontend = process.env.ELECTRON_START_URL || app.get('baseUrl');
-    frontend = new url.URL(frontend);
 
     if (roles.length > 1) {
       // If the session has a previous role, see if it matches
       // the latest roles from the current SAML assertion.  If it
       // doesn't match, wipe it from the session.
       if (session.roleArn && session.principalArn) {
-        let found = roles.find(role => {
-          return role.roleArn === session.roleArn &&
-            role.principalArn === session.principalArn;
-        });
+        let found = roles.find((role) =>
+          role.roleArn === session.roleArn && role.principalArn === session.principalArn
+        );
 
         if (!found) {
           session.showRole = undefined;
@@ -58,11 +60,11 @@ module.exports = (app, auth) => {
       } else {
         frontend.searchParams.set('select-role', 'true');
       }
-
     } else {
+      let role = roles[0];
+
       frontend.searchParams.set('auth', 'true');
 
-      let role = roles[0];
       session.showRole = false;
       session.roleArn = role.roleArn;
       session.roleName = role.roleName;
