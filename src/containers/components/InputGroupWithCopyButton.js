@@ -16,11 +16,13 @@ export class InputGroupWithCopyButton extends Component {
     name: PropTypes.string.isRequired,
     readOnly: PropTypes.bool,
     value: PropTypes.string.isRequired,
+    multiLine: PropTypes.bool,
   };
 
   static defaultProps = {
     message: 'Copied!',
     readOnly: true,
+    multiLine: false,
   };
 
   state = {
@@ -40,7 +42,7 @@ export class InputGroupWithCopyButton extends Component {
   };
 
   render() {
-    const {id: idFromProps, name, readOnly, value, message} = this.props;
+    const {id: idFromProps, name, readOnly, value, message, multiLine} = this.props;
     const id = `icon-${idFromProps}`;
 
     return (
@@ -51,6 +53,7 @@ export class InputGroupWithCopyButton extends Component {
           name={name}
           readOnly={readOnly}
           value={value}
+          type={multiLine ? "textarea" : "text"}
         />
         <InputGroupAddon
           addonType="append"

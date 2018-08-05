@@ -17,6 +17,7 @@ import {Logo} from '../components/Logo';
 import {Credentials} from './Credentials';
 import {Logout} from './Logout';
 import {RenderIfLoaded} from '../components/RenderIfLoaded';
+import {InputGroupWithCopyButton} from '../components/InputGroupWithCopyButton';
 import {
   RoundedContent,
   RoundedWrapper,
@@ -127,9 +128,13 @@ class Refresh extends Component {
                   />
                   <EnvVar>
                     <p>Run these commands from a {getTerm(platform)} to use the AWS CLI:</p>
-                    <pre className={getLang(platform)}>
-                      {getEnvVars(this.props)}
-                    </pre>
+                    <InputGroupWithCopyButton
+                      className={getLang(platform)}
+                      id="envvars"
+                      name="input-envvars"
+                      value={getEnvVars(this.props)}
+                      multiLine={true}
+                    />
                   </EnvVar>
                   <span className="ml-auto p-2">
                     <LinkWithButtonMargin
