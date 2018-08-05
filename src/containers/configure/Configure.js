@@ -42,6 +42,7 @@ class Configure extends Component {
 
     this.state = {
       auth: (params['?auth'] && params['?auth'] === 'true'),
+      selectRole: (params['?select-role'] && params['?select-role'] === 'true'),
       loaded: false,
     };
   }
@@ -64,6 +65,9 @@ class Configure extends Component {
   render() {
     if (this.state.auth) {
       return <Redirect to="/refresh" />;
+    }
+    if (this.state.selectRole) {
+      return <Redirect to="/select-role" />;
     }
     const metadataUrls = getOr([], 'metadataUrls', this.props);
 

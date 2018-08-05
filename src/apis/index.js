@@ -40,6 +40,27 @@ export const getRefresh = async () => {
 };
 
 /**
+ * Execute GET request against the /select-role endpoint
+ * @returns {Promise<*>}
+ */
+export const getSelectRole = async () => {
+  const {data} = await axiosClient.get('select-role');
+
+  return data;
+};
+
+/**
+ * Execute POST request against the /select-role endpoint with payload
+ * @param {Object} payload
+ * @returns {Promise<*>}
+ */
+export const postSelectRole = async (payload) => {
+  const {data} = await axiosClient.post('select-role', payload);
+
+  return data;
+};
+
+/**
  * Execute GET request against the SPA /logout endpoint
  *
  * Note: this call triggers the /logout route on the SPA to make sure that

@@ -7,6 +7,7 @@ import {
 
 import Configure from './configure/Configure';
 import Refresh from './refresh/Refresh';
+import SelectRole from './select-role/SelectRole';
 import ErrorBoundary from './ErrorBoundary';
 import DebugRoute from './components/DebugRoute';
 
@@ -28,6 +29,10 @@ class App extends Component {
           <Route
             component={Refresh}
             path="/refresh"
+          />
+          <Route
+            component={SelectRole}
+            path="/select-role"
           />
           {debug ? <Route component={DebugRoute} /> : ''}
         </Switch>

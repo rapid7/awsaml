@@ -94,6 +94,8 @@ class Refresh extends Component {
       errorMessage,
       status,
       accountId,
+      showRole,
+      roleName,
       accessKey,
       secretKey,
       sessionToken,
@@ -114,11 +116,16 @@ class Refresh extends Component {
                 <RoundedContent>
                   {errorMessage}
                   <details open>
-                    <summary>Account ID</summary>
+                    <summary>Account</summary>
                     <div className="card card-body bg-light mb-3">
-                      <pre className="card-text language-markup">
-                        <code>{accountId}</code>
-                      </pre>
+                      <dl className="mb-0 p-2 bg-dark text-light" style={{display: 'grid', gridTemplateColumns: 'auto 1fr'}}>
+                        <dt className="mr-2" style={{'gridColumn': 1}}>ID:</dt>
+                        <dd className="mb-0" style={{'gridColumn': 2}}>{accountId}</dd>
+                        {showRole && [
+                          <dt key="role-name-dt" className="mr-2" style={{gridColumn: 1}}>Role:</dt>,
+                          <dd key="role-name-dd" className="mb-0" style={{gridColumn: 2}}>{roleName}</dd>
+                        ]}
+                      </dl>
                     </div>
                   </details>
                   <Credentials

@@ -20,6 +20,8 @@ module.exports = (app) => {
 
     const refreshResponseObj = Object.assign({}, ResponseObj, {
       accountId: session.accountId,
+      roleName: session.roleName,
+      showRole: session.showRole,
     });
 
     sts.assumeRoleWithSAML({
