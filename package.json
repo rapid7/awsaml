@@ -12,7 +12,7 @@
   },
   "scripts": {
     "electron": "electron electron/electron.js",
-    "electron-dev": "NODE_ENV=development; ELECTRON_START_URL=http://localhost:3000 electron electron/electron.js",
+    "electron-dev": "NODE_ENV=development ELECTRON_START_URL=http://localhost:3000 electron electron/electron.js",
     "react-start": "BROWSER=none; NODE_ENV=development react-scripts start",
     "react-build": "react-scripts build",
     "test": "mocha",
