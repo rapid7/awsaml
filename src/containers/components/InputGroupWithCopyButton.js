@@ -46,7 +46,7 @@ export class InputGroupWithCopyButton extends Component {
     const id = `icon-${idFromProps}`;
 
     return (
-      <InputGroup className="mb-3 mt-3">
+      <InputGroup>
         <Input
           className="form-control"
           id={name}
