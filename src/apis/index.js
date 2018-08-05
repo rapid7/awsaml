@@ -1,8 +1,6 @@
 import axios from 'axios';
-import {ENDPOINTS} from '../constants';
 
 const axiosClient = axios.create({
-  baseURL: ENDPOINTS.electron,
   timeout: 30000,
 });
 
