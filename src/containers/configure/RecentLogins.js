@@ -1,8 +1,13 @@
-import React from 'react';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import {ListGroup} from 'reactstrap';
+import {
+  ListGroup,
+  Input
+} from 'reactstrap';
 import {Login} from './Login';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 const ScrollableListGroup = styled(ListGroup)`
   overflow-x: hidden;
@@ -15,28 +20,95 @@ const RecentLoginsHeader = styled.h4`
   padding-top: 15px;
 `;
 
-export const RecentLogins = (({metadataUrls}) =>
-  (
-    <div id="recent-logins">
-      <RecentLoginsHeader>Recent Logins</RecentLoginsHeader>
-      <ScrollableListGroup>
-        {
-          metadataUrls.map(({url, name}, i) =>
-            (
-              <Login
-                key={url}
-                pretty={name}
-                profileId={i}
-                url={url}
-              />
-            )
-          )
-        }
-      </ScrollableListGroup>
-    </div>
-  )
-);
+const SearchContainer = styled.div`
+  position: absolute;
+  right: 0;
+  top: 10px;
+  width: 250px;
+`;
 
-RecentLogins.propTypes = {
-  metadataUrls: PropTypes.array.isRequired,
-};
+const SearchIcon = styled(FontAwesomeIcon)`
+  position: absolute;
+  top: 11px;
+  left: 10px;
+`;
+
+const SearchInput = styled(Input)`
+  padding-left: 30px;
+`;
+
+class RecentLoginsComponent extends Component {
+  static propTypes = {
+    metadataUrls: PropTypes.array.isRequired,
+  }
+
+  state = {
+    filterText: '',
+  };
+
+  handleFilterInputChange = ({target: {value}}) => {
+    this.setState({
+      filterText: value,
+    });
+  };
+
+  filterMetadataUrls = () => {
+    const metadataUrls = this.props.metadataUrls;
+    const filterText = this.state.filterText;
+
+    if (filterText === undefined || filterText === '') {
+      return metadataUrls;
+    }
+
+    const tokens = filterText.split(' ').map((token) => token.toLowerCase());
+
+    return metadataUrls.filter((metadataUrl) =>
+      tokens.every((token) =>
+        metadataUrl.name.toLowerCase().indexOf(token) !== -1
+          || metadataUrl.url.toLowerCase().indexOf(token) !== -1
+      )
+    );
+  };
+
+  render() {
+    const metadataUrls = this.filterMetadataUrls();
+
+    return (
+      <div
+        className="position-relative"
+        id="recent-logins"
+      >
+        <RecentLoginsHeader>Recent Logins</RecentLoginsHeader>
+        <SearchContainer>
+          <SearchInput onChange={this.handleFilterInputChange} />
+          <SearchIcon
+            color="grey"
+            icon={['fas', 'search']}
+          />
+        </SearchContainer>
+        <ScrollableListGroup>
+          {
+            metadataUrls.map(({url, name}, i) =>
+              (
+                <Login
+                  key={url}
+                  pretty={name}
+                  profileId={i}
+                  url={url}
+                />
+              )
+            )
+          }
+        </ScrollableListGroup>
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = () => ({
+});
+
+const mapDispatchToProps = () => ({
+});
+
+export const RecentLogins = connect(mapStateToProps, mapDispatchToProps)(RecentLoginsComponent);
