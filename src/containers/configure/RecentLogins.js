@@ -36,6 +36,21 @@ const SearchInput = styled(Input)`
   padding-left: 30px;
 `;
 
+const filterMetadataUrls = (metadataUrls, filterText) => {
+  if (!filterText) {
+    return metadataUrls;
+  }
+
+  const tokens = filterText.split(' ').map((token) => token.toLowerCase());
+
+  return metadataUrls.filter((metadataUrl) =>
+    tokens.every((token) =>
+      metadataUrl.name.toLowerCase().indexOf(token) !== -1
+        || metadataUrl.url.toLowerCase().indexOf(token) !== -1
+    )
+  );
+};
+
 class RecentLogins extends Component {
   static propTypes = {
     metadataUrls: PropTypes.array.isRequired,
@@ -45,32 +60,10 @@ class RecentLogins extends Component {
     filterText: '',
   };
 
-  handleFilterInputChange = ({target: {value}}) => {
-    this.setState({
-      filterText: value,
-    });
-  };
-
-  filterMetadataUrls = () => {
-    const metadataUrls = this.props.metadataUrls;
-    const filterText = this.state.filterText;
-
-    if (!filterText) {
-      return metadataUrls;
-    }
-
-    const tokens = filterText.split(' ').map((token) => token.toLowerCase());
-
-    return metadataUrls.filter((metadataUrl) =>
-      tokens.every((token) =>
-        metadataUrl.name.toLowerCase().indexOf(token) !== -1
-          || metadataUrl.url.toLowerCase().indexOf(token) !== -1
-      )
-    );
-  };
+  handleFilterInputChange = ({currentTarget: {value: filterText}}) => this.setState({filterText});
 
   render() {
-    const metadataUrls = this.filterMetadataUrls();
+    const metadataUrls = filterMetadataUrls(this.props.metadataUrls, this.state.filterText);
 
     return (
       <div
