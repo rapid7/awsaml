@@ -5,11 +5,12 @@ const router = express.Router();
 
 module.exports = () => {
   router.delete('/', (req, res) => {
-    let {profile} = url.parse(req.url, true).query;
-    let idx = parseInt(profile, 10);
+    let {profileUuid} = url.parse(req.url, true).query;
     let metadataUrls = Storage.get('metadataUrls');
 
-    metadataUrls = metadataUrls.map((metadataUrl, i) => (i !== idx) ? metadataUrl : null).filter((el) => !!el);
+    metadataUrls = metadataUrls.map((metadata) =>
+      (metadata.profileUuid !== profileUuid) ? metadata : null
+    ).filter((el) => !!el);
     Storage.set('metadataUrls', metadataUrls);
 
     res.status(200).end();

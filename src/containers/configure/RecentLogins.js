@@ -80,12 +80,12 @@ class RecentLogins extends Component {
         </SearchContainer>
         <ScrollableListGroup>
           {
-            metadataUrls.map(({url, name}, i) =>
+            metadataUrls.map(({url, name, profileUuid}) =>
               (
                 <Login
                   key={url}
                   pretty={name}
-                  profileId={i}
+                  profileUuid={profileUuid}
                   url={url}
                 />
               )
