@@ -55,7 +55,7 @@ class RecentLogins extends Component {
     const metadataUrls = this.props.metadataUrls;
     const filterText = this.state.filterText;
 
-    if (filterText === undefined || filterText === '') {
+    if (!filterText) {
       return metadataUrls;
     }
 
