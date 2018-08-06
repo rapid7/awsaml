@@ -52,6 +52,7 @@ class Refresh extends Component {
     errorMessage: PropTypes.string,
     fetchRefresh: PropTypes.func,
     platform: PropTypes.string,
+    profileName: PropTypes.string,
     redirect: PropTypes.bool,
     roleName: PropTypes.string,
     secretKey: PropTypes.string,
@@ -91,6 +92,10 @@ class Refresh extends Component {
     this.props.fetchRefresh();
   };
 
+  showProfileName() {
+    return this.props.profileName !== `awsaml-${this.props.accountId}`;
+  }
+
   render() {
     const {
       errorMessage,
@@ -102,6 +107,7 @@ class Refresh extends Component {
       secretKey,
       sessionToken,
       platform,
+      profileName,
     } = this.props;
 
     if (status === 401) {
@@ -127,6 +133,22 @@ class Refresh extends Component {
                           gridTemplateColumns: 'auto 1fr',
                         }}
                       >
+                        {this.showProfileName() && [
+                          <dt
+                            className="mr-2"
+                            key="profile-name-dt"
+                            style={{gridColumn: 1}}
+                          >
+                            Profile:
+                          </dt>,
+                          <dd
+                            className="mb-0"
+                            key="profile-name-dd"
+                            style={{gridColumn: 2}}
+                          >
+                            {profileName}
+                          </dd>,
+                        ]}
                         <dt
                           className="mr-2"
                           style={{gridColumn: 1}}

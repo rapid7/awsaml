@@ -55,6 +55,11 @@ module.exports = (app) => {
 
       Storage.set('metadataUrls', metadataUrls);
 
+      // Fetch the metadata profile name for this URL
+      const profile = metadataUrls.find((metadata) => metadata.url === metadataUrl);
+
+      credentialResponseObj.profileName = profile.name;
+
       credentials.save(data.Credentials, profileName, (credSaveErr) => {
         if (credSaveErr) {
           res.json(Object.assign({}, credentialResponseObj, {
