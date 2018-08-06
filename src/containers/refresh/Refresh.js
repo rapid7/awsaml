@@ -34,6 +34,23 @@ const LinkWithButtonMargin = styled(Link)`
 ${BUTTON_MARGIN}
 `;
 
+const AccountProps = styled.dl`
+  display: grid;
+  grid-template-columns: auto 1fr;
+  margin: 0;
+  padding: .5rem;
+`;
+
+const AccountPropsKey = styled.dt`
+  grid-column: 1;
+  margin-right: .5rem;
+`;
+
+const AccountPropsVal = styled.dd`
+  grid-column: 2;
+  margin-bottom: 0;
+`;
+
 const getLang = (platform) => platform === 'win32' ? 'language-batch' : 'language-bash';
 
 const getTerm = (platform) => platform === 'win32' ? 'command prompt' : 'terminal';
@@ -126,58 +143,18 @@ class Refresh extends Component {
                   <details open>
                     <summary>Account</summary>
                     <div className="card card-body bg-light mb-3">
-                      <dl
-                        className="mb-0 p-2 bg-dark text-light"
-                        style={{
-                          display: 'grid',
-                          gridTemplateColumns: 'auto 1fr',
-                        }}
-                      >
+                      <AccountProps className="bg-dark text-light">
                         {this.showProfileName() && [
-                          <dt
-                            className="mr-2"
-                            key="profile-name-dt"
-                            style={{gridColumn: 1}}
-                          >
-                            Profile:
-                          </dt>,
-                          <dd
-                            className="mb-0"
-                            key="profile-name-dd"
-                            style={{gridColumn: 2}}
-                          >
-                            {profileName}
-                          </dd>,
+                          <AccountPropsKey key="profile-name-dt">Profile:</AccountPropsKey>,
+                          <AccountPropsVal key="profile-name-dd">{profileName}</AccountPropsVal>,
                         ]}
-                        <dt
-                          className="mr-2"
-                          style={{gridColumn: 1}}
-                        >
-                          ID:
-                        </dt>
-                        <dd
-                          className="mb-0"
-                          style={{gridColumn: 2}}
-                        >
-                          {accountId}
-                        </dd>
+                        <AccountPropsKey>ID:</AccountPropsKey>
+                        <AccountPropsVal>{accountId}</AccountPropsVal>
                         {showRole && [
-                          <dt
-                            className="mr-2"
-                            key="role-name-dt"
-                            style={{gridColumn: 1}}
-                          >
-                            Role:
-                          </dt>,
-                          <dd
-                            className="mb-0"
-                            key="role-name-dd"
-                            style={{gridColumn: 2}}
-                          >
-                            {roleName}
-                          </dd>,
+                          <AccountPropsKey key="role-name-dt">Role:</AccountPropsKey>,
+                          <AccountPropsVal key="role-name-dd">{roleName}</AccountPropsVal>,
                         ]}
-                      </dl>
+                      </AccountProps>
                     </div>
                   </details>
                   <Credentials

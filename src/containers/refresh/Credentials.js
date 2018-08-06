@@ -4,7 +4,24 @@ import {
   CardBody
 } from 'reactstrap';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import {InputGroupWithCopyButton} from '../components/InputGroupWithCopyButton';
+
+const CredProps = styled.dl`
+  display: grid;
+  grid-template-columns: auto 1fr;
+  margin: 0;
+  padding: .5rem;
+`;
+
+const CredPropsKey = styled.dt`
+  grid-column: 1;
+  margin-right: .5rem;
+`;
+
+const CredPropsVal = styled.dd`
+  grid-column: 2;
+`;
 
 export const Credentials = ({awsAccessKey, awsSecretKey, awsSessionToken}) => {
   const creds = new Map();
@@ -26,40 +43,24 @@ export const Credentials = ({awsAccessKey, awsSecretKey, awsSessionToken}) => {
       <summary>Credentials</summary>
       <Card>
         <CardBody className="bg-light">
-          <dl
-            className="mb-0"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'auto 1fr',
-            }}
-          >
+          <CredProps>
             {
               Array.from(creds).map(([name, value]) => {
                 const id = name.toLowerCase().split(' ').join('-');
 
                 return ([
-                  <dt
-                    className="mr-2"
-                    key={`creds-dt-${name}`}
-                    style={{gridColumn: 1}}
-                  >
-                    {name}:
-                  </dt>,
-                  <dd
-                    key={`creds-dd-${name}`}
-                    style={{gridColumn: 2}}
-                  >
+                  <CredPropsKey key={`creds-dt-${name}`}>{name}:</CredPropsKey>,
+                  <CredPropsVal key={`creds-dd-${name}`}>
                     <InputGroupWithCopyButton
                       id={id}
                       name={`input-${id}`}
                       value={value}
                     />
-                  </dd>,
+                  </CredPropsVal>,
                 ]);
               })
             }
-
-          </dl>
+          </CredProps>
         </CardBody>
       </Card>
     </details>
