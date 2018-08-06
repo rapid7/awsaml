@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {
@@ -37,7 +36,7 @@ const SearchInput = styled(Input)`
   padding-left: 30px;
 `;
 
-class RecentLoginsComponent extends Component {
+class RecentLogins extends Component {
   static propTypes = {
     metadataUrls: PropTypes.array.isRequired,
   }
@@ -105,10 +104,4 @@ class RecentLoginsComponent extends Component {
   }
 }
 
-const mapStateToProps = () => ({
-});
-
-const mapDispatchToProps = () => ({
-});
-
-export const RecentLogins = connect(mapStateToProps, mapDispatchToProps)(RecentLoginsComponent);
+export default RecentLogins;
