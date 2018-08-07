@@ -25,7 +25,7 @@ class LoginComponent extends Component {
   static propTypes = {
     deleteProfile: PropTypes.func.isRequired,
     pretty: PropTypes.string,
-    profileId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    profileUuid: PropTypes.string,
     submitConfigure: PropTypes.func.isRequired,
     url: PropTypes.string,
   };
@@ -62,7 +62,7 @@ class LoginComponent extends Component {
   handleDelete = (event) => {
     event.preventDefault();
     const payload = {
-      profile: this.props.profileId,
+      profileUuid: this.props.profileUuid,
     };
 
     this.props.deleteProfile(payload);
@@ -101,7 +101,7 @@ class LoginComponent extends Component {
             </ProfileInputGroup>
           </summary>
           <InputGroupWithCopyButton
-            id={this.props.profileId}
+            id={this.props.profileUuid}
             name={this.props.pretty}
             value={this.props.url}
           />

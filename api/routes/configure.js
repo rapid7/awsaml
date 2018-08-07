@@ -1,5 +1,6 @@
 const https = require('https');
 const express = require('express');
+const uuidv4 = require('uuid/v4');
 const xmldom = require('xmldom');
 const xpath = require('xpath.js');
 const config = require('../config');
@@ -16,6 +17,21 @@ const ResponseObj = require('./../response');
 module.exports = (app, auth) => {
   router.get('/', (req, res) => {
     const storedMetadataUrls = Storage.get('metadataUrls') || [];
+
+    // Migrate metadataUrls to include a profileUuid.  This makes
+    // profile deletes/edits a little safer since they will no longer be
+    // based on the iteration index.
+    let migrated = false;
+
+    storedMetadataUrls.forEach((metadata) => {
+      if (metadata.profileUuid === undefined) {
+        migrated = true;
+        metadata.profileUuid = uuidv4();
+      }
+    });
+    if (migrated) {
+      Storage.set('metadataUrls', storedMetadataUrls);
+    }
 
     // We populate the value of the metadata url field on the following (in order of precedence):
     //   1. Use the current session's metadata url (may have been rejected).
@@ -132,6 +148,7 @@ module.exports = (app, auth) => {
             profile ? metadataUrls : metadataUrls.concat([
               {
                 name: profileName || metadataUrl,
+                profileUuid: uuidv4(),
                 url: metadataUrl,
               },
             ])

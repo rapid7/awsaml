@@ -43,6 +43,7 @@
     "passport-saml": "^0.33.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "uuid": "^3.3.2",
     "xmldom": "^0.1.27",
     "xpath.js": "^1.1.0"
   },

@@ -10,6 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import fontawesome from '@fortawesome/fontawesome';
 import faCopy from '@fortawesome/fontawesome-free-regular/faCopy';
 import faTrashAlt from '@fortawesome/fontawesome-free-regular/faTrashAlt';
+import faSearch from '@fortawesome/fontawesome-free-solid/faSearch';
 import faExclamationTriangle from '@fortawesome/fontawesome-free-solid/faExclamationTriangle';
 
 import App from './containers/App';
@@ -54,7 +55,7 @@ injectGlobal`
 `;
 /* eslint-enable no-unused-expressions */
 
-fontawesome.library.add(faCopy, faTrashAlt, faExclamationTriangle);
+fontawesome.library.add(faCopy, faTrashAlt, faSearch, faExclamationTriangle);
 
 const target = document.querySelector('#root');
 
