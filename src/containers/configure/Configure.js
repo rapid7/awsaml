@@ -12,7 +12,7 @@ import {
   Row
 } from 'reactstrap';
 import {Logo} from '../components/Logo';
-import {RecentLogins} from './RecentLogins';
+import RecentLogins from './RecentLogins';
 import {ConfigureMetadata} from './ConfigureMetadata';
 import {
   RoundedContent,
