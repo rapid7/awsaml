@@ -46,7 +46,7 @@ module.exports = (app) => {
       const metadataUrl = app.get('metadataUrl');
 
       // Update the stored profile with account number(s) and profile names
-      const metadataUrls = Storage.get('metadataUrls', []).map((metadata) => {
+      const metadataUrls = (Storage.get('metadataUrls') || []).map((metadata) => {
         if (metadata.url === metadataUrl) {
           // If the stored metadataUrl label value is the same as the URL
           // default to the profile name!
