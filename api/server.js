@@ -23,6 +23,9 @@ const app = require('./server-config')(auth, config, sessionSecret);
     name: '/profile',
     route: require('./routes/profile')(),
   }, {
+    name: '/select-role',
+    route: require('./routes/select-role')(),
+  }, {
     name: '/',
     route: require('./routes/static')(),
   },

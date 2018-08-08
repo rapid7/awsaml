@@ -11,8 +11,12 @@ import Clipboard from 'react-clipboard.js';
 
 export class InputGroupWithCopyButton extends Component {
   static propTypes = {
+    buttonClassName: PropTypes.string,
+    className: PropTypes.string,
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    inputClassName: PropTypes.string,
     message: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+    multiLine: PropTypes.bool,
     name: PropTypes.string.isRequired,
     readOnly: PropTypes.bool,
     value: PropTypes.string.isRequired,
@@ -20,6 +24,7 @@ export class InputGroupWithCopyButton extends Component {
 
   static defaultProps = {
     message: 'Copied!',
+    multiLine: false,
     readOnly: true,
   };
 
@@ -40,16 +45,27 @@ export class InputGroupWithCopyButton extends Component {
   };
 
   render() {
-    const {id: idFromProps, name, readOnly, value, message} = this.props;
+    const {
+      id: idFromProps,
+      buttonClassName,
+      className,
+      inputClassName,
+      name,
+      readOnly,
+      value,
+      message,
+      multiLine,
+    } = this.props;
     const id = `icon-${idFromProps}`;
 
     return (
-      <InputGroup className="mb-3 mt-3">
+      <InputGroup className={className}>
         <Input
-          className="form-control"
+          className={`form-control ${inputClassName}`}
           id={name}
           name={name}
           readOnly={readOnly}
+          type={multiLine ? 'textarea' : 'text'}
           value={value}
         />
         <InputGroupAddon
@@ -66,7 +82,7 @@ export class InputGroupWithCopyButton extends Component {
             {message}
           </Tooltip>
           <Clipboard
-            className="btn btn-outline-secondary copy-to-clipboard-button"
+            className={`btn btn-outline-secondary copy-to-clipboard-button ${buttonClassName}`}
             data-clipboard-text={value}
           >
             <FontAwesomeIcon icon={['far', 'copy']}/>

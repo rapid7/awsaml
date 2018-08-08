@@ -20,6 +20,8 @@ module.exports = (app) => {
 
     const refreshResponseObj = Object.assign({}, ResponseObj, {
       accountId: session.accountId,
+      roleName: session.roleName,
+      showRole: session.showRole,
     });
 
     sts.assumeRoleWithSAML({
@@ -42,16 +44,27 @@ module.exports = (app) => {
 
       const profileName = `awsaml-${session.accountId}`;
       const metadataUrl = app.get('metadataUrl');
-      // If the stored metadataUrl label value is the same as the URL default to the profile name!
-      const metadataUrls = Storage.get('metadataUrls', []).map((storedMetadataUrl) => {
-        if (storedMetadataUrl.url === metadataUrl && storedMetadataUrl.name === metadataUrl) {
-          storedMetadataUrl.name = profileName;
+
+      // Update the stored profile with account number(s) and profile names
+      const metadataUrls = (Storage.get('metadataUrls') || []).map((metadata) => {
+        if (metadata.url === metadataUrl) {
+          // If the stored metadataUrl label value is the same as the URL
+          // default to the profile name!
+          if (metadata.name === metadataUrl) {
+            metadata.name = profileName;
+          }
+          metadata.roles = session.roles.map((role) => role.roleArn);
         }
 
-        return storedMetadataUrl;
+        return metadata;
       });
 
       Storage.set('metadataUrls', metadataUrls);
+
+      // Fetch the metadata profile name for this URL
+      const profile = metadataUrls.find((metadata) => metadata.url === metadataUrl);
+
+      credentialResponseObj.profileName = profile.name;
 
       credentials.save(data.Credentials, profileName, (credSaveErr) => {
         if (credSaveErr) {

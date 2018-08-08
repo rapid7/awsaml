@@ -187,6 +187,24 @@ Replace the "arn:aws:iam:role" value with the ARN of the role in AWS you
 created. Replace the "arn:aws:iam:provider" value with the ARN of the identity
 provider in AWS your created.
 
+
+##### Multiple Role Support
+To support multiple roles, add multiple values to the `https://aws.amazon.com/SAML/Attributes/Role`
+attribute.  For example:
+
+```
+arn:aws:iam:role1,arn:aws:iam:provider
+arn:aws:iam:role2,arn:aws:iam:provider
+arn:aws:iam:role3,arn:aws:iam:provider
+```
+
+*Special note for Okta users*:  Multiple roles must be passed as multiple values to a single
+attribute key.  By default, Okta serializes multiple values into a single value using commas.
+To support multiple roles, you must contact Okta support and request that the
+`SAML_SUPPORT_ARRAY_ATTRIBUTES` feature flag be enabled on your Okta account.  For more details
+see [this post](https://devforum.okta.com/t/multivalued-attributes/179).
+
+
 ### 5. Run Awsaml and give it your application's metadata.
 You can find a prebuilt binary for Awsaml on [the releases page][releases]. Grab
 the appropriate binary for your architecture and run the Awsaml application. It

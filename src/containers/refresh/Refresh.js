@@ -17,6 +17,7 @@ import {Logo} from '../components/Logo';
 import {Credentials} from './Credentials';
 import {Logout} from './Logout';
 import {RenderIfLoaded} from '../components/RenderIfLoaded';
+import {InputGroupWithCopyButton} from '../components/InputGroupWithCopyButton';
 import {
   RoundedContent,
   RoundedWrapper,
@@ -31,6 +32,28 @@ const EnvVar = RoundedContent.extend`
 
 const LinkWithButtonMargin = styled(Link)`
 ${BUTTON_MARGIN}
+`;
+
+const AccountProps = styled.dl`
+  display: grid;
+  grid-template-columns: auto 1fr;
+  margin: 0;
+  padding: .5rem;
+`;
+
+const AccountPropsKey = styled.dt`
+  grid-column: 1;
+  margin-right: .5rem;
+`;
+
+const AccountPropsVal = styled.dd`
+  grid-column: 2;
+  margin-bottom: 0;
+`;
+
+const PreInputGroupWithCopyButton = styled(InputGroupWithCopyButton)`
+  font-family: Consolas,monospace;
+  font-size: 1rem;
 `;
 
 const getLang = (platform) => platform === 'win32' ? 'language-batch' : 'language-bash';
@@ -51,9 +74,12 @@ class Refresh extends Component {
     errorMessage: PropTypes.string,
     fetchRefresh: PropTypes.func,
     platform: PropTypes.string,
+    profileName: PropTypes.string,
     redirect: PropTypes.bool,
+    roleName: PropTypes.string,
     secretKey: PropTypes.string,
     sessionToken: PropTypes.string,
+    showRole: PropTypes.bool,
     status: PropTypes.number,
   };
 
@@ -88,15 +114,22 @@ class Refresh extends Component {
     this.props.fetchRefresh();
   };
 
+  showProfileName() {
+    return this.props.profileName !== `awsaml-${this.props.accountId}`;
+  }
+
   render() {
     const {
       errorMessage,
       status,
       accountId,
+      showRole,
+      roleName,
       accessKey,
       secretKey,
       sessionToken,
       platform,
+      profileName,
     } = this.props;
 
     if (status === 401) {
@@ -113,11 +146,20 @@ class Refresh extends Component {
                 <RoundedContent>
                   {errorMessage}
                   <details open>
-                    <summary>Account ID</summary>
+                    <summary>Account</summary>
                     <div className="card card-body bg-light mb-3">
-                      <pre className="card-text language-markup">
-                        <code>{accountId}</code>
-                      </pre>
+                      <AccountProps className="bg-dark text-light">
+                        {this.showProfileName() && [
+                          <AccountPropsKey key="profile-name-dt">Profile:</AccountPropsKey>,
+                          <AccountPropsVal key="profile-name-dd">{profileName}</AccountPropsVal>,
+                        ]}
+                        <AccountPropsKey>ID:</AccountPropsKey>
+                        <AccountPropsVal>{accountId}</AccountPropsVal>
+                        {showRole && [
+                          <AccountPropsKey key="role-name-dt">Role:</AccountPropsKey>,
+                          <AccountPropsVal key="role-name-dd">{roleName}</AccountPropsVal>,
+                        ]}
+                      </AccountProps>
                     </div>
                   </details>
                   <Credentials
@@ -127,9 +169,14 @@ class Refresh extends Component {
                   />
                   <EnvVar>
                     <p>Run these commands from a {getTerm(platform)} to use the AWS CLI:</p>
-                    <pre className={getLang(platform)}>
-                      {getEnvVars(this.props)}
-                    </pre>
+                    <PreInputGroupWithCopyButton
+                      buttonClassName="bg-dark text-light"
+                      id="envvars"
+                      inputClassName={`bg-dark text-light ${getLang(platform)}`}
+                      multiLine
+                      name="input-envvars"
+                      value={getEnvVars(this.props)}
+                    />
                   </EnvVar>
                   <span className="ml-auto p-2">
                     <LinkWithButtonMargin

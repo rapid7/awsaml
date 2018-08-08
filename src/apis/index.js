@@ -1,8 +1,6 @@
 import axios from 'axios';
-import {ENDPOINTS} from '../constants';
 
 const axiosClient = axios.create({
-  baseURL: ENDPOINTS.electron,
   timeout: 30000,
 });
 
@@ -37,6 +35,27 @@ export const postConfigure = async (payload) => {
  */
 export const getRefresh = async () => {
   const {data} = await axios.get('refresh');
+
+  return data;
+};
+
+/**
+ * Execute GET request against the /select-role endpoint
+ * @returns {Promise<*>}
+ */
+export const getSelectRole = async () => {
+  const {data} = await axiosClient.get('select-role');
+
+  return data;
+};
+
+/**
+ * Execute POST request against the /select-role endpoint with payload
+ * @param {Object} payload
+ * @returns {Promise<*>}
+ */
+export const postSelectRole = async (payload) => {
+  const {data} = await axiosClient.post('select-role', payload);
 
   return data;
 };
