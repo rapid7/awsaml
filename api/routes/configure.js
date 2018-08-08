@@ -21,7 +21,7 @@ module.exports = (app, auth) => {
     // profile deletes/edits a little safer since they will no longer be
     // based on the iteration index.
     let migrated = false;
-    const storedMetadataUrls = Storage.get('metadataUrls', []).map((metadata) => {
+    const storedMetadataUrls = (Storage.get('metadataUrls') || []).map((metadata) => {
       if (metadata.profileUuid === undefined) {
         migrated = true;
         metadata.profileUuid = uuidv4();
