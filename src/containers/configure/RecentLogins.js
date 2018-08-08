@@ -44,10 +44,24 @@ const filterMetadataUrls = (metadataUrls, filterText) => {
   const tokens = filterText.split(' ').map((token) => token.toLowerCase());
 
   return metadataUrls.filter((metadataUrl) =>
-    tokens.every((token) =>
-      metadataUrl.name.toLowerCase().indexOf(token) !== -1
-        || metadataUrl.url.toLowerCase().indexOf(token) !== -1
-    )
+    tokens.every((token) => {
+      // Compare profile name
+      if (metadataUrl.name.toLowerCase().indexOf(token) !== -1) {
+        return true;
+      }
+
+      // Compare profile URL
+      if (metadataUrl.url.toLowerCase().indexOf(token) !== -1) {
+        return true;
+      }
+
+      // Compare profile roles
+      if ((metadataUrl.roles || []).some((role) => role.toLowerCase().indexOf(token) !== -1)) {
+        return true;
+      }
+
+      return false;
+    })
   );
 };
 
