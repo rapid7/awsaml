@@ -18,8 +18,8 @@ module.exports = (app, auth) => {
       roleAttr = [roleAttr];
     }
 
-    let roles = roleAttr.map((attr, i) => {
-      let arns = attr.split(',');
+    const roles = roleAttr.map((attr, i) => {
+      const arns = attr.split(',');
 
       return {
         accountId: arns[0].split(':')[4],
@@ -40,7 +40,7 @@ module.exports = (app, auth) => {
       // the latest roles from the current SAML assertion.  If it
       // doesn't match, wipe it from the session.
       if (session.roleArn && session.principalArn) {
-        let found = roles.find((role) =>
+        const found = roles.find((role) =>
           role.roleArn === session.roleArn && role.principalArn === session.principalArn
         );
 
@@ -61,7 +61,7 @@ module.exports = (app, auth) => {
         frontend.searchParams.set('select-role', 'true');
       }
     } else {
-      let role = roles[0];
+      const role = roles[0];
 
       frontend.searchParams.set('auth', 'true');
 

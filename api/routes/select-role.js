@@ -6,7 +6,7 @@ module.exports = () => {
   router.get('/', (req, res) => {
     const session = req.session.passport;
 
-    if (session === undefined) {
+    if (!session) {
       return res.status(401).json({
         error: 'Invalid session',
       });
@@ -20,19 +20,19 @@ module.exports = () => {
   router.post('/', (req, res) => {
     const session = req.session.passport;
 
-    if (session === undefined) {
+    if (!session) {
       return res.status(401).json({
         error: 'Invalid session',
       });
     }
 
-    if (req.body.index === undefined) {
+    if (!req.body.index) {
       return res.status(422).json({
         error: 'Missing role',
       });
     }
 
-    let role = session.roles[req.body.index];
+    const role = session.roles[req.body.index];
 
     session.showRole = true;
     session.roleArn = role.roleArn;

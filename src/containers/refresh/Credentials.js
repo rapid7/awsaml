@@ -16,11 +16,17 @@ const CredProps = styled.dl`
 
 const CredPropsKey = styled.dt`
   grid-column: 1;
-  margin-right: .5rem;
+  margin-right: 1rem;
+  margin-bottom: 10px;
+  line-height: 2.5rem;
 `;
 
 const CredPropsVal = styled.dd`
   grid-column: 2;
+`;
+
+const SmallMarginCardBody = styled(CardBody)`
+  padding: 1.25rem 0.5rem;
 `;
 
 export const Credentials = ({awsAccessKey, awsSecretKey, awsSessionToken}) => {
@@ -42,7 +48,7 @@ export const Credentials = ({awsAccessKey, awsSecretKey, awsSessionToken}) => {
     <details>
       <summary>Credentials</summary>
       <Card>
-        <CardBody className="bg-light">
+        <SmallMarginCardBody className="bg-light">
           <CredProps>
             {
               Array.from(creds).map(([name, value]) => {
@@ -61,7 +67,7 @@ export const Credentials = ({awsAccessKey, awsSecretKey, awsSessionToken}) => {
               })
             }
           </CredProps>
-        </CardBody>
+        </SmallMarginCardBody>
       </Card>
     </details>
   );
