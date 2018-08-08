@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-## [2.0.1] - 2018-08-08
+## [2.1.0] - 2018-08-08
 ### Added
 - Search for recent logins (rapid7/awsaml#120)
 - Multiple role support (rapid7/awsaml#119)
@@ -110,8 +110,8 @@ interact with the tool aside from some nice bells and whistles. However, interna
 ### Added
 - Initial release by @onefrankguy.
 
-[Unreleased]: https://github.com/rapid7/awsaml/compare/v2.0.1...HEAD
-[2.0.1]: https://github.com/rapid7/awsaml/compare/v2.0.0...v2.0.1
+[Unreleased]: https://github.com/rapid7/awsaml/compare/v2.1.0...HEAD
+[2.0.1]: https://github.com/rapid7/awsaml/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/rapid7/awsaml/compare/v1.6.1...v2.0.0
 [1.6.1]: https://github.com/rapid7/awsaml/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/rapid7/awsaml/compare/v1.5.0...v1.6.0
