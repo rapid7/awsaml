@@ -44,10 +44,9 @@ module.exports = (app) => {
 
       const profileName = `awsaml-${session.accountId}`;
       const metadataUrl = app.get('metadataUrl');
-      const metadataUrls = Storage.get('metadataUrls', []);
 
       // Update the stored profile with account number(s) and profile names
-      metadataUrls.forEach((metadata) => {
+      const metadataUrls = Storage.get('metadataUrls', []).map((metadata) => {
         if (metadata.url === metadataUrl) {
           // If the stored metadataUrl label value is the same as the URL
           // default to the profile name!
@@ -56,7 +55,10 @@ module.exports = (app) => {
           }
           metadata.roles = session.roles.map((role) => role.roleArn);
         }
+
+        return metadata;
       });
+
       Storage.set('metadataUrls', metadataUrls);
 
       // Fetch the metadata profile name for this URL

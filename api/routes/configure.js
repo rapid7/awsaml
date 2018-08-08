@@ -17,19 +17,19 @@ const ResponseObj = require('./../response');
 
 module.exports = (app, auth) => {
   router.get('/', (req, res) => {
-    const storedMetadataUrls = Storage.get('metadataUrls') || [];
-
     // Migrate metadataUrls to include a profileUuid.  This makes
     // profile deletes/edits a little safer since they will no longer be
     // based on the iteration index.
     let migrated = false;
-
-    storedMetadataUrls.forEach((metadata) => {
+    const storedMetadataUrls = Storage.get('metadataUrls', []).map((metadata) => {
       if (metadata.profileUuid === undefined) {
         migrated = true;
         metadata.profileUuid = uuidv4();
       }
+
+      return metadata;
     });
+
     if (migrated) {
       Storage.set('metadataUrls', storedMetadataUrls);
     }
