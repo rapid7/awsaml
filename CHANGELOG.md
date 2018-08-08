@@ -4,8 +4,8 @@
 
 ## [2.1.0] - 2018-08-08
 ### Added
-- Search for recent logins (rapid7/awsaml#120)
-- Multiple role support (rapid7/awsaml#119)
+- Search for recent logins ([#120](https://github.com/rapid7/awsaml/pull/120))
+- Multiple role support ([#119](https://github.com/rapid7/awsaml/pull/119))
 - Copy/paste button for terminal export commands
 
 ### Changed
