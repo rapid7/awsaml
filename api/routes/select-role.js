@@ -26,7 +26,7 @@ module.exports = () => {
       });
     }
 
-    if (!req.body.index) {
+    if (req.body.index === undefined) {
       return res.status(422).json({
         error: 'Missing role',
       });
