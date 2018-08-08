@@ -11,6 +11,7 @@ const HTTP_OK = 200;
 const Errors = {
   invalidMetadataErr: 'The SAML metadata is invalid.',
   urlInvalidErr: 'The SAML metadata URL is invalid.',
+  uuidInvalidError: 'The profile is invalid.',
 };
 const ResponseObj = require('./../response');
 
@@ -59,7 +60,11 @@ module.exports = (app, auth) => {
   });
 
   router.post('/', (req, res) => {
+    const profileUuid = req.body.profileUuid;
+    const profileName = req.body.profileName;
     const metadataUrl = req.body.metadataUrl;
+    let storedMetadataUrls = Storage.get('metadataUrls') || [];
+    let profile;
 
     if (!metadataUrl) {
       Storage.set('metadataUrlValid', false);
@@ -71,22 +76,43 @@ module.exports = (app, auth) => {
       }));
     }
 
-    const origin = req.body.origin;
-    const metaDataResponseObj = Object.assign({}, ResponseObj, {defaultMetadataUrl: metadataUrl});
+    // If a profileUuid is passed, validate it and update storage
+    // with the submitted profile name.
+    if (profileUuid) {
+      profile = storedMetadataUrls.find((metadata) => metadata.profileUuid === profileUuid);
 
-    let storedMetadataUrls = Storage.get('metadataUrls') || [];
-    const profileName = req.body.profileName === '' ? metadataUrl : req.body.profileName;
-    const profile = storedMetadataUrls.find((profile) => profile.url === metadataUrl);
-
-    storedMetadataUrls = storedMetadataUrls.map((storedMetadataUrl) => {
-      if (profileName && storedMetadataUrl.url === metadataUrl && storedMetadataUrl.name !== profileName) {
-        storedMetadataUrl.name = profileName;
+      if (!profile) {
+        return res.status(404).json(Object.assign({}, ResponseObj, {
+          error: Errors.uuidInvalidErr,
+          uuidUrlValid: false,
+        }));
       }
 
-      return storedMetadataUrl;
-    });
-    Storage.set('metadataUrls', storedMetadataUrls);
+      if (profile.url !== metadataUrl) {
+        return res.status(422).json(Object.assign({}, ResponseObj, {
+          error: Errors.urlInvalidErr,
+          metadataUrlValid: false,
+        }));
+      }
+
+      if (profileName) {
+        storedMetadataUrls = storedMetadataUrls.map((metadata) => {
+          if (metadata.profileUuid === profileUuid && metadata.name !== profileName) {
+            metadata.name = profileName;
+          }
+
+          return metadata;
+        });
+        Storage.set('metadataUrls', storedMetadataUrls);
+      }
+    } else {
+      profile = storedMetadataUrls.find((metadata) => metadata.url === metadataUrl);
+    }
+
     app.set('metadataUrl', metadataUrl);
+
+    const origin = req.body.origin;
+    const metaDataResponseObj = Object.assign({}, ResponseObj, {defaultMetadataUrl: metadataUrl});
 
     const xmlReq = https.get(metadataUrl, (xmlRes) => {
       let xml = '';
@@ -141,18 +167,22 @@ module.exports = (app, auth) => {
 
         if (cert && issuer && entryPoint) {
           Storage.set('previousMetadataUrl', metadataUrl);
-          const metadataUrls = Storage.get('metadataUrls') || [];
 
-          Storage.set(
-            'metadataUrls',
-            profile ? metadataUrls : metadataUrls.concat([
-              {
-                name: profileName || metadataUrl,
-                profileUuid: uuidv4(),
-                url: metadataUrl,
-              },
-            ])
-          );
+          // Add a profile for this URL if one does not already exist
+          if (!profile) {
+            const metadataUrls = Storage.get('metadataUrls') || [];
+
+            Storage.set(
+              'metadataUrls',
+              metadataUrls.concat([
+                {
+                  name: profileName || metadataUrl,
+                  profileUuid: uuidv4(),
+                  url: metadataUrl,
+                },
+              ])
+            );
+          }
 
           app.set('entryPointUrl', config.auth.entryPoint);
           auth.configure(config.auth);

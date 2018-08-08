@@ -54,6 +54,7 @@ class LoginComponent extends Component {
     const payload = {
       metadataUrl: this.props.url,
       profileName: profileName ? profileName : this.props.pretty,
+      profileUuid: this.props.profileUuid,
     };
 
     this.props.submitConfigure(payload);
