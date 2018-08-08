@@ -171,8 +171,8 @@ class Refresh extends Component {
                     <p>Run these commands from a {getTerm(platform)} to use the AWS CLI:</p>
                     <PreInputGroupWithCopyButton
                       buttonClassName="bg-dark text-light"
-                      inputClassName={`bg-dark text-light ${getLang(platform)}`}
                       id="envvars"
+                      inputClassName={`bg-dark text-light ${getLang(platform)}`}
                       multiLine
                       name="input-envvars"
                       value={getEnvVars(this.props)}

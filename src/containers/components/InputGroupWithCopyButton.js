@@ -45,7 +45,17 @@ export class InputGroupWithCopyButton extends Component {
   };
 
   render() {
-    const {id: idFromProps, buttonClassName, className, inputClassName, name, readOnly, value, message, multiLine} = this.props;
+    const {
+      id: idFromProps,
+      buttonClassName,
+      className,
+      inputClassName,
+      name,
+      readOnly,
+      value,
+      message,
+      multiLine,
+    } = this.props;
     const id = `icon-${idFromProps}`;
 
     return (
