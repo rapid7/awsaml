@@ -111,7 +111,7 @@ interact with the tool aside from some nice bells and whistles. However, interna
 - Initial release by @onefrankguy.
 
 [Unreleased]: https://github.com/rapid7/awsaml/compare/v2.1.0...HEAD
-[2.0.1]: https://github.com/rapid7/awsaml/compare/v2.0.0...v2.1.0
+[2.1.0]: https://github.com/rapid7/awsaml/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/rapid7/awsaml/compare/v1.6.1...v2.0.0
 [1.6.1]: https://github.com/rapid7/awsaml/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/rapid7/awsaml/compare/v1.5.0...v1.6.0
