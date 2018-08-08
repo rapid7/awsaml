@@ -48,11 +48,8 @@ class RoleComponent extends Component {
   }
 }
 
-const mapStateToProps = () => ({
-});
-
 const mapDispatchToProps = (dispatch) => ({
   submitSelectRole: bindActionCreators(submitSelectRole, dispatch),
 });
 
-export const Role = connect(mapStateToProps, mapDispatchToProps)(RoleComponent);
+export const Role = connect(null, mapDispatchToProps)(RoleComponent);

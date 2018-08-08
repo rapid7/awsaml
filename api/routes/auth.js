@@ -18,15 +18,18 @@ module.exports = (app, auth) => {
       roleAttr = [roleAttr];
     }
 
-    const roles = roleAttr.map((attr, i) => {
-      const arns = attr.split(',');
+    const roles = roleAttr.map((arns, i) => {
+      const [roleArn, principalArn] = arns.split(',');
+      const roleArnSegments = roleArn.split(':');
+      const accountId = roleArnSegments[4];
+      const roleName = roleArnSegments[5].replace('role/', '');
 
       return {
-        accountId: arns[0].split(':')[4],
+        accountId,
         index: i,
-        principalArn: arns[1],
-        roleArn: arns[0],
-        roleName: arns[0].split(':')[5].replace('role/', ''),
+        principalArn,
+        roleArn,
+        roleName,
       };
     });
 
