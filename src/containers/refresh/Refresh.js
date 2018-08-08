@@ -51,6 +51,11 @@ const AccountPropsVal = styled.dd`
   margin-bottom: 0;
 `;
 
+const PreInputGroupWithCopyButton = styled(InputGroupWithCopyButton)`
+  font-family: Consolas,monospace;
+  font-size: 1rem;
+`;
+
 const getLang = (platform) => platform === 'win32' ? 'language-batch' : 'language-bash';
 
 const getTerm = (platform) => platform === 'win32' ? 'command prompt' : 'terminal';
@@ -164,8 +169,9 @@ class Refresh extends Component {
                   />
                   <EnvVar>
                     <p>Run these commands from a {getTerm(platform)} to use the AWS CLI:</p>
-                    <InputGroupWithCopyButton
-                      className={getLang(platform)}
+                    <PreInputGroupWithCopyButton
+                      buttonClassName="bg-dark text-light"
+                      inputClassName={`bg-dark text-light ${getLang(platform)}`}
                       id="envvars"
                       multiLine
                       name="input-envvars"
