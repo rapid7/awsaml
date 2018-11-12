@@ -76,6 +76,8 @@ const loadTouchBar = (browserWindow) => {
 };
 
 Application.commandLine.appendSwitch('disable-http-cache');
+// No reason for Awsaml to force Macs to use dedicated gfx
+Application.disableHardwareAcceleration();
 
 Application.on('window-all-closed', () => {
   Application.quit();
