@@ -57,7 +57,7 @@ need to create a SAML 2.0 application in Okta with the following settings
 
 Once Okta's created your application, it will show you setup instructions.
 
-Among those instructions will be a url for a generated XML metadata document
+Among those instructions will be a URL for a generated XML metadata document
 that will look something like this:
 
 ```
@@ -113,7 +113,7 @@ the number of characters that the names have.
 arn:aws:iam::XXXXXXXXXXXX:role/,arn:aws:iam::XXXXXXXXXXXX:saml-provider/
 ```
 
-As a consequence, between the name you give to the identity provier and the name
+As a consequence, between the name you give to the identity provider and the name
 you give to the role, you can only use up to 28 characters.
 
 ### 2. Create a SAML identity provider in AWS
@@ -141,7 +141,7 @@ The permissions in this role will be the ones users are granted by their the
 AWS tokens Awsaml generates.
 
 Once the role's created, a trust relationship should have been established
-betweeen your role and the SAML identidy provider you created. If not, you will
+between your role and the SAML identity provider you created. If not, you will
 need to set up a trust relationship between it and your SAML identity provider
 manually. Here's an example of the JSON policy document for that relationship.
 
@@ -209,7 +209,7 @@ see [this post](https://devforum.okta.com/t/multivalued-attributes/179).
 You can find a prebuilt binary for Awsaml on [the releases page][releases]. Grab
 the appropriate binary for your architecture and run the Awsaml application. It
 will prompt you for a SAML metadata URL. Enter the URL you saved in step 1. If
-the URL's valid, it will prompt you to login to your identity provider. If the
+the URL's valid, it will prompt you to log in to your identity provider. If the
 login's successful, you'll see temporary AWS credentials in the UI.
 
 ## Building
@@ -240,7 +240,7 @@ export PLATFORM=darwin,linux
 yarn build
 ~~~
 
-## Setup on OSX with Homebrew
+## Setup on macOS with Homebrew
 A caskfile is bundled with the repository, to install Awsaml with [Homebrew][] simply run:
 
 `brew cask install https://raw.githubusercontent.com/rapid7/awsaml/master/brew/cask/awsaml.rb`
