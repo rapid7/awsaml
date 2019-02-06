@@ -67,6 +67,16 @@ class ConfigureMetadataComponent extends Component {
             type="url"
             value={this.state.metadataUrl}
           />
+          <label htmlFor="name">Account Alias</label>
+          <input
+            className="form-control"
+            id="name"
+            name="name"
+            onChange={this.handleInputChange}
+            onKeyDown={this.handleKeyDown}
+            pattern=".+"
+            type="string"
+          />
         </div>
         <Button
           color="primary"
