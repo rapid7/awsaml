@@ -71,7 +71,6 @@ class ConfigureMetadataComponent extends Component {
           />
         </div>
         <div className={this.props.nameGroupClass}>
-          <label htmlFor="metadataUrl">SAML Metadata URL</label>
           <label htmlFor="profileName">Account Alias</label>
           <input
             className="form-control"
