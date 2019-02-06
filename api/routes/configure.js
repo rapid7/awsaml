@@ -48,6 +48,9 @@ module.exports = (app, auth) => {
     if (!defaultMetadataUrl) {
       if (storedMetadataUrls.length > 0 && storedMetadataUrls[0].hasOwnProperty('url')) {
         defaultMetadataUrl = storedMetadataUrls[0].url;
+        if (storedMetadataUrls[0].hasOwnProperty('name')) {
+          defaultMetadataName = storedMetadataUrls[0].name;
+        }
       }
     }
 

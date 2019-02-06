@@ -40,10 +40,10 @@ class ConfigureMetadataComponent extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const {metadataUrl,name} = this.state;
+    const {metadataUrl,profileName} = this.state;
     const payload = {
       metadataUrl,
-      name,
+      profileName,
     };
 
     this.props.submitConfigure(payload);
@@ -72,11 +72,11 @@ class ConfigureMetadataComponent extends Component {
         </div>
         <div className={this.props.nameGroupClass}>
           <label htmlFor="metadataUrl">SAML Metadata URL</label>
-          <label htmlFor="name">Account Alias</label>
+          <label htmlFor="profileName">Account Alias</label>
           <input
             className="form-control"
-            id="name"
-            name="name"
+            id="profileName"
+            name="profileName"
             onChange={this.handleInputChange}
             onKeyDown={this.handleKeyDown}
             pattern=".+"
