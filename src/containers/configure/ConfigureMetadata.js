@@ -13,6 +13,7 @@ class ConfigureMetadataComponent extends Component {
     redirect: PropTypes.string,
     submitConfigure: PropTypes.func.isRequired,
     urlGroupClass: PropTypes.string,
+    nameGroupClass: PropTypes.string,
   };
 
   state = {
@@ -39,9 +40,10 @@ class ConfigureMetadataComponent extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const {metadataUrl} = this.state;
+    const {metadataUrl,name} = this.state;
     const payload = {
       metadataUrl,
+      name,
     };
 
     this.props.submitConfigure(payload);
@@ -67,6 +69,9 @@ class ConfigureMetadataComponent extends Component {
             type="url"
             value={this.state.metadataUrl}
           />
+        </div>
+        <div className={this.props.nameGroupClass}>
+          <label htmlFor="metadataUrl">SAML Metadata URL</label>
           <label htmlFor="name">Account Alias</label>
           <input
             className="form-control"
