@@ -36,6 +36,7 @@ export const ComponentWithError = (WrappedComponent) => {
           {...this.props}
           {...this.state}
           errorMessage={this.errorMessage}
+          nameGroupClass={'form-group'}
           urlGroupClass={getErrorClass(this.hasError())}
         />
       );

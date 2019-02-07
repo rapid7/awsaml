@@ -8,21 +8,24 @@ import {ComponentWithError} from '../components/ComponentWithError';
 
 class ConfigureMetadataComponent extends Component {
   static propTypes = {
+    defaultMetadataName: PropTypes.string,
     defaultMetadataUrl: PropTypes.string.isRequired,
     errorMessage: PropTypes.string,
+    nameGroupClass: PropTypes.string,
     redirect: PropTypes.string,
     submitConfigure: PropTypes.func.isRequired,
     urlGroupClass: PropTypes.string,
-    nameGroupClass: PropTypes.string,
   };
 
   state = {
     metadataUrl: '',
+    profileName: '',
   };
 
   componentDidMount() {
     this.setState({
       metadataUrl: this.props.defaultMetadataUrl,
+      profileName: this.props.defaultMetadataName,
     });
   }
 
@@ -40,7 +43,7 @@ class ConfigureMetadataComponent extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const {metadataUrl,profileName} = this.state;
+    const {metadataUrl, profileName} = this.state;
     const payload = {
       metadataUrl,
       profileName,
