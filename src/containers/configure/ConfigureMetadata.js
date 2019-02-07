@@ -83,6 +83,7 @@ class ConfigureMetadataComponent extends Component {
             onKeyDown={this.handleKeyDown}
             pattern=".+"
             type="string"
+            value={this.state.profileName}
           />
         </div>
         <Button
