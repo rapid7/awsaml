@@ -8,8 +8,10 @@ import {ComponentWithError} from '../components/ComponentWithError';
 
 class ConfigureMetadataComponent extends Component {
   static propTypes = {
+    defaultMetadataName: PropTypes.string,
     defaultMetadataUrl: PropTypes.string.isRequired,
     errorMessage: PropTypes.string,
+    nameGroupClass: PropTypes.string,
     redirect: PropTypes.string,
     submitConfigure: PropTypes.func.isRequired,
     urlGroupClass: PropTypes.string,
@@ -17,11 +19,13 @@ class ConfigureMetadataComponent extends Component {
 
   state = {
     metadataUrl: '',
+    profileName: '',
   };
 
   componentDidMount() {
     this.setState({
       metadataUrl: this.props.defaultMetadataUrl,
+      profileName: this.props.defaultMetadataName,
     });
   }
 
@@ -39,9 +43,10 @@ class ConfigureMetadataComponent extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const {metadataUrl} = this.state;
+    const {metadataUrl, profileName} = this.state;
     const payload = {
       metadataUrl,
+      profileName,
     };
 
     this.props.submitConfigure(payload);
@@ -66,6 +71,19 @@ class ConfigureMetadataComponent extends Component {
             required
             type="url"
             value={this.state.metadataUrl}
+          />
+        </div>
+        <div className={this.props.nameGroupClass}>
+          <label htmlFor="profileName">Account Alias</label>
+          <input
+            className="form-control"
+            id="profileName"
+            name="profileName"
+            onChange={this.handleInputChange}
+            onKeyDown={this.handleKeyDown}
+            pattern=".+"
+            type="string"
+            value={this.state.profileName}
           />
         </div>
         <Button

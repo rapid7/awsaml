@@ -30,6 +30,7 @@ const RoundedCenteredDivColumnWrapper = RoundedWrapper.extend(CenteredDivColumn)
 
 class Configure extends Component {
   static propTypes = {
+    defaultMetadataName: PropTypes.string,
     defaultMetadataUrl: PropTypes.string,
     fetchConfigure: PropTypes.func.isRequired,
     location: PropTypes.object.isRequired,
@@ -77,7 +78,10 @@ class Configure extends Component {
           <RoundedCenteredDivColumnWrapper>
             <Logo />
             <RoundedCenteredDivColumnContent>
-              <ConfigureMetadata defaultMetadataUrl={this.props.defaultMetadataUrl} />
+              <ConfigureMetadata 
+                defaultMetadataName={this.props.defaultMetadataName}
+                defaultMetadataUrl={this.props.defaultMetadataUrl}
+              />
               {!!metadataUrls.length && <RecentLogins metadataUrls={metadataUrls} />}
             </RoundedCenteredDivColumnContent>
           </RoundedCenteredDivColumnWrapper>

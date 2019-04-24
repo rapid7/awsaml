@@ -34,6 +34,9 @@ module.exports = (app, auth) => {
       Storage.set('metadataUrls', storedMetadataUrls);
     }
 
+    let defaultMetadataName = app.get('profileName')
+      || '';
+
     // We populate the value of the metadata url field on the following (in order of precedence):
     //   1. Use the current session's metadata url (may have been rejected).
     //   2. Use the latest validated metadata url.
@@ -48,10 +51,14 @@ module.exports = (app, auth) => {
     if (!defaultMetadataUrl) {
       if (storedMetadataUrls.length > 0 && storedMetadataUrls[0].hasOwnProperty('url')) {
         defaultMetadataUrl = storedMetadataUrls[0].url;
+        if (storedMetadataUrls[0].hasOwnProperty('name')) {
+          defaultMetadataName = storedMetadataUrls[0].name;
+        }
       }
     }
 
     res.json(Object.assign({}, ResponseObj, {
+      defaultMetadataName,
       defaultMetadataUrl,
       error: Storage.get('metadataUrlError'),
       metadataUrlValid: Storage.get('metadataUrlValid'),
@@ -110,9 +117,13 @@ module.exports = (app, auth) => {
     }
 
     app.set('metadataUrl', metadataUrl);
+    app.set('profileName', profileName);
 
     const origin = req.body.origin;
-    const metaDataResponseObj = Object.assign({}, ResponseObj, {defaultMetadataUrl: metadataUrl});
+    const metaDataResponseObj = Object.assign({}, ResponseObj, {
+      defaultMetadataName: profileName,
+      defaultMetadataUrl: metadataUrl,
+    });
 
     const xmlReq = https.get(metadataUrl, (xmlRes) => {
       let xml = '';
