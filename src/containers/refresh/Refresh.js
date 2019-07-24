@@ -18,7 +18,6 @@ import styled from 'styled-components';
 import {fetchRefresh} from '../../actions/refresh';
 import {ComponentWithError} from '../components/ComponentWithError';
 import {Logo} from '../components/Logo';
-import {AccountDropdown} from './AccountDropdown';
 import {Credentials} from './Credentials';
 import {Logout} from './Logout';
 import {RenderIfLoaded} from '../components/RenderIfLoaded';

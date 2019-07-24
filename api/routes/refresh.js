@@ -12,7 +12,6 @@ module.exports = (app) => {
     const sts = new Aws.STS();
     const session = req.session.passport;
     const account = req.query.account;
-    console.log(account);
 
     if (session === undefined) {
       return res.status(401).json({
