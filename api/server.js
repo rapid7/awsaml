@@ -17,7 +17,7 @@ const app = require('./server-config')(auth, config, sessionSecret);
     name: '/logout',
     route: require('./routes/logout')(app),
   }, {
-    name: '/refresh',
+    name: '/refresh/:account?',
     route: require('./routes/refresh')(app),
   }, {
     name: '/profile',

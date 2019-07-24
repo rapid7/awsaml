@@ -11,6 +11,8 @@ module.exports = (app) => {
   router.all('/', (req, res) => {
     const sts = new Aws.STS();
     const session = req.session.passport;
+    const account = req.params.account;
+    console.log(account);
 
     if (session === undefined) {
       return res.status(401).json({
@@ -60,6 +62,9 @@ module.exports = (app) => {
       });
 
       Storage.set('metadataUrls', metadataUrls);
+
+      const accounts = metadataUrls.map(metadataUrl => metadataUrl.name);
+      credentialResponseObj.accounts = accounts;
 
       // Fetch the metadata profile name for this URL
       const profile = metadataUrls.find((metadata) => metadata.url === metadataUrl);

@@ -28,7 +28,7 @@ class App extends Component {
           />
           <Route
             component={Refresh}
-            path="/refresh"
+            path="/refresh/:account?"
           />
           <Route
             component={SelectRole}

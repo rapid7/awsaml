@@ -30,11 +30,13 @@ export const postConfigure = async (payload) => {
  *
  * Note: this call triggers the /refresh route on the SPA to make sure that
  * we get routed to the right component.
- *
+ * @param {String} account
  * @returns {Promise<*>}
  */
-export const getRefresh = async () => {
-  const {data} = await axios.get('refresh');
+
+export const getRefresh = async (account) => {
+
+  const {data} = await (account ? axiosClient.get(`refresh/${account}`) : axiosClient.get('refresh'));
 
   return data;
 };

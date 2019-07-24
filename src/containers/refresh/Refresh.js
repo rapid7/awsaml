@@ -4,7 +4,11 @@ import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
 import {
   Container,
-  Row
+  Row,
+  ButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
 } from 'reactstrap';
 import {
   Link,
@@ -14,6 +18,7 @@ import styled from 'styled-components';
 import {fetchRefresh} from '../../actions/refresh';
 import {ComponentWithError} from '../components/ComponentWithError';
 import {Logo} from '../components/Logo';
+import {AccountDropdown} from './AccountDropdown';
 import {Credentials} from './Credentials';
 import {Logout} from './Logout';
 import {RenderIfLoaded} from '../components/RenderIfLoaded';
@@ -81,17 +86,19 @@ class Refresh extends Component {
     sessionToken: PropTypes.string,
     showRole: PropTypes.bool,
     status: PropTypes.number,
+    accounts: PropTypes.array,
   };
-
 
   state = {
     loaded: false,
+    dropdownOpen: false,
   };
 
   async componentDidMount() {
     this._isMounted = true;
+    this.toggle = this.toggle.bind(this);
 
-    await this.props.fetchRefresh();
+    await this.props.fetchRefresh(null);
     if (this._isMounted) {
       this.setState({
         loaded: true,
@@ -109,13 +116,19 @@ class Refresh extends Component {
     this._isMounted = false;
   }
 
-  handleRefreshClickEvent = (event) => {
+  handleRefreshClickEvent = (account) => (event) => {
     event.preventDefault();
-    this.props.fetchRefresh();
+    this.props.fetchRefresh(account);
   };
 
   showProfileName() {
     return this.props.profileName !== `awsaml-${this.props.accountId}`;
+  }
+
+  toggle() {
+    this.setState({
+      dropdownOpen: !this.state.dropdownOpen
+    });
   }
 
   render() {
@@ -130,6 +143,7 @@ class Refresh extends Component {
       sessionToken,
       platform,
       profileName,
+      accounts,
     } = this.props;
 
     if (status === 401) {
@@ -145,6 +159,19 @@ class Refresh extends Component {
                 <Logo />
                 <RoundedContent>
                   {errorMessage}
+                  <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                    <DropdownToggle caret>
+                      {profileName}
+                    </DropdownToggle>
+                    <DropdownMenu>
+                      {this.props.accounts.map((account) =>
+                        <DropdownItem
+                          onClick={ this.handleRefreshClickEvent(account) }
+                          to={`/refresh/${account}`}
+                          role="button">{account}</DropdownItem>
+                      )}
+                      </DropdownMenu>
+                  </ButtonDropdown>
                   <details open>
                     <summary>Account</summary>
                     <div className="card card-body bg-light mb-3">
@@ -181,7 +208,7 @@ class Refresh extends Component {
                   <span className="ml-auto p-2">
                     <LinkWithButtonMargin
                       className="btn btn-secondary"
-                      onClick={this.handleRefreshClickEvent}
+                      onClick={this.handleRefreshClickEvent(null)}
                       role="button"
                       to="/refresh"
                     >
