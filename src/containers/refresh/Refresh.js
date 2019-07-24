@@ -167,7 +167,7 @@ class Refresh extends Component {
                       {this.props.accounts.map((account) =>
                         <DropdownItem
                           onClick={ this.handleRefreshClickEvent(account) }
-                          to={`/refresh/${account}`}
+                          to={`/refresh?account=${account}`}
                           role="button">{account}</DropdownItem>
                       )}
                       </DropdownMenu>

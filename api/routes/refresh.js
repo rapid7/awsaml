@@ -11,7 +11,7 @@ module.exports = (app) => {
   router.all('/', (req, res) => {
     const sts = new Aws.STS();
     const session = req.session.passport;
-    const account = req.params.account;
+    const account = req.query.account;
     console.log(account);
 
     if (session === undefined) {
