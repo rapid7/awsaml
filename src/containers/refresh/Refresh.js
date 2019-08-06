@@ -16,6 +16,7 @@ import {
 } from 'react-router-dom';
 import styled from 'styled-components';
 import {fetchRefresh} from '../../actions/refresh';
+import {submitConfigure} from '../../actions/configure';
 import {ComponentWithError} from '../components/ComponentWithError';
 import {Logo} from '../components/Logo';
 import {Credentials} from './Credentials';
@@ -77,6 +78,7 @@ class Refresh extends Component {
     accountId: PropTypes.string,
     errorMessage: PropTypes.string,
     fetchRefresh: PropTypes.func,
+    submitConfigure: PropTypes.func,
     platform: PropTypes.string,
     profileName: PropTypes.string,
     redirect: PropTypes.bool,
@@ -97,7 +99,7 @@ class Refresh extends Component {
     this._isMounted = true;
     this.toggle = this.toggle.bind(this);
 
-    await this.props.fetchRefresh(null);
+    await this.props.fetchRefresh();
     if (this._isMounted) {
       this.setState({
         loaded: true,
@@ -115,9 +117,21 @@ class Refresh extends Component {
     this._isMounted = false;
   }
 
-  handleRefreshClickEvent = (account) => (event) => {
+  handleRefreshClickEvent = (event) => {
     event.preventDefault();
-    this.props.fetchRefresh(account);
+    this.props.fetchRefresh();
+  };
+
+  handleConfigureClickEvent = (account) => (event) => {
+    event.preventDefault();
+
+    const payload = {
+      profileUuid: account.profileUuid,
+      profileName: account.name,
+      metadataUrl: account.url,
+    }
+
+    this.props.submitConfigure(payload);
   };
 
   showProfileName() {
@@ -142,7 +156,6 @@ class Refresh extends Component {
       sessionToken,
       platform,
       profileName,
-      accounts,
     } = this.props;
 
     if (status === 401) {
@@ -165,9 +178,8 @@ class Refresh extends Component {
                     <DropdownMenu>
                       {this.props.accounts.map((account) =>
                         <DropdownItem
-                          onClick={ this.handleRefreshClickEvent(account) }
-                          to={`/refresh?account=${account}`}
-                          role="button">{account}</DropdownItem>
+                          onClick={ this.handleConfigureClickEvent(account) }
+                          role="button">{account.name}</DropdownItem>
                       )}
                       </DropdownMenu>
                   </ButtonDropdown>
@@ -207,7 +219,7 @@ class Refresh extends Component {
                   <span className="ml-auto p-2">
                     <LinkWithButtonMargin
                       className="btn btn-secondary"
-                      onClick={this.handleRefreshClickEvent(null)}
+                      onClick={this.handleRefreshClickEvent}
                       role="button"
                       to="/refresh"
                     >
@@ -225,13 +237,16 @@ class Refresh extends Component {
   }
 }
 
-const mapStateToProps = ({refresh}) => ({
+const mapStateToProps = ({refresh, configure}) => ({
   ...refresh.fetchFailure,
   ...refresh.fetchSuccess,
+  ...configure.submitFailure,
+  ...configure.submitSuccess,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   fetchRefresh: bindActionCreators(fetchRefresh, dispatch),
+  submitConfigure: bindActionCreators(submitConfigure, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ComponentWithError(Refresh));

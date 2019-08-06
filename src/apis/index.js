@@ -34,9 +34,8 @@ export const postConfigure = async (payload) => {
  * @returns {Promise<*>}
  */
 
-export const getRefresh = async (account) => {
-
-  const {data} = await (account ? axiosClient.get(`refresh?account=${account}`) : axiosClient.get('refresh'));
+export const getRefresh = async () => {
+  const {data} = await axiosClient.get('refresh');
 
   return data;
 };
