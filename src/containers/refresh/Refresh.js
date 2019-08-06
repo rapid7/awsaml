@@ -5,10 +5,6 @@ import PropTypes from 'prop-types';
 import {
   Container,
   Row,
-  ButtonDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
 } from 'reactstrap';
 import {
   Link,
@@ -22,6 +18,7 @@ import {Logo} from '../components/Logo';
 import {Credentials} from './Credentials';
 import {Logout} from './Logout';
 import {RenderIfLoaded} from '../components/RenderIfLoaded';
+import AccountSwitch from './AccountSwitch';
 import {InputGroupWithCopyButton} from '../components/InputGroupWithCopyButton';
 import {
   RoundedContent,
@@ -91,13 +88,11 @@ class Refresh extends Component {
   };
 
   state = {
-    dropdownOpen: false,
     loaded: false,
   };
 
   async componentDidMount() {
     this._isMounted = true;
-    this.toggle = this.toggle.bind(this);
 
     await this.props.fetchRefresh();
     if (this._isMounted) {
@@ -122,26 +117,8 @@ class Refresh extends Component {
     this.props.fetchRefresh();
   };
 
-  handleConfigureClickEvent = (account) => (event) => {
-    event.preventDefault();
-
-    const payload = {
-      metadataUrl: account.url,
-      profileName: account.name,
-      profileUuid: account.profileUuid,
-    };
-
-    this.props.submitConfigure(payload);
-  };
-
   showProfileName() {
     return this.props.profileName !== `awsaml-${this.props.accountId}`;
-  }
-
-  toggle() {
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen,
-    });
   }
 
   render() {
@@ -171,24 +148,11 @@ class Refresh extends Component {
                 <Logo />
                 <RoundedContent>
                   {errorMessage}
-                  <ButtonDropdown
-                    isOpen={this.state.dropdownOpen}
-                    toggle={this.toggle}
-                  >
-                    <DropdownToggle caret>
-                      {profileName}
-                    </DropdownToggle>
-                    <DropdownMenu>
-                      {this.props.accounts.map((account) => (
-                        <DropdownItem
-                          key={account.id}
-                          onClick={this.handleConfigureClickEvent(account)}
-                          role="button"
-                        >{account.name}
-                        </DropdownItem>
-                      ))}
-                    </DropdownMenu>
-                  </ButtonDropdown>
+                  <AccountSwitch
+                    accounts={this.props.accounts}
+                    profileName={profileName}
+                    submitConfigure={this.props.submitConfigure}
+                  />
                   <details open>
                     <summary>Account</summary>
                     <div className="card card-body bg-light mb-3">
