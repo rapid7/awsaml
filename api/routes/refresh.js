@@ -66,6 +66,7 @@ module.exports = (app) => {
       const metadataContents = fs.readFileSync(metadataFile);
       const metadataObject = JSON.parse(metadataContents);
       const accounts = metadataObject.metadataUrls;
+
       credentialResponseObj.accounts = accounts;
 
       // Fetch the metadata profile name for this URL

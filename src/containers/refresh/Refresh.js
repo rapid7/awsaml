@@ -8,11 +8,11 @@ import {
   ButtonDropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem
+  DropdownItem,
 } from 'reactstrap';
 import {
   Link,
-  Redirect
+  Redirect,
 } from 'react-router-dom';
 import styled from 'styled-components';
 import {fetchRefresh} from '../../actions/refresh';
@@ -26,7 +26,7 @@ import {InputGroupWithCopyButton} from '../components/InputGroupWithCopyButton';
 import {
   RoundedContent,
   RoundedWrapper,
-  BUTTON_MARGIN
+  BUTTON_MARGIN,
 } from '../../constants/styles';
 
 const EnvVar = RoundedContent.extend`
@@ -76,9 +76,9 @@ class Refresh extends Component {
   static propTypes = {
     accessKey: PropTypes.string,
     accountId: PropTypes.string,
+    accounts: PropTypes.array,
     errorMessage: PropTypes.string,
     fetchRefresh: PropTypes.func,
-    submitConfigure: PropTypes.func,
     platform: PropTypes.string,
     profileName: PropTypes.string,
     redirect: PropTypes.bool,
@@ -87,12 +87,12 @@ class Refresh extends Component {
     sessionToken: PropTypes.string,
     showRole: PropTypes.bool,
     status: PropTypes.number,
-    accounts: PropTypes.array,
+    submitConfigure: PropTypes.func,
   };
 
   state = {
-    loaded: false,
     dropdownOpen: false,
+    loaded: false,
   };
 
   async componentDidMount() {
@@ -126,10 +126,10 @@ class Refresh extends Component {
     event.preventDefault();
 
     const payload = {
-      profileUuid: account.profileUuid,
-      profileName: account.name,
       metadataUrl: account.url,
-    }
+      profileName: account.name,
+      profileUuid: account.profileUuid,
+    };
 
     this.props.submitConfigure(payload);
   };
@@ -140,7 +140,7 @@ class Refresh extends Component {
 
   toggle() {
     this.setState({
-      dropdownOpen: !this.state.dropdownOpen
+      dropdownOpen: !this.state.dropdownOpen,
     });
   }
 
@@ -171,17 +171,23 @@ class Refresh extends Component {
                 <Logo />
                 <RoundedContent>
                   {errorMessage}
-                  <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                  <ButtonDropdown
+                    isOpen={this.state.dropdownOpen}
+                    toggle={this.toggle}
+                  >
                     <DropdownToggle caret>
                       {profileName}
                     </DropdownToggle>
                     <DropdownMenu>
-                      {this.props.accounts.map((account) =>
+                      {this.props.accounts.map((account) => (
                         <DropdownItem
-                          onClick={ this.handleConfigureClickEvent(account) }
-                          role="button">{account.name}</DropdownItem>
-                      )}
-                      </DropdownMenu>
+                          key={account.id}
+                          onClick={this.handleConfigureClickEvent(account)}
+                          role="button"
+                        >{account.name}
+                        </DropdownItem>
+                      ))}
+                    </DropdownMenu>
                   </ButtonDropdown>
                   <details open>
                     <summary>Account</summary>
