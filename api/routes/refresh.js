@@ -3,6 +3,7 @@ const config = require('../config');
 const Aws = require('aws-sdk');
 const AwsCredentials = require('../aws-credentials');
 const ResponseObj = require('./../response');
+const fs = require('fs');
 
 const router = express.Router();
 const credentials = new AwsCredentials(config.aws);
@@ -11,7 +12,6 @@ module.exports = (app) => {
   router.all('/', (req, res) => {
     const sts = new Aws.STS();
     const session = req.session.passport;
-    const account = req.query.account;
 
     if (session === undefined) {
       return res.status(401).json({
@@ -62,7 +62,10 @@ module.exports = (app) => {
 
       Storage.set('metadataUrls', metadataUrls);
 
-      const accounts = metadataUrls.map(metadataUrl => metadataUrl.name);
+      const metadataFile = Storage.file;
+      const metadataContents = fs.readFileSync(metadataFile);
+      const metadataObject = JSON.parse(metadataContents);
+      const accounts = metadataObject.metadataUrls;
       credentialResponseObj.accounts = accounts;
 
       // Fetch the metadata profile name for this URL
