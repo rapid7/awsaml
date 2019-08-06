@@ -54,14 +54,16 @@ class AccountSwitch extends Component {
           {profileName}
         </DropdownToggle>
         <DropdownMenu>
-          {accounts.map((account) => (
-            <DropdownItem
-              key={account.id}
-              onClick={this.handleConfigureClickEvent(account)}
-              role="button"
-            >{account.name}
-            </DropdownItem>
-          ))}
+          {
+            accounts.map((account) => (
+              <DropdownItem
+                key={account.id}
+                onClick={this.handleConfigureClickEvent(account)}
+                role="button"
+              >{account.name}
+              </DropdownItem>
+            ))
+          }
         </DropdownMenu>
       </ButtonDropdown>
     );
