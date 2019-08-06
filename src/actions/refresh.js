@@ -9,11 +9,11 @@ const fetchRefreshRequest = createAction(FETCH_REFRESH_REQUEST);
 const fetchRefreshSuccess = createAction(FETCH_REFRESH_SUCCESS);
 const fetchRefreshFailure = createAction(FETCH_REFRESH_FAILURE);
 
-export const fetchRefresh = (account) => async (dispatch) => {
+export const fetchRefresh = () => async (dispatch) => {
   dispatch(fetchRefreshRequest());
 
   try {
-    const data = await api.getRefresh(account);
+    const data = await api.getRefresh();
 
     if (data.error) {
       return dispatch(fetchRefreshFailure(data));
