@@ -3,7 +3,6 @@ const config = require('../config');
 const Aws = require('aws-sdk');
 const AwsCredentials = require('../aws-credentials');
 const ResponseObj = require('./../response');
-const fs = require('fs');
 
 const router = express.Router();
 const credentials = new AwsCredentials(config.aws);
@@ -62,10 +61,7 @@ module.exports = (app) => {
 
       Storage.set('metadataUrls', metadataUrls);
 
-      const metadataFile = Storage.file;
-      const metadataContents = fs.readFileSync(metadataFile);
-      const metadataObject = JSON.parse(metadataContents);
-      const accounts = metadataObject.metadataUrls;
+      const accounts = metadataUrls;
 
       credentialResponseObj.accounts = accounts;
 
