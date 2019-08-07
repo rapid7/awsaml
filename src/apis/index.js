@@ -30,6 +30,7 @@ export const postConfigure = async (payload) => {
  *
  * Note: this call triggers the /refresh route on the SPA to make sure that
  * we get routed to the right component.
+ *
  * @returns {Promise<*>}
  */
 
