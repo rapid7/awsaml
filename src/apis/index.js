@@ -33,7 +33,6 @@ export const postConfigure = async (payload) => {
  *
  * @returns {Promise<*>}
  */
-
 export const getRefresh = async () => {
   const {data} = await axiosClient.get('refresh');
 
