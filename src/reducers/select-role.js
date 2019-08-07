@@ -5,7 +5,7 @@ import {
   FETCH_SELECT_ROLE_FAILURE,
   SUBMIT_SELECT_ROLE_REQUEST,
   SUBMIT_SELECT_ROLE_SUCCESS,
-  SUBMIT_SELECT_ROLE_FAILURE,
+  SUBMIT_SELECT_ROLE_FAILURE
 } from '../actions/select-role';
 
 const selectRoleFetchRequest = (state, action) => ({

@@ -9,14 +9,14 @@ import styled from 'styled-components';
 import {fetchConfigure} from '../../actions/configure';
 import {
   Container,
-  Row,
+  Row
 } from 'reactstrap';
 import {Logo} from '../components/Logo';
 import RecentLogins from './RecentLogins';
 import {ConfigureMetadata} from './ConfigureMetadata';
 import {
   RoundedContent,
-  RoundedWrapper,
+  RoundedWrapper
 } from '../../constants/styles';
 
 const CenteredDivColumn = styled.div`

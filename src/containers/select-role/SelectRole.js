@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import {
   Container,
   ListGroup,
-  Row,
+  Row
 } from 'reactstrap';
 import {Redirect} from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -16,7 +16,7 @@ import {Role} from './Role';
 import {Logo} from '../components/Logo';
 import {
   RoundedContent,
-  RoundedWrapper,
+  RoundedWrapper
 } from '../../constants/styles';
 
 const SelectRoleHeader = styled.h4`

@@ -4,7 +4,7 @@ import {
   ButtonDropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem,
+  DropdownItem
 } from 'reactstrap';
 
 class AccountSwitch extends Component {

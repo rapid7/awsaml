@@ -4,7 +4,7 @@ import {
   InputGroup,
   Input,
   InputGroupAddon,
-  Tooltip,
+  Tooltip
 } from 'reactstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import Clipboard from 'react-clipboard.js';

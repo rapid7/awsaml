@@ -5,7 +5,7 @@ import {
   FETCH_CONFIGURE_REQUEST,
   SUBMIT_CONFIGURE_FAILURE,
   SUBMIT_CONFIGURE_SUCCESS,
-  SUBMIT_CONFIGURE_REQUEST,
+  SUBMIT_CONFIGURE_REQUEST
 } from '../actions/configure';
 
 const configureFetchRequest = (state, action) => ({

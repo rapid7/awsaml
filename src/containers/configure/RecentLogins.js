@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {
   ListGroup,
-  Input,
+  Input
 } from 'reactstrap';
 import {Login} from './Login';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';

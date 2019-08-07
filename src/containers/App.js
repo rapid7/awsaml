@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {
   Route,
-  Switch,
+  Switch
 } from 'react-router';
 
 import Configure from './configure/Configure';
