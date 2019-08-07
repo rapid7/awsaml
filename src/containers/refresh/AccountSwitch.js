@@ -8,6 +8,12 @@ import {
 } from 'reactstrap';
 
 class AccountSwitch extends Component {
+  static propTypes = {
+    accounts: PropTypes.array,
+    profileName: PropTypes.string,
+    submitConfigure: PropTypes.func,
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -15,12 +21,6 @@ class AccountSwitch extends Component {
     };
 
     this.toggle = this.toggle.bind(this);
-  }
-
-  static propTypes = {
-    accounts: PropTypes.array,
-    profileName: PropTypes.string,
-    submitConfigure: PropTypes.func,
   }
 
   handleConfigureClickEvent = (account) => (event) => {
