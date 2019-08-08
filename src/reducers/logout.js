@@ -2,7 +2,7 @@ import {handleActions} from 'redux-actions';
 import {
   FETCH_LOGOUT_REQUEST,
   FETCH_LOGOUT_SUCCESS,
-  FETCH_LOGOUT_FAILURE
+  FETCH_LOGOUT_FAILURE,
 } from '../actions/logout';
 
 const logoutFetchRequest = (state, action) => ({

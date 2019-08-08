@@ -2,7 +2,7 @@ import {handleActions} from 'redux-actions';
 import {
   DELETE_PROFILE_REQUEST,
   DELETE_PROFILE_SUCCESS,
-  DELETE_PROFILE_FAILURE
+  DELETE_PROFILE_FAILURE,
 } from '../actions/profile';
 
 const deleteProfileRequest = (state, action) => ({

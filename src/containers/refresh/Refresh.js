@@ -4,11 +4,11 @@ import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
 import {
   Container,
-  Row
+  Row,
 } from 'reactstrap';
 import {
   Link,
-  Redirect
+  Redirect,
 } from 'react-router-dom';
 import styled from 'styled-components';
 import {fetchRefresh} from '../../actions/refresh';
@@ -21,7 +21,7 @@ import {InputGroupWithCopyButton} from '../components/InputGroupWithCopyButton';
 import {
   RoundedContent,
   RoundedWrapper,
-  BUTTON_MARGIN
+  BUTTON_MARGIN,
 } from '../../constants/styles';
 
 const EnvVar = RoundedContent.extend`
