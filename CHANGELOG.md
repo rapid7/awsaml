@@ -4,11 +4,11 @@
 
 ## [2.2.0] - 2019-08-07
 ### Added
-- Adds ability to proactively name new profiles (#125)
+- Adds ability to proactively name new profiles ([#125](https://github.com/rapid7/awsaml/pull/125))
 
 ### Changed
-- Disables hardware acceleration, giving you more battery time (#123)
-- Documentation updates (#124)
+- Disables hardware acceleration, giving you more battery time ([#123](https://github.com/rapid7/awsaml/pull/123))
+- Documentation updates ([#124](https://github.com/rapid7/awsaml/pull/124))
 
 ## [2.1.0] - 2018-08-08
 ### Added
