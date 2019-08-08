@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {
   Container,
   Row,
-  Col
+  Col,
 } from 'reactstrap';
 
 const COLUMN_STYLE = {fontSize: '1.2rem'};

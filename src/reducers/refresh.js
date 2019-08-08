@@ -2,7 +2,7 @@ import {handleActions} from 'redux-actions';
 import {
   FETCH_REFRESH_FAILURE,
   FETCH_REFRESH_SUCCESS,
-  FETCH_REFRESH_REQUEST
+  FETCH_REFRESH_REQUEST,
 } from '../actions/refresh';
 
 const refreshFetchRequest = (state, action) => ({
