@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [2.2.1] - 2019-08-08
+### Fixed
+- Upgraded electron and everything else, fixing [#126](https://github.com/rapid7/awsaml/issues/126)
+
 ## [2.2.0] - 2019-08-07
 ### Added
 - Adds ability to proactively name new profiles ([#125](https://github.com/rapid7/awsaml/pull/125))
