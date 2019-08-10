@@ -123,6 +123,7 @@ class Refresh extends Component {
 
   render() {
     const {
+      accounts,
       errorMessage,
       status,
       accountId,
@@ -131,6 +132,7 @@ class Refresh extends Component {
       accessKey,
       secretKey,
       sessionToken,
+      submitConfigure,
       platform,
       profileName,
     } = this.props;
@@ -149,9 +151,9 @@ class Refresh extends Component {
                 <RoundedContent>
                   {errorMessage}
                   <AccountSwitch
-                    accounts={this.props.accounts}
+                    accounts={accounts}
                     profileName={profileName}
-                    submitConfigure={this.props.submitConfigure}
+                    submitConfigure={submitConfigure}
                   />
                   <details open>
                     <summary>Account</summary>
