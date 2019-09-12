@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [2.2.2] - 2019-09-12
+### Fixed
+- Upgraded electron bits to version that supports WebAuthn standard [#135](https://github.com/rapid7/awsaml/issues/135)
+
 ## [2.2.1] - 2019-08-08
 ### Fixed
 - Upgraded electron and everything else, fixing [#126](https://github.com/rapid7/awsaml/issues/126)
