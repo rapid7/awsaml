@@ -61,6 +61,8 @@ module.exports = (app) => {
 
       Storage.set('metadataUrls', metadataUrls);
 
+      credentialResponseObj.accounts = metadataUrls;
+
       // Fetch the metadata profile name for this URL
       const profile = metadataUrls.find((metadata) => metadata.url === metadataUrl);
 

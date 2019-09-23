@@ -12,11 +12,13 @@ import {
 } from 'react-router-dom';
 import styled from 'styled-components';
 import {fetchRefresh} from '../../actions/refresh';
+import {submitConfigure} from '../../actions/configure';
 import {ComponentWithError} from '../components/ComponentWithError';
 import {Logo} from '../components/Logo';
 import {Credentials} from './Credentials';
 import {Logout} from './Logout';
 import {RenderIfLoaded} from '../components/RenderIfLoaded';
+import AccountSwitch from './AccountSwitch';
 import {InputGroupWithCopyButton} from '../components/InputGroupWithCopyButton';
 import {
   RoundedContent,
@@ -71,6 +73,7 @@ class Refresh extends Component {
   static propTypes = {
     accessKey: PropTypes.string,
     accountId: PropTypes.string,
+    accounts: PropTypes.array,
     errorMessage: PropTypes.string,
     fetchRefresh: PropTypes.func,
     platform: PropTypes.string,
@@ -81,8 +84,8 @@ class Refresh extends Component {
     sessionToken: PropTypes.string,
     showRole: PropTypes.bool,
     status: PropTypes.number,
+    submitConfigure: PropTypes.func,
   };
-
 
   state = {
     loaded: false,
@@ -120,6 +123,7 @@ class Refresh extends Component {
 
   render() {
     const {
+      accounts,
       errorMessage,
       status,
       accountId,
@@ -128,6 +132,7 @@ class Refresh extends Component {
       accessKey,
       secretKey,
       sessionToken,
+      submitConfigure,
       platform,
       profileName,
     } = this.props;
@@ -145,6 +150,11 @@ class Refresh extends Component {
                 <Logo />
                 <RoundedContent>
                   {errorMessage}
+                  <AccountSwitch
+                    accounts={accounts}
+                    profileName={profileName}
+                    submitConfigure={submitConfigure}
+                  />
                   <details open>
                     <summary>Account</summary>
                     <div className="card card-body bg-light mb-3">
@@ -199,13 +209,16 @@ class Refresh extends Component {
   }
 }
 
-const mapStateToProps = ({refresh}) => ({
+const mapStateToProps = ({refresh, configure}) => ({
   ...refresh.fetchFailure,
   ...refresh.fetchSuccess,
+  ...configure.submitFailure,
+  ...configure.submitSuccess,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   fetchRefresh: bindActionCreators(fetchRefresh, dispatch),
+  submitConfigure: bindActionCreators(submitConfigure, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ComponentWithError(Refresh));

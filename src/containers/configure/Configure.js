@@ -78,7 +78,7 @@ class Configure extends Component {
           <RoundedCenteredDivColumnWrapper>
             <Logo />
             <RoundedCenteredDivColumnContent>
-              <ConfigureMetadata 
+              <ConfigureMetadata
                 defaultMetadataName={this.props.defaultMetadataName}
                 defaultMetadataUrl={this.props.defaultMetadataUrl}
               />
