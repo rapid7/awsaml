@@ -66,7 +66,7 @@ module.exports = (app) => {
 
       credentialResponseObj.profileName = profile.name;
 
-      credentials.save(data.Credentials, profileName, (credSaveErr) => {
+      credentials.save(data.Credentials, profile.name, (credSaveErr) => {
         if (credSaveErr) {
           res.json(Object.assign({}, credentialResponseObj, {
             error: credSaveErr,

@@ -62,9 +62,9 @@ const getTerm = (platform) => platform === 'win32' ? 'command prompt' : 'termina
 
 const getExport = (platform) => platform === 'win32' ? 'set' : 'export';
 
-const getEnvVars = ({platform, accountId}) => `
-${getExport(platform)} AWS_PROFILE=awsaml-${accountId}
-${getExport(platform)} AWS_DEFAULT_PROFILE=awsaml-${accountId}
+const getEnvVars = ({platform, profileName}) => `
+${getExport(platform)} AWS_PROFILE=${profileName}
+${getExport(platform)} AWS_DEFAULT_PROFILE=${profileName}
 `.trim();
 
 class Refresh extends Component {
