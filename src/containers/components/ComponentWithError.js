@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Alert} from 'reactstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import hoistNonReactStatic from 'hoist-non-react-statics';
 
 const getErrorClass = (error) => error ? 'form-group has-error' : 'form-group';

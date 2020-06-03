@@ -6,7 +6,7 @@ import {
   Input,
 } from 'reactstrap';
 import {Login} from './Login';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 const ScrollableListGroup = styled(ListGroup)`
   overflow-x: hidden;

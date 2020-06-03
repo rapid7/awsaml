@@ -12,7 +12,7 @@ import {
   ListGroupItem,
   Button,
 } from 'reactstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {InputGroupWithCopyButton} from '../components/InputGroupWithCopyButton';
 
 const ProfileInputGroup = styled(InputGroup)`
