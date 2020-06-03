@@ -6,7 +6,7 @@ import {
   InputGroupAddon,
   Tooltip,
 } from 'reactstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import Clipboard from 'react-clipboard.js';
 
 export class InputGroupWithCopyButton extends Component {
