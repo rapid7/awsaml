@@ -56,7 +56,7 @@
     "babel-eslint": "^8.2.5",
     "bootstrap": "^4.1.1",
     "coveralls": "^3.0.1",
-    "electron": "^6.0.8",
+    "electron": "^9.4.0",
     "electron-devtools-installer": "^2.2.4",
     "electron-packager": "^14.0.6",
     "electron-rebuild": "^1.8.6",
