@@ -243,7 +243,10 @@ yarn build
 ## Setup on macOS with Homebrew
 A caskfile is bundled with the repository, to install Awsaml with [Homebrew][] simply run:
 
-`brew cask install https://raw.githubusercontent.com/rapid7/awsaml/master/brew/cask/awsaml.rb`
+`wget https://raw.githubusercontent.com/rapid7/awsaml/master/brew/cask/awsaml.rb`
+`brew install --HEAD -s awsaml.rb`
+There might be an error and warning prompt but it should start succesfully downloading right after
+When download is succesfully installed, a `awsaml was successfully installed!` prompt is displayed
 
 ## License
 
