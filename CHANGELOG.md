@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [2.2.3] - 2022-02-09
+### Fixed
+- Adds ability to work with AWSGovCloud [#181](https://github.com/rapid7/awsaml/pull/181)
+
 ## [2.2.2] - 2019-09-12
 ### Fixed
 - Upgraded electron bits to version that supports WebAuthn standard [#135](https://github.com/rapid7/awsaml/issues/135)
