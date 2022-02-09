@@ -9,7 +9,6 @@ const credentials = new AwsCredentials(config.aws);
 
 module.exports = (app) => {
   router.all('/', (req, res) => {
-    const sts = new Aws.STS();
     const session = req.session.passport;
 
     if (session === undefined) {
@@ -17,6 +16,12 @@ module.exports = (app) => {
         error: 'Invalid session',
       });
     }
+
+    if (session.roleArn.includes("aws-us-gov")) {
+      Aws.config.update({region: 'us-gov-west-1'});
+    }
+
+    const sts = new Aws.STS();
 
     const refreshResponseObj = Object.assign({}, ResponseObj, {
       accountId: session.accountId,
