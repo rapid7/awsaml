@@ -75,8 +75,7 @@ module.exports = (app) => {
         region = "us-gov-west-1"
       }
       else
-        region = "us-east-1"
-
+        region = ""
       credentials.save(data.Credentials, profileName, (credSaveErr) => {
         if (credSaveErr) {
           res.json(Object.assign({}, credentialResponseObj, {

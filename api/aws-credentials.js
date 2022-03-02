@@ -46,7 +46,8 @@ class AwsCredentials {
         config[profile].aws_access_key_id = credentials.AccessKeyId;
         config[profile].aws_secret_access_key = credentials.SecretAccessKey;
         config[profile].aws_session_token = credentials.SessionToken;
-        config[profile].region = region
+        if (region.includes("gov"))
+          config[profile].region = region
         // Some libraries e.g. boto v2.38.0, expect an "aws_security_token" entry.
         config[profile].aws_security_token = credentials.SessionToken;
         config = ini.encode(config, {whitespace: true});
