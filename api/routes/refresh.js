@@ -70,7 +70,12 @@ module.exports = (app) => {
       const profile = metadataUrls.find((metadata) => metadata.url === metadataUrl);
 
       credentialResponseObj.profileName = profile.name;
-
+      
+      if (session.roleArn.includes("aws-us-gov")) {
+        region = "us-gov-west-1"
+      }
+      else
+        region = ""
       credentials.save(data.Credentials, profileName, (credSaveErr) => {
         if (credSaveErr) {
           res.json(Object.assign({}, credentialResponseObj, {
@@ -79,7 +84,7 @@ module.exports = (app) => {
         } else {
           res.json(credentialResponseObj);
         }
-      });
+      }, region);
     });
   });
 
