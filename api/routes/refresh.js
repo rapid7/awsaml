@@ -20,6 +20,9 @@ module.exports = (app) => {
     if (session.roleArn.includes("aws-us-gov")) {
       Aws.config.update({region: 'us-gov-west-1'});
     }
+    else {
+      Aws.config.update({region: 'us-east-1'});
+    }
 
     const sts = new Aws.STS();
 
@@ -74,8 +77,9 @@ module.exports = (app) => {
       if (session.roleArn.includes("aws-us-gov")) {
         region = "us-gov-west-1"
       }
-      else
+      else {
         region = ""
+      }
       credentials.save(data.Credentials, profileName, (credSaveErr) => {
         if (credSaveErr) {
           res.json(Object.assign({}, credentialResponseObj, {
