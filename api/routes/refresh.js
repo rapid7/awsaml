@@ -17,12 +17,8 @@ module.exports = (app) => {
       });
     }
 
-    if (session.roleArn.includes("aws-us-gov")) {
-      Aws.config.update({region: 'us-gov-west-1'});
-    }
-    else {
-      Aws.config.update({region: 'us-east-1'});
-    }
+		const region = session.roleArn.includes("aws-us-gov") ? 'us-gov-west-1' : 'us-east-1';
+		Aws.config.update({region: region});
 
     const sts = new Aws.STS();
 
