@@ -8,7 +8,7 @@ class AwsCredentials {
     this.saveAsIniFile(credentials, profile, done, region);
   }
 
-  saveAsIniFile(credentials, profile, done, region) {
+  saveAsIniFile(credentials, profile, done, region = "") {
     const home = AwsCredentials.resolveHomePath();
 
     if (!home) {
