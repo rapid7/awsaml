@@ -58,7 +58,7 @@
     "coveralls": "^3.1.1",
     "electron": "^11.5.0",
     "electron-devtools-installer": "^2.2.4",
-    "electron-packager": "^14.2.1",
+    "electron-packager": "^15.4.0",
     "electron-rebuild": "^1.11.0",
     "eslint": "^5.0.1",
     "eslint-config-rapid7": "^3.0.2",
