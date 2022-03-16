@@ -43,6 +43,7 @@ const template = [{
     },
     label: 'Reload',
   }, {
+    accelerator: 'CmdOrCtrl+Shift+R',
     click(item, focusedWindow) {
       if (focusedWindow) {
         focusedWindow.emit('reset');
