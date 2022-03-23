@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+## [2.3.0] - 2022-03-23
+### Fixed
+- Fix failures to login when moving between commercial/fedramp accounts: [#192](https://github.com/rapid7/awsaml/pull/192)
+- Fix tests and enable github actions: [#193](https://github.com/rapid7/awsaml/pull/193)
+- Add keyboard shortcut for Reset: [#180](https://github.com/rapid7/awsaml/pull/180)
+- Bump packages called out by dependabot: [#196](https://github.com/rapid7/awsaml/pull/196)
+- Bump electron packager to latest version: [197](https://github.com/rapid7/awsaml/pull/197)
+- Bump other packages to latest versions: [#194](https://github.com/rapid7/awsaml/pull/194)
+
 ## [2.2.3] - 2022-02-09
 ### Fixed
 - Adds ability to work with AWSGovCloud [#181](https://github.com/rapid7/awsaml/pull/181)
