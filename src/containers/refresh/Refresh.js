@@ -89,6 +89,7 @@ class Refresh extends Component {
   };
 
   async componentDidMount() {
+    this.interval = setInterval(() => this.setState({ts: new Date()}), 1000)
     this._isMounted = true;
 
     await this.props.fetchRefresh();
@@ -106,6 +107,7 @@ class Refresh extends Component {
   }
 
   componentWillUnmount() {
+    clearInterval(this.interval);
     this._isMounted = false;
   }
 
@@ -116,6 +118,21 @@ class Refresh extends Component {
 
   showProfileName() {
     return this.props.profileName !== `awsaml-${this.props.accountId}`;
+  }
+
+  relativeDate(date) {
+    const deltaSeconds = (new Date(date) - new Date()) / 1000;
+    let relative = "";
+
+    const hours = Math.floor(deltaSeconds / 3600);
+    const minutes = Math.floor((deltaSeconds % 3600) / 60);
+    const seconds = Math.floor(deltaSeconds % 60);
+
+    if (hours) relative += `${hours}h`;
+    if (minutes) relative += `${minutes}m`;
+    if (seconds) relative += `${seconds}s`;
+
+    return relative;
   }
 
   render() {
@@ -130,7 +147,9 @@ class Refresh extends Component {
       sessionToken,
       platform,
       profileName,
+      expiration,
     } = this.props;
+    const localExpiration = new Date(expiration);
 
     if (status === 401) {
       return <Redirect to="/" />;
@@ -178,6 +197,8 @@ class Refresh extends Component {
                       value={getEnvVars(this.props)}
                     />
                   </EnvVar>
+                  <div><b>Expires in:</b> {this.relativeDate(expiration)}</div>
+                  <div class="mb-3"><b>Expires at:</b> {localExpiration.toString()}</div>
                   <span className="ml-auto p-2">
                     <LinkWithButtonMargin
                       className="btn btn-secondary"
