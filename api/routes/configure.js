@@ -175,6 +175,7 @@ module.exports = (app, auth) => {
           entryPoint = entryPoint.length ? entryPoint[0].value : null;
         }
         config.auth.entryPoint = entryPoint;
+        app.set('lastEntryPointLoad', new Date());
 
         if (cert && issuer && entryPoint) {
           Storage.set('previousMetadataUrl', metadataUrl);

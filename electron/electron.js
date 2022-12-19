@@ -155,12 +155,20 @@ Application.on('ready', async () => {
 
   mainWindow.emit('reset');
 
+  // Use timestamps for determining when to reload the entry point.
+  // `setInterval` doesn't tick when the computer is asleep, possibly
+  // causing the refresh interval to be missed when the computer has
+  // been asleep for a long time.
   setInterval(() => {
     const entryPointUrl = Server.get('entryPointUrl');
+    const lastEntryPointLoad = Server.get('lastEntryPointLoad');
+    const elapsedSinceLastLoad = Date.now() - lastEntryPointLoad;
+    const needLoad = !lastEntryPointLoad || elapsedSinceLastLoad > (config.aws.duration / 2 * 1000);
 
-    if (entryPointUrl) {
+    if (entryPointUrl && needLoad) {
       console.log('Reloading...'); // eslint-disable-line no-console
       mainWindow.loadURL(entryPointUrl);
+      Server.set('lastEntryPointLoad', Date.now());
     }
-  }, (config.aws.duration / 2) * 1000); // eslint-disable-line rapid7/static-magic-numbers
+  }, 3 * 1000); // eslint-disable-line rapid7/static-magic-numbers
 });
