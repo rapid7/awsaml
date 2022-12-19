@@ -166,7 +166,7 @@ Application.on('ready', async () => {
     const needLoad = !lastEntryPointLoad || elapsedSinceLastLoad > (config.aws.duration / 2 * 1000);
 
     if (entryPointUrl && needLoad) {
-      console.log('Reloading...'); // eslint-disable-line no-console
+      console.log('Reloading...', entryPointUrl); // eslint-disable-line no-console
       mainWindow.loadURL(entryPointUrl);
       Server.set('lastEntryPointLoad', Date.now());
     }
