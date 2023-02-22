@@ -240,6 +240,15 @@ export PLATFORM=darwin,linux
 yarn build
 ~~~
 
+## Local Development
+
+When developing with AWSaml, the following commands can be used to run locally:
+
+~~~bash
+yarn build  # To build the react front-end
+npm run electron  # To start the application.
+~~~
+
 ## Setup on macOS with Homebrew
 A caskfile is bundled with the repository, to install Awsaml with [Homebrew][] simply run:
 
