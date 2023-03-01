@@ -65,8 +65,10 @@ class LoginComponent extends Component {
     const {profileName} = this.state;
 
     const text = `Are you sure you want to delete the profile "${profileName ? profileName : this.props.pretty}"?`;
+
     if (window.confirm(text)) {
-      const payload = { profileUuid: this.props.profileUuid };
+      const payload = {profileUuid: this.props.profileUuid};
+
       this.props.deleteProfile(payload);
     }
   };
