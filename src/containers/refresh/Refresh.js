@@ -128,9 +128,15 @@ class Refresh extends Component {
     const minutes = Math.floor((deltaSeconds % 3600) / 60);
     const seconds = Math.floor(deltaSeconds % 60);
 
-    if (hours) relative += `${hours}h`;
-    if (minutes) relative += `${minutes}m`;
-    if (seconds) relative += `${seconds}s`;
+    if (hours) {
+      relative += `${hours}h`;
+    }
+    if (minutes) {
+      relative += `${minutes}m`;
+    }
+    if (seconds) {
+      relative += `${seconds}s`;
+    }
 
     return relative;
   }
