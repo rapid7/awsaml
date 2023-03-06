@@ -1,6 +1,4 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   Container,
@@ -10,16 +8,15 @@ import {
 } from 'reactstrap';
 import {
   Link,
-  Redirect,
+  Navigate,
 } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
-import { fetchRefresh } from '../../actions/refresh';
+import { getRefresh } from '../../apis';
 import ComponentWithError from '../components/ComponentWithError';
 import Logo from '../components/Logo';
 import Credentials from './Credentials';
 import Logout from './Logout';
-import RenderIfLoaded from '../components/RenderIfLoaded';
 import InputGroupWithCopyButton from '../components/InputGroupWithCopyButton';
 import {
   RoundedContent,
@@ -27,7 +24,7 @@ import {
   BUTTON_MARGIN,
 } from '../../constants/styles';
 
-const EnvVar = RoundedContent.extend`
+const EnvVar = styled(RoundedContent)`
   margin-top: 20px;
   margin-bottom: 20px;
   padding: 10px 20px;
@@ -75,197 +72,159 @@ ${getExport(platform)} AWS_PROFILE=awsaml-${accountId}
 ${getExport(platform)} AWS_DEFAULT_PROFILE=awsaml-${accountId}
 `.trim();
 
-class Refresh extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loaded: false,
-      caretDirection: 'down',
-      isOpen: true,
+function Refresh(props) {
+  const {
+    errorMessage,
+    status,
+  } = props;
+
+  const [loaded, setLoaded] = useState(false);
+  const [caretDirection, setCaretDirection] = useState('down');
+  const [isOpen, setIsOpen] = useState(true);
+  const [credentials, setCredentials] = useState({
+    accessKey: '',
+    secretKey: '',
+    sessionToken: '',
+  });
+  const [accountId, setAccountId] = useState('');
+  const [platform, setPlatform] = useState('');
+  const [profileName, setProfileName] = useState('');
+  const [roleName, setRoleName] = useState('');
+  const [showRole, setShowRole] = useState(false);
+
+  const { accessKey, secretKey, sessionToken } = credentials;
+
+  const get = async () => getRefresh();
+  const getSuccessCallback = (data) => {
+    setAccountId(data.accountId);
+    setCredentials({
+      accessKey: data.accessKey,
+      secretKey: data.secretKey,
+      sessionToken: data.sessionToken,
+    });
+
+    setPlatform(data.platform);
+    setProfileName(data.profileName);
+    setRoleName(data.roleName);
+    setShowRole(data.showRole);
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+
+    get().then((data) => {
+      if (data.redirect) {
+        window.location.href = data.redirect;
+      }
+
+      if (isMounted) {
+        setLoaded(true);
+        getSuccessCallback(data);
+      }
+    }).catch(console.error);
+
+    return () => {
+      isMounted = false;
     };
-  }
+  }, [props]);
 
-  async componentDidMount() {
-    const {
-      fetchRefresh: fr,
-    } = this.props;
-
-    this._isMounted = true; // eslint-disable-line no-underscore-dangle
-
-    await fr();
-    if (this._isMounted) { // eslint-disable-line no-underscore-dangle
-      this.setState({
-        loaded: true,
-      });
-    }
-  }
-
-  componentDidUpdate() {
-    const {
-      redirect,
-    } = this.props;
-
-    if (redirect) {
-      window.location.href = redirect;
-    }
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false; // eslint-disable-line no-underscore-dangle
-  }
-
-  handleRefreshClickEvent = (event) => {
-    const {
-      fetchRefresh: fr,
-    } = this.props;
-
+  const handleRefreshClickEvent = (event) => {
     event.preventDefault();
 
-    fr();
+    get().then(getSuccessCallback).catch(console.error);
   };
 
-  handleCollapse = () => {
-    const {
-      caretDirection,
-      isOpen,
-    } = this.state;
-    const newCaretDirection = (caretDirection === 'right' ? 'down' : 'right');
-    this.setState({
-      caretDirection: newCaretDirection,
-      isOpen: !isOpen,
-    });
+  const handleCollapse = () => {
+    setCaretDirection(caretDirection === 'right' ? 'down' : 'right');
+    setIsOpen(!isOpen);
   };
 
-  showProfileName() {
-    const {
-      profileName,
-      accountId,
-    } = this.props;
-
-    return profileName !== `awsaml-${accountId}`;
+  if (status === 401) {
+    return <Navigate to="/" />;
   }
 
-  render() {
-    const {
-      errorMessage,
-      status,
-      accountId,
-      showRole,
-      roleName,
-      accessKey,
-      secretKey,
-      sessionToken,
-      platform,
-      profileName,
-    } = this.props;
-    const {
-      loaded,
-      caretDirection,
-      isOpen,
-    } = this.state;
-
-    if (status === 401) {
-      return <Redirect to="/" />;
-    }
-
-    return (
-      <RenderIfLoaded isLoaded={loaded}>
-        {() => (
-          <Container>
-            <Row className="d-flex p-2">
-              <RoundedWrapper>
-                <Logo />
-                <RoundedContent>
-                  {errorMessage}
-                  <div>
-                    <BorderlessButton
-                      onClick={this.handleCollapse}
-                      outline
-                      color="link"
-                    >
-                      <FontAwesomeIcon icon={['fas', `fa-caret-${caretDirection}`]} />
-                      &nbsp;&nbsp;&nbsp;Account
-                    </BorderlessButton>
-                    <Collapse isOpen={isOpen}>
-                      <div className="card card-body bg-light mb-3">
-                        <AccountProps className="bg-dark text-light">
-                          {this.showProfileName() && [
-                            <AccountPropsKey key="profile-name-dt">Profile:</AccountPropsKey>,
-                            <AccountPropsVal key="profile-name-dd">{profileName}</AccountPropsVal>,
-                          ]}
-                          <AccountPropsKey>ID:</AccountPropsKey>
-                          <AccountPropsVal>{accountId}</AccountPropsVal>
-                          {showRole && [
-                            <AccountPropsKey key="role-name-dt">Role:</AccountPropsKey>,
-                            <AccountPropsVal key="role-name-dd">{roleName}</AccountPropsVal>,
-                          ]}
-                        </AccountProps>
-                      </div>
-                    </Collapse>
-                  </div>
-                  <Credentials
-                    awsAccessKey={accessKey}
-                    awsSecretKey={secretKey}
-                    awsSessionToken={sessionToken}
-                  />
-                  <EnvVar>
-                    <p>
-                      Run these commands from a&nbsp;
-                      {getTerm(platform)}
-                      &nbsp;to use the AWS CLI:
-                    </p>
-                    <PreInputGroupWithCopyButton
-                      buttonClassName="bg-dark text-light"
-                      id="envvars"
-                      inputClassName={`bg-dark text-light ${getLang(platform)}`}
-                      multiLine
-                      name="input-envvars"
-                      value={getEnvVars(this.props)}
-                    />
-                  </EnvVar>
-                  <span className="ml-auto p-2">
-                    <LinkWithButtonMargin
-                      className="btn btn-secondary"
-                      onClick={this.handleRefreshClickEvent}
-                      role="button"
-                      to="/refresh"
-                    >
-                      Refresh
-                    </LinkWithButtonMargin>
-                    <Logout />
-                  </span>
-                </RoundedContent>
-              </RoundedWrapper>
-            </Row>
-          </Container>
-        )}
-      </RenderIfLoaded>
-    );
+  if (!loaded) {
+    return ('');
   }
+
+  return (
+    <Container>
+      <Row className="d-flex p-2">
+        <RoundedWrapper>
+          <Logo />
+          <RoundedContent>
+            {errorMessage}
+            <div>
+              <BorderlessButton
+                onClick={handleCollapse}
+                outline
+                color="link"
+              >
+                <FontAwesomeIcon icon={['fas', `fa-caret-${caretDirection}`]} />
+                &nbsp;&nbsp;&nbsp;Account
+              </BorderlessButton>
+              <Collapse isOpen={isOpen}>
+                <div className="card card-body bg-light mb-3">
+                  <AccountProps className="bg-dark text-light">
+                    {profileName !== `awsaml-${accountId}` && [
+                      <AccountPropsKey key="profile-name-dt">Profile:</AccountPropsKey>,
+                      <AccountPropsVal key="profile-name-dd">{profileName}</AccountPropsVal>,
+                    ]}
+                    <AccountPropsKey>ID:</AccountPropsKey>
+                    <AccountPropsVal>{accountId}</AccountPropsVal>
+                    {showRole && [
+                      <AccountPropsKey key="role-name-dt">Role:</AccountPropsKey>,
+                      <AccountPropsVal key="role-name-dd">{roleName}</AccountPropsVal>,
+                    ]}
+                  </AccountProps>
+                </div>
+              </Collapse>
+            </div>
+            <Credentials
+              awsAccessKey={accessKey}
+              awsSecretKey={secretKey}
+              awsSessionToken={sessionToken}
+            />
+            <EnvVar>
+              <p>
+                Run these commands from a&nbsp;
+                {getTerm(platform)}
+                &nbsp;to use the AWS CLI:
+              </p>
+              <PreInputGroupWithCopyButton
+                buttonClassName="bg-dark text-light"
+                id="envvars"
+                inputClassName={`bg-dark text-light ${getLang(platform)}`}
+                multiLine
+                name="input-envvars"
+                value={getEnvVars({ platform, accountId })}
+              />
+            </EnvVar>
+            <span className="ml-auto p-2">
+              <LinkWithButtonMargin
+                className="btn btn-secondary"
+                onClick={handleRefreshClickEvent}
+                role="button"
+                to="/refresh"
+              >
+                Refresh
+              </LinkWithButtonMargin>
+              <Logout />
+            </span>
+          </RoundedContent>
+        </RoundedWrapper>
+      </Row>
+    </Container>
+  );
 }
 
 Refresh.propTypes = {
-  accessKey: PropTypes.string,
-  accountId: PropTypes.string,
   errorMessage: PropTypes.string,
-  fetchRefresh: PropTypes.func,
-  platform: PropTypes.string,
-  profileName: PropTypes.string,
-  redirect: PropTypes.bool,
-  roleName: PropTypes.string,
-  secretKey: PropTypes.string,
-  sessionToken: PropTypes.string,
-  showRole: PropTypes.bool,
   status: PropTypes.number,
 };
 
-const mapStateToProps = ({ refresh }) => ({
-  ...refresh.fetchFailure,
-  ...refresh.fetchSuccess,
-});
+Refresh.defaultProps = {
+  errorMessage: '',
+};
 
-const mapDispatchToProps = (dispatch) => ({
-  fetchRefresh: bindActionCreators(fetchRefresh, dispatch),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ComponentWithError(Refresh));
+export default ComponentWithError(Refresh);

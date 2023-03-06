@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {
@@ -64,65 +64,54 @@ const filterMetadataUrls = (metadataUrls, filterText) => {
   ));
 };
 
-class RecentLogins extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      filterText: '',
-    };
-  }
-
+function RecentLogins(props) {
+  const [filterText, setFilterText] = useState('');
   // eslint-disable-next-line max-len
-  handleFilterInputChange = ({ currentTarget: { value: filterText } }) => this.setState({ filterText });
+  const handleFilterInputChange = ({ currentTarget: { value: ft } }) => setFilterText(ft);
+  const {
+    metadataUrls,
+    deleteCallback,
+  } = props;
 
-  render() {
-    const {
-      metadataUrls: metadataUrlsFromProps,
-    } = this.props;
-    const {
-      filterText,
-    } = this.state;
+  const filteredMetadataUrls = filterMetadataUrls(metadataUrls, filterText);
 
-    const metadataUrls = filterMetadataUrls(metadataUrlsFromProps, filterText);
-
-    return (
-      <div
-        className="position-relative"
-        id="recent-logins"
-      >
-        <RecentLoginsHeader>Recent Logins</RecentLoginsHeader>
-        <SearchContainer>
-          <SearchInput onChange={this.handleFilterInputChange} />
-          <SearchIcon
-            color="grey"
-            icon={['fas', 'search']}
-          />
-        </SearchContainer>
-        <ScrollableListGroup>
-          {
-            metadataUrls.map(({ url, name, profileUuid }) => (
-              <Login
-                key={url}
-                pretty={name}
-                profileUuid={profileUuid}
-                url={url}
-              />
-            ))
-          }
-        </ScrollableListGroup>
-      </div>
-    );
-  }
+  return (
+    <div
+      className="position-relative"
+      id="recent-logins"
+    >
+      <RecentLoginsHeader>Recent Logins</RecentLoginsHeader>
+      <SearchContainer>
+        <SearchInput onChange={handleFilterInputChange} />
+        <SearchIcon
+          color="grey"
+          icon={['fas', 'search']}
+        />
+      </SearchContainer>
+      <ScrollableListGroup>
+        {
+          filteredMetadataUrls.map(({ url, name, profileUuid }) => (
+            <Login
+              deleteCallback={deleteCallback}
+              key={url}
+              pretty={name}
+              profileUuid={profileUuid}
+              url={url}
+            />
+          ))
+        }
+      </ScrollableListGroup>
+    </div>
+  );
 }
 
 RecentLogins.propTypes = {
   metadataUrls: PropTypes.arrayOf(PropTypes.shape({
+    url: PropTypes.string,
     name: PropTypes.string,
     profileUuid: PropTypes.string,
-    roles: PropTypes.arrayOf(PropTypes.string),
-    url: PropTypes.string,
   })).isRequired,
+  deleteCallback: PropTypes.func,
 };
 
 export default RecentLogins;

@@ -1,61 +1,46 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Alert } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import hoistNonReactStatic from 'hoist-non-react-statics';
 
 const getErrorClass = (error) => (error ? 'form-group has-error' : 'form-group');
+const hasError = (error, metadataUrlValid) => (error || metadataUrlValid === false);
 
-function ComponentWithError(WrappedComponent) {
-  class InnerComponentWithError extends Component {
-    get errorMessage() {
-      const {
-        error,
-      } = this.props;
+const errorMessage = (error, metadataUrlValid) => {
+  if (hasError(error, metadataUrlValid)) {
+    return !!error && (
+      <Alert color="danger">
+        <FontAwesomeIcon icon="exclamation-triangle" />
+        &nbsp;
+        {' '}
+        {error}
+      </Alert>
+    );
+  }
+  return '';
+};
 
-      if (this.hasError()) {
-        return !!error && (
-          <Alert color="danger">
-            <FontAwesomeIcon icon="exclamation-triangle" />
-            &nbsp;
-            {error}
-          </Alert>
-        );
-      }
+export default (WrappedComponent) => {
+  function ComponentWithError(props) {
+    const {
+      error,
+      metadataUrlValid,
+    } = props;
 
-      return '';
-    }
-
-    hasError() {
-      const {
-        error,
-        metadataUrlValid,
-      } = this.props;
-
-      return error || metadataUrlValid === false;
-    }
-
-    render() {
-      return (
-        <WrappedComponent
-          {...this.props} // eslint-disable-line react/jsx-props-no-spreading
-          {...this.state} // eslint-disable-line react/jsx-props-no-spreading
-          errorMessage={this.errorMessage}
-          nameGroupClass="form-group"
-          urlGroupClass={getErrorClass(this.hasError())}
-        />
-      );
-    }
+    return (
+      <WrappedComponent
+        {...props} // eslint-disable-line react/jsx-props-no-spreading
+        errorMessage={errorMessage(error, metadataUrlValid)}
+        nameGroupClass="form-group"
+        urlGroupClass={getErrorClass(hasError(error, metadataUrlValid))}
+      />
+    );
   }
 
-  InnerComponentWithError.propTypes = {
+  ComponentWithError.propTypes = {
     error: PropTypes.string,
     metadataUrlValid: PropTypes.bool,
   };
 
-  hoistNonReactStatic(InnerComponentWithError, WrappedComponent);
-
-  return InnerComponentWithError;
-}
-
-export default ComponentWithError;
+  return ComponentWithError;
+};

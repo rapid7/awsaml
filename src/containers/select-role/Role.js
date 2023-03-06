@@ -1,56 +1,51 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { ListGroupItem } from 'reactstrap';
 import styled from 'styled-components';
-import { submitSelectRole } from '../../actions/select-role';
+import { postSelectRole } from '../../apis';
 
 const SelectRoleButton = styled(ListGroupItem)`
   cursor: pointer;
 `;
 
-const displayName = (displayAccountId, accountId, name) => (displayAccountId ? `${accountId}:${name}` : name);
+function Role(props) {
+  const {
+    displayAccountId,
+    name,
+    accountId,
+    index,
+    selectStatusCallback,
+  } = props;
 
-class RoleComponent extends Component {
-  handleClick = (event) => {
+  const handleClick = (event) => {
     event.preventDefault();
-    const {
-      submitSelectRole: ssr,
-      index,
-    } = this.props;
-    ssr({ index });
+
+    const selectRole = async () => postSelectRole({ index });
+
+    selectRole().then((data) => {
+      selectStatusCallback(data);
+    }).catch(console.error);
   };
 
-  render() {
-    const {
-      displayAccountId,
-      accountId,
-      name,
-    } = this.props;
+  const displayName = displayAccountId ? `${accountId}:${name}` : name;
 
-    return (
-      <SelectRoleButton
-        action
-        onClick={this.handleClick}
-        tag="button"
-      >
-        {displayName(displayAccountId, accountId, name)}
-      </SelectRoleButton>
-    );
-  }
+  return (
+    <SelectRoleButton
+      action
+      onClick={handleClick}
+      tag="button"
+    >
+      {displayName}
+    </SelectRoleButton>
+  );
 }
 
-RoleComponent.propTypes = {
-  accountId: PropTypes.string,
-  displayAccountId: PropTypes.bool,
-  index: PropTypes.number,
-  name: PropTypes.string,
-  submitSelectRole: PropTypes.func.isRequired,
+Role.propTypes = {
+  accountId: PropTypes.string.isRequired,
+  displayAccountId: PropTypes.bool.isRequired,
+  index: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  selectStatusCallback: PropTypes.func,
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  submitSelectRole: bindActionCreators(submitSelectRole, dispatch),
-});
-
-export default connect(null, mapDispatchToProps)(RoleComponent);
+export default Role;

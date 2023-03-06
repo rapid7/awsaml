@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Button,
@@ -8,80 +8,58 @@ import {
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-class InputGroupWithCopyButton extends Component {
-  constructor(props) {
-    super(props);
+function InputGroupWithCopyButton(props) {
+  const {
+    id: idFromProps,
+    className,
+    inputClassName,
+    name,
+    value,
+    message,
+    multiLine,
+  } = props;
+  const [tooltipState, setTooltipState] = useState(false);
 
-    this.state = {
-      tooltipState: false,
-    };
-  }
-
-  handleTooltipTargetClick = () => {
-    const {
-      tooltipState,
-    } = this.state;
-    const {
-      value,
-    } = this.props;
-
-    this.setState({
-      tooltipState: !tooltipState,
-    });
+  const handleTooltipTargetClick = () => {
+    setTooltipState(!tooltipState);
     navigator.clipboard.writeText(value);
 
     setTimeout(function () { // eslint-disable-line prefer-arrow-callback, func-names
-      this.setState({
-        tooltipState,
-      });
-    }.bind(this), 1000);
+      setTooltipState(!tooltipState);
+    }, 1000);
   };
 
-  render() {
-    const {
-      id: idFromProps,
-      className,
-      inputClassName,
-      name,
-      value,
-      message,
-      multiLine,
-    } = this.props;
-    const {
-      tooltipState,
-    } = this.state;
-    const id = `icon-${idFromProps}`;
+  const id = `icon-${idFromProps}`;
 
-    return (
-      <InputGroup className={className}>
-        <Input
-          className={`form-control ${inputClassName}`}
-          id={name}
-          name={name}
-          disabled
-          type={multiLine ? 'textarea' : 'text'}
-          value={value}
-        />
-        <Button
-          onClick={this.handleTooltipTargetClick}
-          id={id}
-          outline
-          color="secondary"
+  return (
+    <InputGroup className={className}>
+      <Input
+        className={`form-control ${inputClassName}`}
+        id={name}
+        name={name}
+        disabled
+        type={multiLine ? 'textarea' : 'text'}
+        value={value}
+      />
+      <Button
+        onClick={handleTooltipTargetClick}
+        id={id}
+        outline
+        color="secondary"
+      >
+        <Tooltip
+          autohide
+          container="#root"
+          isOpen={tooltipState}
+          placement="top"
+          target={id}
         >
-          <Tooltip
-            autohide
-            container="#root"
-            isOpen={tooltipState}
-            placement="top"
-            target={id}
-          >
-            {message}
-          </Tooltip>
-          <FontAwesomeIcon icon={['far', 'copy']} inverted="true" />
-        </Button>
-      </InputGroup>
-    );
-  }
+          {message}
+        </Tooltip>
+        <FontAwesomeIcon icon={['far', 'copy']} inverted="true" />
+      </Button>
+    </InputGroup>
+  );
 }
 
 InputGroupWithCopyButton.propTypes = {

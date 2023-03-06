@@ -1,58 +1,35 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 import { Button } from 'reactstrap';
-import { Redirect } from 'react-router';
+import { Navigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { bindActionCreators } from 'redux';
-import { fetchLogout } from '../../actions/logout';
+import { getLogout } from '../../apis';
 import { BUTTON_MARGIN } from '../../constants/styles';
 
 const ButtonWithMargin = styled(Button)`${BUTTON_MARGIN}`;
 
-class LogoutComponent extends Component {
-  handleLogoutEvent = (event) => {
-    const {
-      fetchLogout: fl,
-    } = this.props;
+function Logout() {
+  const [logout, setLogout] = useState(false);
 
+  const handleLogoutEvent = (event) => {
     event.preventDefault();
 
-    fl();
+    getLogout().then(() => {
+      setLogout(true);
+    }).catch(console.error);
   };
 
-  render() {
-    const {
-      logout,
-    } = this.props;
-
-    if (logout) {
-      return <Redirect to="/" />;
-    }
-
-    return (
-      <ButtonWithMargin
-        color="danger"
-        onClick={this.handleLogoutEvent}
-      >
-        Logout
-      </ButtonWithMargin>
-    );
+  if (logout) {
+    return <Navigate to="/" />;
   }
+
+  return (
+    <ButtonWithMargin
+      color="danger"
+      onClick={handleLogoutEvent}
+    >
+      Logout
+    </ButtonWithMargin>
+  );
 }
 
-LogoutComponent.propTypes = {
-  fetchLogout: PropTypes.func,
-  logout: PropTypes.bool,
-};
-
-const mapStateToProps = ({ logout }) => ({
-  ...logout.fetchFailure,
-  ...logout.fetchSuccess,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  fetchLogout: bindActionCreators(fetchLogout, dispatch),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(LogoutComponent);
+export default Logout;

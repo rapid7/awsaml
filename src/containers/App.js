@@ -1,9 +1,10 @@
 import React from 'react';
 import {
   Route,
-  Switch,
-} from 'react-router';
-
+  Routes,
+  BrowserRouter,
+} from 'react-router-dom';
+import { createGlobalStyle } from 'styled-components';
 import Configure from './configure/Configure';
 import Refresh from './refresh/Refresh';
 import SelectRole from './select-role/SelectRole';
@@ -14,27 +15,59 @@ import 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css';
 
 const debug = process.env.NODE_ENV === 'development';
+const GlobalStyle = createGlobalStyle`
+  html {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    background: rgb(249, 249, 249);
+  }
+
+  body > * {
+    flex-grow: 1;
+  }
+
+  summary {
+    padding: 0.25rem;
+    display: flex;
+    width: 100%;
+    align-items: center;
+  }
+
+  dd {
+    margin-bottom: 10px;
+  }
+
+  input[type="text"], input[type="url"] {
+    border: 1px solid #6c757d;
+  }
+  .has-error .form-control, :invalid input {
+    border: 2px solid red;
+  }
+`;
 
 function App() {
   return (
-    <ErrorBoundary>
-      <Switch>
-        <Route
-          component={Configure}
-          exact
-          path="/"
-        />
-        <Route
-          component={Refresh}
-          path="/refresh"
-        />
-        <Route
-          component={SelectRole}
-          path="/select-role"
-        />
-        {debug ? <Route component={DebugRoute} /> : ''}
-      </Switch>
-    </ErrorBoundary>
+    <React.StrictMode>
+      <ErrorBoundary>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<Configure />} path="/" />
+            <Route element={<Refresh />} path="/refresh" />
+            <Route element={<SelectRole />} path="/select-role" />
+            {debug ? <Route element={<DebugRoute />} /> : ''}
+          </Routes>
+        </BrowserRouter>
+      </ErrorBoundary>
+      <GlobalStyle />
+    </React.StrictMode>
   );
 }
 

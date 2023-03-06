@@ -1,16 +1,11 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Redirect } from 'react-router';
-import PropTypes from 'prop-types';
-import { getOr } from 'unchanged';
-import qs from 'querystring';
+import React, { useEffect, useState } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import {
   Container,
   Row,
 } from 'reactstrap';
-import { fetchConfigure } from '../../actions/configure';
+import { getConfigure } from '../../apis';
 import Logo from '../components/Logo';
 import RecentLogins from './RecentLogins';
 import ConfigureMetadata from './ConfigureMetadata';
@@ -24,95 +19,77 @@ const CenteredDivColumn = styled.div`
   margin: 0 auto;
 `;
 
-const RoundedCenteredDivColumnContent = RoundedContent.extend(CenteredDivColumn);
-const RoundedCenteredDivColumnWrapper = RoundedWrapper.extend(CenteredDivColumn);
+const RoundedCenteredDivColumnContent = styled(RoundedContent)(CenteredDivColumn);
+const RoundedCenteredDivColumnWrapper = styled(RoundedWrapper)(CenteredDivColumn);
 
-class Configure extends Component {
-  constructor(props) {
-    super(props);
+function Configure(props) {
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const [auth] = useState(params.get('auth') === 'true');
+  const [loaded, setLoaded] = useState(false);
+  const [selectRole] = useState(params.get('select-role') === 'true');
+  const [defaultMetadataUrl, setDefaultMetadataUrl] = useState('');
+  const [defaultMetadataName, setDefaultMetadataName] = useState('');
+  const [metadataUrls, setMetadataUrls] = useState([]);
 
-    const params = qs.parse(props.location.search);
+  useEffect(() => {
+    let isMounted = true;
+    const fetchConfig = async () => getConfigure();
 
-    this.state = {
-      auth: (params['?auth'] && params['?auth'] === 'true'),
-      loaded: false,
-      selectRole: (params['?select-role'] && params['?select-role'] === 'true'),
+    fetchConfig().then((data) => {
+      if (isMounted) {
+        setDefaultMetadataUrl(data.defaultMetadataUrl);
+        setDefaultMetadataName(data.defaultMetadataName);
+        setMetadataUrls(data.metadataUrls);
+
+        setLoaded(true);
+      }
+    }).catch(console.error);
+
+    return () => {
+      isMounted = false;
     };
+  }, [props]);
+
+  const deleteCallback = (deleted) => {
+    const updatedMetadataUrls = metadataUrls
+      .filter((metadataUrl) => metadataUrl.profileUuid !== deleted.profileUuid);
+    setMetadataUrls(updatedMetadataUrls);
+  };
+
+  if (auth) {
+    return <Navigate to="/refresh" />;
   }
 
-  async componentDidMount() {
-    this._isMounted = true; // eslint-disable-line no-underscore-dangle
-
-    const {
-      fetchConfigure: fc,
-    } = this.props;
-
-    await fc();
-    if (this._isMounted) { // eslint-disable-line no-underscore-dangle
-      this.setState({
-        loaded: true,
-      });
-    }
+  if (selectRole) {
+    return <Navigate to="/select-role" />;
   }
 
-  componentWillUnmount() {
-    this._isMounted = false; // eslint-disable-line no-underscore-dangle
+  if (!loaded) {
+    return '';
   }
 
-  render() {
-    const {
-      auth,
-      selectRole,
-      loaded,
-    } = this.state;
-    const {
-      defaultMetadataName,
-      defaultMetadataUrl,
-    } = this.props;
-
-    if (auth) {
-      return <Redirect to="/refresh" />;
-    }
-    if (selectRole) {
-      return <Redirect to="/select-role" />;
-    }
-    const metadataUrls = getOr([], 'metadataUrls', this.props);
-
-    return (loaded) ? (
-      <Container>
-        <Row>
-          <RoundedCenteredDivColumnWrapper>
-            <Logo />
-            <RoundedCenteredDivColumnContent>
-              <ConfigureMetadata
-                defaultMetadataName={defaultMetadataName}
-                defaultMetadataUrl={defaultMetadataUrl}
+  return (
+    <Container>
+      <Row>
+        <RoundedCenteredDivColumnWrapper>
+          <Logo />
+          <RoundedCenteredDivColumnContent>
+            <ConfigureMetadata
+              defaultMetadataName={defaultMetadataName}
+              defaultMetadataUrl={defaultMetadataUrl}
+            />
+            {!!metadataUrls.length && (
+              <RecentLogins
+                metadataUrls={metadataUrls}
+                deleteCallback={deleteCallback}
               />
-              {!!metadataUrls.length && <RecentLogins metadataUrls={metadataUrls} />}
-            </RoundedCenteredDivColumnContent>
-          </RoundedCenteredDivColumnWrapper>
-        </Row>
-      </Container>
-    ) : '';
-  }
+            )}
+          </RoundedCenteredDivColumnContent>
+        </RoundedCenteredDivColumnWrapper>
+      </Row>
+    </Container>
+  );
 }
 
-Configure.propTypes = {
-  defaultMetadataName: PropTypes.string,
-  defaultMetadataUrl: PropTypes.string,
-  fetchConfigure: PropTypes.func.isRequired,
-  location: PropTypes.shape({
-    search: PropTypes.string,
-  }).isRequired,
-};
-
-const mapStateToProps = ({ configure }) => ({
-  ...configure.fetchFailure,
-  ...configure.fetchSuccess,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  fetchConfigure: bindActionCreators(fetchConfigure, dispatch),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Configure);
+export default Configure;
