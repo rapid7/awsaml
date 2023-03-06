@@ -8,6 +8,7 @@ class AwsCredentials {
     this.saveAsIniFile(credentials, profile, done, region);
   }
 
+  // eslint-disable-next-line class-methods-use-this, consistent-return
   saveAsIniFile(credentials, profile, done, region = '') {
     const home = AwsCredentials.resolveHomePath();
 
@@ -26,11 +27,13 @@ class AwsCredentials {
     }
 
     // mkdirp is a no-op if the directory already exists
+    // eslint-disable-next-line consistent-return
     mkdirp(path.join(home, '.aws'), '0700', (mkDirErr) => {
       if (mkDirErr) {
         return done(mkDirErr);
       }
 
+      // eslint-disable-next-line consistent-return
       fs.readFile(configFile, 'utf8', (fsErr, data) => {
         if (fsErr && fsErr.code !== 'ENOENT') {
           return done(fsErr);
@@ -51,7 +54,9 @@ class AwsCredentials {
         }
         // Some libraries e.g. boto v2.38.0, expect an "aws_security_token" entry.
         config[profile].aws_security_token = credentials.SessionToken;
-        config = ini.encode(config, {whitespace: true});
+        config = ini.encode(config, {
+          whitespace: true,
+        });
 
         fs.writeFile(configFile, config, 'utf8', done);
       });
@@ -59,7 +64,9 @@ class AwsCredentials {
   }
 
   static resolveHomePath() {
-    const env = process.env;
+    const {
+      env,
+    } = process;
 
     return env.HOME
       || env.USERPROFILE

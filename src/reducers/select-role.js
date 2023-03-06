@@ -1,4 +1,4 @@
-import {handleActions} from 'redux-actions';
+import { handleActions } from 'redux-actions';
 import {
   FETCH_SELECT_ROLE_REQUEST,
   FETCH_SELECT_ROLE_SUCCESS,
@@ -13,17 +13,17 @@ const selectRoleFetchRequest = (state, action) => ({
   fetchRequest: action,
 });
 
-const selectRoleFetchSuccess = (state, {payload}) => ({
+const selectRoleFetchSuccess = (state, { payload }) => ({
   ...state,
   fetchSuccess: payload,
 });
 
-const selectRoleFetchFailure = (state, {payload}) => ({
+const selectRoleFetchFailure = (state, { payload }) => ({
   ...state,
-  fetchFailure: Object.assign({}, payload, {
+  fetchFailure: {
     ...payload,
     errorMessage: payload.error,
-  }),
+  },
 });
 
 const selectRoleSubmitRequest = (state, action) => ({
@@ -31,17 +31,17 @@ const selectRoleSubmitRequest = (state, action) => ({
   submitRequest: action,
 });
 
-const selectRoleSubmitSuccess = (state, {payload}) => ({
+const selectRoleSubmitSuccess = (state, { payload }) => ({
   ...state,
   submitSuccess: payload,
 });
 
-const selectRoleSubmitFailure = (state, {payload}) => ({
+const selectRoleSubmitFailure = (state, { payload }) => ({
   ...state,
-  submitFailure: Object.assign({}, payload, {
+  submitFailure: {
     ...payload,
     errorMessage: payload.error,
-  }),
+  },
 });
 
 export const SELECT_ROLE_INITIAL_STATE = {

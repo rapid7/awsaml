@@ -1,4 +1,4 @@
-import {handleActions} from 'redux-actions';
+import { handleActions } from 'redux-actions';
 import {
   FETCH_LOGOUT_REQUEST,
   FETCH_LOGOUT_SUCCESS,
@@ -10,17 +10,17 @@ const logoutFetchRequest = (state, action) => ({
   fetchRequest: action,
 });
 
-const logoutFetchSuccess = (state, {payload}) => ({
+const logoutFetchSuccess = (state, { payload }) => ({
   ...state,
   fetchSuccess: payload,
 });
 
-const logoutFetchFailure = (state, {payload}) => ({
+const logoutFetchFailure = (state, { payload }) => ({
   ...state,
-  fetchFailure: Object.assign({}, payload, {
+  fetchFailure: {
     ...payload,
     errorMessage: payload.error,
-  }),
+  },
 });
 
 export const CONFIGURE_INITIAL_STATE = {

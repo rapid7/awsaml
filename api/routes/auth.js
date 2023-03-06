@@ -43,9 +43,9 @@ module.exports = (app, auth) => {
       // the latest roles from the current SAML assertion.  If it
       // doesn't match, wipe it from the session.
       if (session.roleArn && session.principalArn) {
-        const found = roles.find((role) =>
-          role.roleArn === session.roleArn && role.principalArn === session.principalArn
-        );
+        const found = roles
+          // eslint-disable-next-line max-len
+          .find((role) => role.roleArn === session.roleArn && role.principalArn === session.principalArn);
 
         if (!found) {
           session.showRole = undefined;

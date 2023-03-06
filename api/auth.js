@@ -17,7 +17,7 @@ class Auth {
       if (req.isAuthenticated()) {
         return next();
       }
-      res.json({
+      return res.json({
         redirect: options.entryPoint,
       });
     };

@@ -1,5 +1,5 @@
-import {createAction} from 'redux-actions';
-import {fetchConfigure} from './configure';
+import { createAction } from 'redux-actions';
+import { fetchConfigure } from './configure';
 import * as api from '../apis';
 
 export const DELETE_PROFILE_REQUEST = 'DELETE_PROFILE_REQUEST';
@@ -14,7 +14,7 @@ export const deleteProfile = (payload) => async (dispatch) => {
   dispatch(deleteProfileRequest());
 
   try {
-    const {data} = await api.deleteProfile({
+    const { data } = await api.deleteProfile({
       params: payload,
     });
 

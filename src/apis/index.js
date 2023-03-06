@@ -9,7 +9,7 @@ const axiosClient = axios.create({
  * @returns {Promise<*>}
  */
 export const getConfigure = async () => {
-  const {data} = await axiosClient.get('configure');
+  const { data } = await axiosClient.get('configure');
 
   return data;
 };
@@ -20,7 +20,7 @@ export const getConfigure = async () => {
  * @returns {Promise<*>}
  */
 export const postConfigure = async (payload) => {
-  const {data} = await axiosClient.post('configure', payload);
+  const { data } = await axiosClient.post('configure', payload);
 
   return data;
 };
@@ -34,7 +34,7 @@ export const postConfigure = async (payload) => {
  * @returns {Promise<*>}
  */
 export const getRefresh = async () => {
-  const {data} = await axios.get('refresh');
+  const { data } = await axios.get('refresh');
 
   return data;
 };
@@ -44,7 +44,7 @@ export const getRefresh = async () => {
  * @returns {Promise<*>}
  */
 export const getSelectRole = async () => {
-  const {data} = await axiosClient.get('select-role');
+  const { data } = await axiosClient.get('select-role');
 
   return data;
 };
@@ -55,7 +55,7 @@ export const getSelectRole = async () => {
  * @returns {Promise<*>}
  */
 export const postSelectRole = async (payload) => {
-  const {data} = await axiosClient.post('select-role', payload);
+  const { data } = await axiosClient.post('select-role', payload);
 
   return data;
 };
@@ -69,7 +69,7 @@ export const postSelectRole = async (payload) => {
  * @returns {Promise<*>}
  */
 export const getLogout = async () => {
-  const {data} = await axios.get('logout');
+  const { data } = await axios.get('logout');
 
   return data;
 };
@@ -80,7 +80,7 @@ export const getLogout = async () => {
  * @returns {Promise<*>}
  */
 export const deleteProfile = async (payload) => {
-  const {data} = await axiosClient.delete('profile', payload);
+  const { data } = await axiosClient.delete('profile', payload);
 
   return data;
 };

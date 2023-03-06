@@ -1,15 +1,22 @@
 const electron = require('electron');
 
 const Application = electron.app;
-const BrowserWindow = electron.BrowserWindow;
+const {
+  BrowserWindow,
+  TouchBar,
+} = electron;
 const isPlainObject = require('lodash.isplainobject');
 const path = require('path');
 const Server = require('../api/server');
-const config = require('../api/config');
+const config = require('../api/config.json');
 
 const storagePath = path.join(Application.getPath('userData'), 'data.json');
-const TouchBar = electron.TouchBar;
-const {TouchBarButton, TouchBarGroup, TouchBarPopover, TouchBarSpacer} = electron.TouchBar;
+const {
+  TouchBarButton,
+  TouchBarGroup,
+  TouchBarPopover,
+  TouchBarSpacer,
+} = TouchBar;
 
 global.Storage = require('../api/storage')(storagePath);
 
@@ -58,13 +65,19 @@ const loadTouchBar = (browserWindow) => {
     label: '🔄',
   });
 
-  const profileButtons = storedMetadataUrls.map((storedMetadataUrl) =>
-    buttonForProfileWithUrl(browserWindow, storedMetadataUrl.name, storedMetadataUrl.url));
+  const profileButtons = storedMetadataUrls
+    .map((storedMetadataUrl) => (
+      buttonForProfileWithUrl(browserWindow, storedMetadataUrl.name, storedMetadataUrl.url)
+    ));
   const touchbar = new TouchBar({
     items: [
       refreshButton,
-      new TouchBarGroup({items: profileButtons.slice(0, 3)}),
-      new TouchBarSpacer({size: 'flexible'}),
+      new TouchBarGroup({
+        items: profileButtons.slice(0, 3),
+      }),
+      new TouchBarSpacer({
+        size: 'flexible',
+      }),
       new TouchBarPopover({
         items: profileButtons,
         label: '👥 More Profiles',
@@ -84,6 +97,7 @@ Application.on('window-all-closed', () => {
 });
 
 Application.on('ready', async () => {
+  // eslint-disable-next-line global-require
   require('./menu');
 
   const host = Server.get('host');
@@ -131,16 +145,6 @@ Application.on('ready', async () => {
   });
 
   if (process.env.NODE_ENV === 'development') {
-    const {default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} = require('electron-devtools-installer');
-
-    try {
-      const name = await installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS]);
-
-      console.log(`Added Extension:  ${name}`);
-    } catch (err) {
-      console.log('An error occurred: ', err);
-    }
-
     mainWindow.openDevTools();
   }
 
@@ -162,5 +166,5 @@ Application.on('ready', async () => {
       console.log('Reloading...'); // eslint-disable-line no-console
       mainWindow.loadURL(entryPointUrl);
     }
-  }, (config.aws.duration / 2) * 1000); // eslint-disable-line rapid7/static-magic-numbers
+  }, (config.aws.duration / 2) * 1000);
 });

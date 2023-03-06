@@ -16,7 +16,7 @@ module.exports = (auth, config, secret) => {
   app.use(morgan('dev'));
   app.use(cookieParser(secret));
   app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({extended: true}));
+  app.use(bodyParser.urlencoded({ extended: true }));
   app.use(expressSession({
     resave: false,
     saveUninitialized: true,

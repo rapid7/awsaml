@@ -1,4 +1,4 @@
-import {handleActions} from 'redux-actions';
+import { handleActions } from 'redux-actions';
 import {
   FETCH_CONFIGURE_FAILURE,
   FETCH_CONFIGURE_SUCCESS,
@@ -13,17 +13,17 @@ const configureFetchRequest = (state, action) => ({
   fetchRequest: action,
 });
 
-const configureFetchSuccess = (state, {payload}) => ({
+const configureFetchSuccess = (state, { payload }) => ({
   ...state,
   fetchSuccess: payload,
 });
 
-const configureFetchFailure = (state, {payload}) => ({
+const configureFetchFailure = (state, { payload }) => ({
   ...state,
-  fetchFailure: Object.assign({}, payload, {
+  fetchFailure: {
     ...payload,
     errorMessage: payload.error,
-  }),
+  },
 });
 
 const configureSubmitRequest = (state, action) => ({
@@ -31,17 +31,17 @@ const configureSubmitRequest = (state, action) => ({
   submitRequest: action,
 });
 
-const configureSubmitSuccess = (state, {payload}) => ({
+const configureSubmitSuccess = (state, { payload }) => ({
   ...state,
   submitSuccess: payload,
 });
 
-const configureSubmitFailure = (state, {payload}) => ({
+const configureSubmitFailure = (state, { payload }) => ({
   ...state,
-  submitFailure: Object.assign({}, payload, {
+  submitFailure: {
     ...payload,
     errorMessage: payload.error,
-  }),
+  },
 });
 
 export const CONFIGURE_INITIAL_STATE = {

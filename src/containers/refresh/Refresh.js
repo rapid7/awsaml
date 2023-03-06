@@ -1,23 +1,26 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import {
   Container,
   Row,
+  Button,
+  Collapse,
 } from 'reactstrap';
 import {
   Link,
   Redirect,
 } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
-import {fetchRefresh} from '../../actions/refresh';
-import {ComponentWithError} from '../components/ComponentWithError';
-import {Logo} from '../components/Logo';
-import {Credentials} from './Credentials';
-import {Logout} from './Logout';
-import {RenderIfLoaded} from '../components/RenderIfLoaded';
-import {InputGroupWithCopyButton} from '../components/InputGroupWithCopyButton';
+import { fetchRefresh } from '../../actions/refresh';
+import ComponentWithError from '../components/ComponentWithError';
+import Logo from '../components/Logo';
+import Credentials from './Credentials';
+import Logout from './Logout';
+import RenderIfLoaded from '../components/RenderIfLoaded';
+import InputGroupWithCopyButton from '../components/InputGroupWithCopyButton';
 import {
   RoundedContent,
   RoundedWrapper,
@@ -56,43 +59,41 @@ const PreInputGroupWithCopyButton = styled(InputGroupWithCopyButton)`
   font-size: 1rem;
 `;
 
-const getLang = (platform) => platform === 'win32' ? 'language-batch' : 'language-bash';
+const BorderlessButton = styled(Button)`
+  border: 0;
+  margin-bottom: 3px;
+`;
 
-const getTerm = (platform) => platform === 'win32' ? 'command prompt' : 'terminal';
+const getLang = (platform) => (platform === 'win32' ? 'language-batch' : 'language-bash');
 
-const getExport = (platform) => platform === 'win32' ? 'set' : 'export';
+const getTerm = (platform) => (platform === 'win32' ? 'command prompt' : 'terminal');
 
-const getEnvVars = ({platform, accountId}) => `
+const getExport = (platform) => (platform === 'win32' ? 'set' : 'export');
+
+const getEnvVars = ({ platform, accountId }) => `
 ${getExport(platform)} AWS_PROFILE=awsaml-${accountId}
 ${getExport(platform)} AWS_DEFAULT_PROFILE=awsaml-${accountId}
 `.trim();
 
 class Refresh extends Component {
-  static propTypes = {
-    accessKey: PropTypes.string,
-    accountId: PropTypes.string,
-    errorMessage: PropTypes.string,
-    fetchRefresh: PropTypes.func,
-    platform: PropTypes.string,
-    profileName: PropTypes.string,
-    redirect: PropTypes.bool,
-    roleName: PropTypes.string,
-    secretKey: PropTypes.string,
-    sessionToken: PropTypes.string,
-    showRole: PropTypes.bool,
-    status: PropTypes.number,
-  };
-
-
-  state = {
-    loaded: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      loaded: false,
+      caretDirection: 'down',
+      isOpen: true,
+    };
+  }
 
   async componentDidMount() {
-    this._isMounted = true;
+    const {
+      fetchRefresh: fr,
+    } = this.props;
 
-    await this.props.fetchRefresh();
-    if (this._isMounted) {
+    this._isMounted = true; // eslint-disable-line no-underscore-dangle
+
+    await fr();
+    if (this._isMounted) { // eslint-disable-line no-underscore-dangle
       this.setState({
         loaded: true,
       });
@@ -100,22 +101,48 @@ class Refresh extends Component {
   }
 
   componentDidUpdate() {
-    if (this.props.redirect) {
-      window.location.href = this.props.redirect;
+    const {
+      redirect,
+    } = this.props;
+
+    if (redirect) {
+      window.location.href = redirect;
     }
   }
 
   componentWillUnmount() {
-    this._isMounted = false;
+    this._isMounted = false; // eslint-disable-line no-underscore-dangle
   }
 
   handleRefreshClickEvent = (event) => {
+    const {
+      fetchRefresh: fr,
+    } = this.props;
+
     event.preventDefault();
-    this.props.fetchRefresh();
+
+    fr();
+  };
+
+  handleCollapse = () => {
+    const {
+      caretDirection,
+      isOpen,
+    } = this.state;
+    const newCaretDirection = (caretDirection === 'right' ? 'down' : 'right');
+    this.setState({
+      caretDirection: newCaretDirection,
+      isOpen: !isOpen,
+    });
   };
 
   showProfileName() {
-    return this.props.profileName !== `awsaml-${this.props.accountId}`;
+    const {
+      profileName,
+      accountId,
+    } = this.props;
+
+    return profileName !== `awsaml-${accountId}`;
   }
 
   render() {
@@ -131,13 +158,18 @@ class Refresh extends Component {
       platform,
       profileName,
     } = this.props;
+    const {
+      loaded,
+      caretDirection,
+      isOpen,
+    } = this.state;
 
     if (status === 401) {
       return <Redirect to="/" />;
     }
 
     return (
-      <RenderIfLoaded isLoaded={this.state.loaded}>
+      <RenderIfLoaded isLoaded={loaded}>
         {() => (
           <Container>
             <Row className="d-flex p-2">
@@ -145,30 +177,43 @@ class Refresh extends Component {
                 <Logo />
                 <RoundedContent>
                   {errorMessage}
-                  <details open>
-                    <summary>Account</summary>
-                    <div className="card card-body bg-light mb-3">
-                      <AccountProps className="bg-dark text-light">
-                        {this.showProfileName() && [
-                          <AccountPropsKey key="profile-name-dt">Profile:</AccountPropsKey>,
-                          <AccountPropsVal key="profile-name-dd">{profileName}</AccountPropsVal>,
-                        ]}
-                        <AccountPropsKey>ID:</AccountPropsKey>
-                        <AccountPropsVal>{accountId}</AccountPropsVal>
-                        {showRole && [
-                          <AccountPropsKey key="role-name-dt">Role:</AccountPropsKey>,
-                          <AccountPropsVal key="role-name-dd">{roleName}</AccountPropsVal>,
-                        ]}
-                      </AccountProps>
-                    </div>
-                  </details>
+                  <div>
+                    <BorderlessButton
+                      onClick={this.handleCollapse}
+                      outline
+                      color="link"
+                    >
+                      <FontAwesomeIcon icon={['fas', `fa-caret-${caretDirection}`]} />
+                      &nbsp;&nbsp;&nbsp;Account
+                    </BorderlessButton>
+                    <Collapse isOpen={isOpen}>
+                      <div className="card card-body bg-light mb-3">
+                        <AccountProps className="bg-dark text-light">
+                          {this.showProfileName() && [
+                            <AccountPropsKey key="profile-name-dt">Profile:</AccountPropsKey>,
+                            <AccountPropsVal key="profile-name-dd">{profileName}</AccountPropsVal>,
+                          ]}
+                          <AccountPropsKey>ID:</AccountPropsKey>
+                          <AccountPropsVal>{accountId}</AccountPropsVal>
+                          {showRole && [
+                            <AccountPropsKey key="role-name-dt">Role:</AccountPropsKey>,
+                            <AccountPropsVal key="role-name-dd">{roleName}</AccountPropsVal>,
+                          ]}
+                        </AccountProps>
+                      </div>
+                    </Collapse>
+                  </div>
                   <Credentials
                     awsAccessKey={accessKey}
                     awsSecretKey={secretKey}
                     awsSessionToken={sessionToken}
                   />
                   <EnvVar>
-                    <p>Run these commands from a {getTerm(platform)} to use the AWS CLI:</p>
+                    <p>
+                      Run these commands from a&nbsp;
+                      {getTerm(platform)}
+                      &nbsp;to use the AWS CLI:
+                    </p>
                     <PreInputGroupWithCopyButton
                       buttonClassName="bg-dark text-light"
                       id="envvars"
@@ -187,7 +232,7 @@ class Refresh extends Component {
                     >
                       Refresh
                     </LinkWithButtonMargin>
-                    <Logout/>
+                    <Logout />
                   </span>
                 </RoundedContent>
               </RoundedWrapper>
@@ -199,7 +244,22 @@ class Refresh extends Component {
   }
 }
 
-const mapStateToProps = ({refresh}) => ({
+Refresh.propTypes = {
+  accessKey: PropTypes.string,
+  accountId: PropTypes.string,
+  errorMessage: PropTypes.string,
+  fetchRefresh: PropTypes.func,
+  platform: PropTypes.string,
+  profileName: PropTypes.string,
+  redirect: PropTypes.bool,
+  roleName: PropTypes.string,
+  secretKey: PropTypes.string,
+  sessionToken: PropTypes.string,
+  showRole: PropTypes.bool,
+  status: PropTypes.number,
+};
+
+const mapStateToProps = ({ refresh }) => ({
   ...refresh.fetchFailure,
   ...refresh.fetchSuccess,
 });

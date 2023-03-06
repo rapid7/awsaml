@@ -1,4 +1,4 @@
-import {handleActions} from 'redux-actions';
+import { handleActions } from 'redux-actions';
 import {
   DELETE_PROFILE_REQUEST,
   DELETE_PROFILE_SUCCESS,
@@ -15,12 +15,12 @@ const deleteProfileSuccess = (state) => ({
   deleteSuccess: true,
 });
 
-const deleteProfileFailure = (state, {payload}) => ({
+const deleteProfileFailure = (state, { payload }) => ({
   ...state,
-  deleteFailure: Object.assign({}, payload, {
+  deleteFailure: {
     ...payload,
     errorMessage: payload.error,
-  }),
+  },
 });
 
 export const PROFILE_INITIAL_STATE = {

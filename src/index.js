@@ -1,26 +1,29 @@
 import React from 'react';
-import {render} from 'react-dom';
-import {Provider} from 'react-redux';
-import {ConnectedRouter} from 'react-router-redux';
-import {injectGlobal} from 'styled-components';
-import store, {history} from './store';
-
+import { render } from 'react-dom';
+import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'react-router-redux';
+import { injectGlobal } from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-import fontawesome from '@fortawesome/fontawesome';
-import faCopy from '@fortawesome/fontawesome-free-regular/faCopy';
-import faTrashAlt from '@fortawesome/fontawesome-free-regular/faTrashAlt';
-import faSearch from '@fortawesome/fontawesome-free-solid/faSearch';
-import faExclamationTriangle from '@fortawesome/fontawesome-free-solid/faExclamationTriangle';
-
+import { library } from '@fortawesome/fontawesome-svg-core';
+import {
+  faCopy,
+  faTrashAlt,
+} from '@fortawesome/free-regular-svg-icons';
+import {
+  faSearch,
+  faCaretRight,
+  faCaretDown,
+  faExclamationTriangle,
+} from '@fortawesome/free-solid-svg-icons';
 import App from './containers/App';
+import store, { history } from './store';
 
 /* eslint-disable no-unused-expressions */
 injectGlobal`
   html {
     height: 100%;
   }
-  
+
   body {
     margin: 0;
     padding: 0;
@@ -30,22 +33,22 @@ injectGlobal`
     align-items: center;
     background: rgb(249, 249, 249);
   }
-  
+
   body > * {
     flex-grow: 1;
   }
-  
+
   summary {
     padding: 0.25rem;
     display: flex;
     width: 100%;
     align-items: center;
   }
-  
+
   dd {
     margin-bottom: 10px;
   }
-  
+
   input[type="text"], input[type="url"] {
     border: 1px solid #6c757d;
   }
@@ -55,7 +58,7 @@ injectGlobal`
 `;
 /* eslint-enable no-unused-expressions */
 
-fontawesome.library.add(faCopy, faTrashAlt, faSearch, faExclamationTriangle);
+library.add(faCopy, faTrashAlt, faSearch, faCaretRight, faCaretDown, faExclamationTriangle);
 
 const target = document.querySelector('#root');
 
@@ -65,5 +68,5 @@ render(
       <App />
     </ConnectedRouter>
   </Provider>,
-  target
+  target,
 );

@@ -1,5 +1,4 @@
-/*global process:true*/
-import React, {Component} from 'react';
+import React from 'react';
 import {
   Route,
   Switch,
@@ -16,29 +15,27 @@ import 'prismjs/themes/prism-tomorrow.css';
 
 const debug = process.env.NODE_ENV === 'development';
 
-class App extends Component {
-  render() {
-    return (
-      <ErrorBoundary>
-        <Switch>
-          <Route
-            component={Configure}
-            exact
-            path="/"
-          />
-          <Route
-            component={Refresh}
-            path="/refresh"
-          />
-          <Route
-            component={SelectRole}
-            path="/select-role"
-          />
-          {debug ? <Route component={DebugRoute} /> : ''}
-        </Switch>
-      </ErrorBoundary>
-    );
-  }
+function App() {
+  return (
+    <ErrorBoundary>
+      <Switch>
+        <Route
+          component={Configure}
+          exact
+          path="/"
+        />
+        <Route
+          component={Refresh}
+          path="/refresh"
+        />
+        <Route
+          component={SelectRole}
+          path="/select-role"
+        />
+        {debug ? <Route component={DebugRoute} /> : ''}
+      </Switch>
+    </ErrorBoundary>
+  );
 }
 
 export default App;

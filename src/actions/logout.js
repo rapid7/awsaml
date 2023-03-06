@@ -1,4 +1,4 @@
-import {createAction} from 'redux-actions';
+import { createAction } from 'redux-actions';
 import * as api from '../apis';
 
 export const FETCH_LOGOUT_REQUEST = 'FETCH_LOGOUT_REQUEST';

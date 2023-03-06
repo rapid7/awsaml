@@ -10,6 +10,9 @@
   "bugs": {
     "url": "https://github.com/rapid7/awsaml/issues"
   },
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "packageManager": "yarn@3.4.1",
   "scripts": {
     "electron": "electron electron/electron.js",
@@ -49,22 +52,29 @@
     "xpath.js": "^1.1.0"
   },
   "devDependencies": {
-    "@fortawesome/fontawesome": "^1.1.8",
-    "@fortawesome/fontawesome-free-regular": "^5.0.13",
-    "@fortawesome/fontawesome-free-solid": "^5.0.13",
-    "@fortawesome/react-fontawesome": "^0.0.20",
+    "@babel/core": "^7.21.0",
+    "@babel/eslint-parser": "^7.19.1",
+    "@babel/preset-react": "^7.18.6",
+    "@fortawesome/fontawesome-free": "^6.3.0",
+    "@fortawesome/fontawesome-svg-core": "^6.3.0",
+    "@fortawesome/free-regular-svg-icons": "^6.3.0",
+    "@fortawesome/free-solid-svg-icons": "^6.3.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@popperjs/core": "^2.11.6",
     "axios": "^0.21.2",
     "babel-eslint": "^8.2.5",
-    "bootstrap": "^4.6.1",
+    "bootstrap": "^5.2.3",
     "coveralls": "^3.1.1",
-    "electron": "^11.5.0",
-    "electron-devtools-installer": "^2.2.4",
-    "electron-packager": "^15.4.0",
-    "electron-rebuild": "^1.11.0",
-    "eslint": "^5.0.1",
-    "eslint-config-rapid7": "^3.0.2",
-    "eslint-plugin-import": "^2.25.4",
+    "electron": "^23.1.1",
+    "electron-packager": "^17.1.1",
+    "electron-rebuild": "^3.2.9",
+    "eslint": "^8.35.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "history": "^4.10.1",
     "hoist-non-react-statics": "^2.5.5",
     "istanbul": "^0.4.5",
@@ -80,13 +90,21 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-router-redux": "^5.0.0-alpha.9",
-    "react-scripts": "^1.1.4",
-    "reactstrap": "^6.1.0",
+    "react-scripts": "^5.0.1",
+    "reactstrap": "^9.1.8",
     "redux": "^4.1.2",
     "redux-actions": "^2.4.0",
     "redux-thunk": "^2.4.1",
     "should": "^13.2.1",
     "styled-components": "^3.3.3",
     "unchanged": "^1.3.1"
+  },
+  "browserslist": {
+    "production": [
+      "last 1 electron version"
+    ],
+    "development": [
+      "last 1 electron version"
+    ]
   }
 }

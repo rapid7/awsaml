@@ -1,1 +1,3 @@
-export const RenderIfLoaded = ({children, isLoaded}) => isLoaded ? children() : '';
+const RenderIfLoaded = ({ children, isLoaded }) => (isLoaded ? children() : '');
+
+export default RenderIfLoaded;

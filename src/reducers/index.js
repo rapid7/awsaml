@@ -1,5 +1,5 @@
-import {combineReducers} from 'redux';
-import {routerReducer} from 'react-router-redux';
+import { combineReducers } from 'redux';
+import { routerReducer } from 'react-router-redux';
 import configureReducer from './configure';
 import refreshReducer from './refresh';
 import selectRoleReducer from './select-role';

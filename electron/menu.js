@@ -1,6 +1,8 @@
 const electron = require('electron');
 
-const Menu = electron.Menu;
+const {
+  Menu,
+} = electron;
 const Application = electron.app;
 
 const template = [{
@@ -124,7 +126,7 @@ if (process.platform === 'darwin') {
   });
 
   // Window menu.
-  template[3].submenu.push({ // eslint-disable-line rapid7/static-magic-numbers
+  template[3].submenu.push({
     type: 'separator',
   }, {
     label: 'Bring All to Front',

@@ -1,4 +1,4 @@
-import {handleActions} from 'redux-actions';
+import { handleActions } from 'redux-actions';
 import {
   FETCH_REFRESH_FAILURE,
   FETCH_REFRESH_SUCCESS,
@@ -10,13 +10,13 @@ const refreshFetchRequest = (state, action) => ({
   fetchRequest: action,
 });
 
-const refreshFetchSuccess = (state, {payload}) => ({
+const refreshFetchSuccess = (state, { payload }) => ({
   ...state,
   fetchSuccess: payload,
 });
 
-const refreshFetchFailure = (state, {payload}) => {
-  const {data, headers, status} = payload.response;
+const refreshFetchFailure = (state, { payload }) => {
+  const { data, headers, status } = payload.response;
 
   return {
     ...state,

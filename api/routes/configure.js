@@ -3,7 +3,7 @@ const express = require('express');
 const uuidv4 = require('uuid/v4');
 const xmldom = require('xmldom');
 const xpath = require('xpath.js');
-const config = require('../config');
+const config = require('../config.json');
 
 const router = express.Router();
 const HTTP_OK = 200;
@@ -13,7 +13,7 @@ const Errors = {
   urlInvalidErr: 'The SAML metadata URL is invalid.',
   uuidInvalidError: 'The profile is invalid.',
 };
-const ResponseObj = require('./../response');
+const ResponseObj = require('../response');
 
 module.exports = (app, auth) => {
   router.get('/', (req, res) => {
@@ -22,9 +22,12 @@ module.exports = (app, auth) => {
     // based on the iteration index.
     let migrated = false;
     const storedMetadataUrls = (Storage.get('metadataUrls') || []).map((metadata) => {
+      const ret = {
+        ...metadata,
+      };
       if (metadata.profileUuid === undefined) {
         migrated = true;
-        metadata.profileUuid = uuidv4();
+        ret.profileUuid = uuidv4();
       }
 
       return metadata;
@@ -42,34 +45,40 @@ module.exports = (app, auth) => {
     //   2. Use the latest validated metadata url.
     //   3. Support the <= v1.3.0 storage key.
     //   4. Default the metadata url to empty string.
-    let defaultMetadataUrl =
-      app.get('metadataUrl')
+    let defaultMetadataUrl = app.get('metadataUrl')
       || Storage.get('previousMetadataUrl')
       || Storage.get('metadataUrl')
       || '';
 
     if (!defaultMetadataUrl) {
-      if (storedMetadataUrls.length > 0 && storedMetadataUrls[0].hasOwnProperty('url')) {
-        defaultMetadataUrl = storedMetadataUrls[0].url;
-        if (storedMetadataUrls[0].hasOwnProperty('name')) {
-          defaultMetadataName = storedMetadataUrls[0].name;
+      if (storedMetadataUrls.length > 0) {
+        const defaultMetadata = storedMetadataUrls[0];
+        if (Object.prototype.hasOwnProperty.call(defaultMetadata, 'url')) {
+          defaultMetadataUrl = defaultMetadata.url;
+        }
+        if (Object.prototype.hasOwnProperty.call(defaultMetadata, 'name')) {
+          defaultMetadataName = defaultMetadata.name;
         }
       }
     }
 
-    res.json(Object.assign({}, ResponseObj, {
+    res.json({
+      ...ResponseObj,
       defaultMetadataName,
       defaultMetadataUrl,
       error: Storage.get('metadataUrlError'),
       metadataUrlValid: Storage.get('metadataUrlValid'),
       metadataUrls: storedMetadataUrls,
-    }));
+    });
   });
 
+  // eslint-disable-next-line consistent-return
   router.post('/', (req, res) => {
-    const profileUuid = req.body.profileUuid;
-    const profileName = req.body.profileName;
-    const metadataUrl = req.body.metadataUrl;
+    const {
+      profileUuid,
+      profileName,
+      metadataUrl,
+    } = req.body;
     let storedMetadataUrls = Storage.get('metadataUrls') || [];
     let profile;
 
@@ -77,10 +86,11 @@ module.exports = (app, auth) => {
       Storage.set('metadataUrlValid', false);
       Storage.set('metadataUrlError', Errors.urlInvalidErr);
 
-      return res.json(Object.assign({}, ResponseObj, {
+      return res.json({
+        ...ResponseObj,
         error: Errors.urlInvalidErr,
         metadataUrlValid: false,
-      }));
+      });
     }
 
     // If a profileUuid is passed, validate it and update storage
@@ -89,26 +99,32 @@ module.exports = (app, auth) => {
       profile = storedMetadataUrls.find((metadata) => metadata.profileUuid === profileUuid);
 
       if (!profile) {
-        return res.status(404).json(Object.assign({}, ResponseObj, {
-          error: Errors.uuidInvalidErr,
+        return res.status(404).json({
+          ...ResponseObj,
+          error: Errors.uuidInvalidError,
           uuidUrlValid: false,
-        }));
+        });
       }
 
       if (profile.url !== metadataUrl) {
-        return res.status(422).json(Object.assign({}, ResponseObj, {
+        return res.status(422).json({
+          ...ResponseObj,
           error: Errors.urlInvalidErr,
           metadataUrlValid: false,
-        }));
+        });
       }
 
       if (profileName) {
         storedMetadataUrls = storedMetadataUrls.map((metadata) => {
+          const ret = {
+            ...metadata,
+          };
+
           if (metadata.profileUuid === profileUuid && metadata.name !== profileName) {
-            metadata.name = profileName;
+            ret.name = profileName;
           }
 
-          return metadata;
+          return ret;
         });
         Storage.set('metadataUrls', storedMetadataUrls);
       }
@@ -119,11 +135,15 @@ module.exports = (app, auth) => {
     app.set('metadataUrl', metadataUrl);
     app.set('profileName', profileName);
 
-    const origin = req.body.origin;
-    const metaDataResponseObj = Object.assign({}, ResponseObj, {
+    const {
+      origin,
+    } = req.body;
+
+    const metaDataResponseObj = {
+      ...ResponseObj,
       defaultMetadataName: profileName,
       defaultMetadataUrl: metadataUrl,
-    });
+    };
 
     const xmlReq = https.get(metadataUrl, (xmlRes) => {
       let xml = '';
@@ -132,10 +152,11 @@ module.exports = (app, auth) => {
         Storage.set('metadataUrlValid', false);
         Storage.set('metadataUrlError', Errors.urlInvalidErr);
 
-        res.json(Object.assign({}, metaDataResponseObj, {
+        res.json({
+          ...metaDataResponseObj,
           error: Errors.urlInvalidErr,
           metadataUrlValid: false,
-        }));
+        });
 
         return;
       }
@@ -156,10 +177,10 @@ module.exports = (app, auth) => {
           }
         };
 
-        let cert = safeXpath(xmlDoc, '//*[local-name(.)=\'X509Certificate\']/text()'),
-            issuer = safeXpath(xmlDoc, '//*[local-name(.)=\'EntityDescriptor\']/@entityID'),
-            entryPoint = safeXpath(xmlDoc, '//*[local-name(.)=\'SingleSignOnService\' and' +
-                ' @Binding=\'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST\']/@Location');
+        let cert = safeXpath(xmlDoc, '//*[local-name(.)=\'X509Certificate\']/text()');
+        let issuer = safeXpath(xmlDoc, '//*[local-name(.)=\'EntityDescriptor\']/@entityID');
+        let entryPoint = safeXpath(xmlDoc, '//*[local-name(.)=\'SingleSignOnService\' and'
+                + ' @Binding=\'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST\']/@Location');
 
         if (cert) {
           cert = cert.length ? cert[0].data.replace(/\s+/g, '') : null;
@@ -191,7 +212,7 @@ module.exports = (app, auth) => {
                   profileUuid: uuidv4(),
                   url: metadataUrl,
                 },
-              ])
+              ]),
             );
           }
 
@@ -205,17 +226,19 @@ module.exports = (app, auth) => {
             });
           }
         } else {
-          res.json(Object.assign({}, metaDataResponseObj, {
+          res.json({
+            ...metaDataResponseObj,
             error: Errors.invalidMetadataErr,
-          }));
+          });
         }
       });
     });
 
     xmlReq.on('error', (err) => {
-      res.json(Object.assign({}, metaDataResponseObj, {
+      res.json({
+        ...metaDataResponseObj,
         error: err.message,
-      }));
+      });
     });
   });
 

@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {
   ListGroup,
   Input,
 } from 'reactstrap';
-import {Login} from './Login';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Login from './Login';
 
 const ScrollableListGroup = styled(ListGroup)`
   overflow-x: hidden;
@@ -43,41 +43,48 @@ const filterMetadataUrls = (metadataUrls, filterText) => {
 
   const tokens = filterText.split(' ').map((token) => token.toLowerCase());
 
-  return metadataUrls.filter((metadataUrl) =>
-    tokens.every((token) => {
-      // Compare profile name
-      if (metadataUrl.name.toLowerCase().indexOf(token) !== -1) {
-        return true;
-      }
+  return metadataUrls.filter((metadataUrl) => (tokens.every((token) => {
+    // Compare profile name
+    if (metadataUrl.name.toLowerCase().indexOf(token) !== -1) {
+      return true;
+    }
 
-      // Compare profile URL
-      if (metadataUrl.url.toLowerCase().indexOf(token) !== -1) {
-        return true;
-      }
+    // Compare profile URL
+    if (metadataUrl.url.toLowerCase().indexOf(token) !== -1) {
+      return true;
+    }
 
-      // Compare profile roles
-      if ((metadataUrl.roles || []).some((role) => role.toLowerCase().indexOf(token) !== -1)) {
-        return true;
-      }
+    // Compare profile roles
+    if ((metadataUrl.roles || []).some((role) => role.toLowerCase().indexOf(token) !== -1)) {
+      return true;
+    }
 
-      return false;
-    })
-  );
+    return false;
+  })
+  ));
 };
 
 class RecentLogins extends Component {
-  static propTypes = {
-    metadataUrls: PropTypes.array.isRequired,
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      filterText: '',
+    };
   }
 
-  state = {
-    filterText: '',
-  };
-
-  handleFilterInputChange = ({currentTarget: {value: filterText}}) => this.setState({filterText});
+  // eslint-disable-next-line max-len
+  handleFilterInputChange = ({ currentTarget: { value: filterText } }) => this.setState({ filterText });
 
   render() {
-    const metadataUrls = filterMetadataUrls(this.props.metadataUrls, this.state.filterText);
+    const {
+      metadataUrls: metadataUrlsFromProps,
+    } = this.props;
+    const {
+      filterText,
+    } = this.state;
+
+    const metadataUrls = filterMetadataUrls(metadataUrlsFromProps, filterText);
 
     return (
       <div
@@ -94,21 +101,28 @@ class RecentLogins extends Component {
         </SearchContainer>
         <ScrollableListGroup>
           {
-            metadataUrls.map(({url, name, profileUuid}) =>
-              (
-                <Login
-                  key={url}
-                  pretty={name}
-                  profileUuid={profileUuid}
-                  url={url}
-                />
-              )
-            )
+            metadataUrls.map(({ url, name, profileUuid }) => (
+              <Login
+                key={url}
+                pretty={name}
+                profileUuid={profileUuid}
+                url={url}
+              />
+            ))
           }
         </ScrollableListGroup>
       </div>
     );
   }
 }
+
+RecentLogins.propTypes = {
+  metadataUrls: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    profileUuid: PropTypes.string,
+    roles: PropTypes.arrayOf(PropTypes.string),
+    url: PropTypes.string,
+  })).isRequired,
+};
 
 export default RecentLogins;

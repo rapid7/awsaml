@@ -1,19 +1,19 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import {
   Container,
   ListGroup,
   Row,
 } from 'reactstrap';
-import {Redirect} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import {fetchSelectRole} from '../../actions/select-role';
-import {ComponentWithError} from '../components/ComponentWithError';
-import {RenderIfLoaded} from '../components/RenderIfLoaded';
 import styled from 'styled-components';
-import {Role} from './Role';
-import {Logo} from '../components/Logo';
+import { fetchSelectRole } from '../../actions/select-role';
+import ComponentWithError from '../components/ComponentWithError';
+import RenderIfLoaded from '../components/RenderIfLoaded';
+import Role from './Role';
+import Logo from '../components/Logo';
 import {
   RoundedContent,
   RoundedWrapper,
@@ -25,42 +25,47 @@ const SelectRoleHeader = styled.h4`
 `;
 
 class SelectRole extends Component {
-  static propTypes = {
-    errorMessage: PropTypes.string,
-    fetchSelectRole: PropTypes.func,
-    roles: PropTypes.array,
-    status: PropTypes.string,
-  };
+  constructor(props) {
+    super(props);
 
-  state = {
-    loaded: false,
-  };
+    this.state = {
+      loaded: false,
+      displayAccountId: true,
+    };
+  }
 
   async componentDidMount() {
-    this._isMounted = true;
+    const {
+      fetchSelectRole: fsr,
+    } = this.props;
 
-    await this.props.fetchSelectRole();
+    this._isMounted = true; // eslint-disable-line no-underscore-dangle
 
-    let uniqueAccountIds = new Set(
-      this.props.roles.map((role) => role.accountId)
-    );
-
-    if (uniqueAccountIds.size === 1) {
-      this.displayAccountId = false;
-    }
-
-    if (this._isMounted) {
+    await fsr();
+    if (this._isMounted) { // eslint-disable-line no-underscore-dangle
       this.setState({
         loaded: true,
       });
+
+      const {
+        roles,
+      } = this.props;
+
+      const uniqueAccountIds = new Set(
+        roles.map((role) => role.accountId),
+      );
+
+      if (uniqueAccountIds.size === 1) {
+        this.setState({
+          displayAccountId: false,
+        });
+      }
     }
   }
 
   componentWillUnmount() {
-    this._isMounted = false;
+    this._isMounted = false; // eslint-disable-line no-underscore-dangle
   }
-
-  displayAccountId = true;
 
   render() {
     const {
@@ -73,8 +78,13 @@ class SelectRole extends Component {
       return <Redirect to="/refresh" />;
     }
 
+    const {
+      loaded,
+      displayAccountId,
+    } = this.state;
+
     return (
-      <RenderIfLoaded isLoaded={this.state.loaded}>
+      <RenderIfLoaded isLoaded={loaded}>
         {() => (
           <Container>
             <Row className="d-flex p-2">
@@ -86,19 +96,17 @@ class SelectRole extends Component {
                   <SelectRoleHeader>Select a role:</SelectRoleHeader>
                   <ListGroup>
                     {
-                      roles.map((role) =>
-                        (
-                          <Role
-                            accountId={role.accountId}
-                            displayAccountId={this.displayAccountId}
-                            index={role.index}
-                            key={`role-item-${role.index}`}
-                            name={role.roleName}
-                            principalArn={role.principalArn}
-                            roleArn={role.roleArn}
-                          />
-                        )
-                      )
+                      roles.map((role) => (
+                        <Role
+                          accountId={role.accountId}
+                          displayAccountId={displayAccountId}
+                          index={role.index}
+                          key={`role-item-${role.index}`}
+                          name={role.roleName}
+                          principalArn={role.principalArn}
+                          roleArn={role.roleArn}
+                        />
+                      ))
                     }
                   </ListGroup>
                 </RoundedContent>
@@ -111,7 +119,20 @@ class SelectRole extends Component {
   }
 }
 
-const mapStateToProps = ({selectRole}) => ({
+SelectRole.propTypes = {
+  errorMessage: PropTypes.string,
+  fetchSelectRole: PropTypes.func,
+  roles: PropTypes.arrayOf(PropTypes.shape({
+    accountId: PropTypes.string,
+    index: PropTypes.number,
+    roleName: PropTypes.string,
+    principalArn: PropTypes.string,
+    roleArn: PropTypes.string,
+  })),
+  status: PropTypes.string,
+};
+
+const mapStateToProps = ({ selectRole }) => ({
   ...selectRole.fetchFailure,
   ...selectRole.fetchSuccess,
   ...selectRole.submitFailure,

@@ -1,19 +1,19 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {Redirect} from 'react-router';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Redirect } from 'react-router';
 import PropTypes from 'prop-types';
-import {getOr} from 'unchanged';
+import { getOr } from 'unchanged';
 import qs from 'querystring';
 import styled from 'styled-components';
-import {fetchConfigure} from '../../actions/configure';
 import {
   Container,
   Row,
 } from 'reactstrap';
-import {Logo} from '../components/Logo';
+import { fetchConfigure } from '../../actions/configure';
+import Logo from '../components/Logo';
 import RecentLogins from './RecentLogins';
-import {ConfigureMetadata} from './ConfigureMetadata';
+import ConfigureMetadata from './ConfigureMetadata';
 import {
   RoundedContent,
   RoundedWrapper,
@@ -27,15 +27,7 @@ const CenteredDivColumn = styled.div`
 const RoundedCenteredDivColumnContent = RoundedContent.extend(CenteredDivColumn);
 const RoundedCenteredDivColumnWrapper = RoundedWrapper.extend(CenteredDivColumn);
 
-
 class Configure extends Component {
-  static propTypes = {
-    defaultMetadataName: PropTypes.string,
-    defaultMetadataUrl: PropTypes.string,
-    fetchConfigure: PropTypes.func.isRequired,
-    location: PropTypes.object.isRequired,
-  };
-
   constructor(props) {
     super(props);
 
@@ -49,10 +41,14 @@ class Configure extends Component {
   }
 
   async componentDidMount() {
-    this._isMounted = true;
+    this._isMounted = true; // eslint-disable-line no-underscore-dangle
 
-    await this.props.fetchConfigure();
-    if (this._isMounted) {
+    const {
+      fetchConfigure: fc,
+    } = this.props;
+
+    await fc();
+    if (this._isMounted) { // eslint-disable-line no-underscore-dangle
       this.setState({
         loaded: true,
       });
@@ -60,27 +56,37 @@ class Configure extends Component {
   }
 
   componentWillUnmount() {
-    this._isMounted = false;
+    this._isMounted = false; // eslint-disable-line no-underscore-dangle
   }
 
   render() {
-    if (this.state.auth) {
+    const {
+      auth,
+      selectRole,
+      loaded,
+    } = this.state;
+    const {
+      defaultMetadataName,
+      defaultMetadataUrl,
+    } = this.props;
+
+    if (auth) {
       return <Redirect to="/refresh" />;
     }
-    if (this.state.selectRole) {
+    if (selectRole) {
       return <Redirect to="/select-role" />;
     }
     const metadataUrls = getOr([], 'metadataUrls', this.props);
 
-    return (this.state.loaded) ? (
+    return (loaded) ? (
       <Container>
         <Row>
           <RoundedCenteredDivColumnWrapper>
             <Logo />
             <RoundedCenteredDivColumnContent>
-              <ConfigureMetadata 
-                defaultMetadataName={this.props.defaultMetadataName}
-                defaultMetadataUrl={this.props.defaultMetadataUrl}
+              <ConfigureMetadata
+                defaultMetadataName={defaultMetadataName}
+                defaultMetadataUrl={defaultMetadataUrl}
               />
               {!!metadataUrls.length && <RecentLogins metadataUrls={metadataUrls} />}
             </RoundedCenteredDivColumnContent>
@@ -91,7 +97,16 @@ class Configure extends Component {
   }
 }
 
-const mapStateToProps = ({configure}) => ({
+Configure.propTypes = {
+  defaultMetadataName: PropTypes.string,
+  defaultMetadataUrl: PropTypes.string,
+  fetchConfigure: PropTypes.func.isRequired,
+  location: PropTypes.shape({
+    search: PropTypes.string,
+  }).isRequired,
+};
+
+const mapStateToProps = ({ configure }) => ({
   ...configure.fetchFailure,
   ...configure.fetchSuccess,
 });

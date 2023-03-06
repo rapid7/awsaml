@@ -1,8 +1,8 @@
-const AwsCredentials = require('../api/aws-credentials');
 const should = require('should');
 const Path = require('path');
 const FS = require('fs');
 const ini = require('ini');
+const AwsCredentials = require('../api/aws-credentials');
 
 describe('AwsCredentials#saveAsIniFile', function() {
   const awsFolder = Path.resolve(__dirname, '.aws');

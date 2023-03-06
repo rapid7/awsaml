@@ -1,45 +1,38 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
+  Button,
   InputGroup,
   Input,
-  InputGroupAddon,
   Tooltip,
 } from 'reactstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import Clipboard from 'react-clipboard.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export class InputGroupWithCopyButton extends Component {
-  static propTypes = {
-    buttonClassName: PropTypes.string,
-    className: PropTypes.string,
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    inputClassName: PropTypes.string,
-    message: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-    multiLine: PropTypes.bool,
-    name: PropTypes.string.isRequired,
-    readOnly: PropTypes.bool,
-    value: PropTypes.string.isRequired,
-  };
+class InputGroupWithCopyButton extends Component {
+  constructor(props) {
+    super(props);
 
-  static defaultProps = {
-    message: 'Copied!',
-    multiLine: false,
-    readOnly: true,
-  };
-
-  state = {
-    tooltipState: false,
-  };
+    this.state = {
+      tooltipState: false,
+    };
+  }
 
   handleTooltipTargetClick = () => {
-    this.setState({
-      tooltipState: !this.state.tooltipState,
-    });
+    const {
+      tooltipState,
+    } = this.state;
+    const {
+      value,
+    } = this.props;
 
-    setTimeout(function() { // eslint-disable-line prefer-arrow-callback
+    this.setState({
+      tooltipState: !tooltipState,
+    });
+    navigator.clipboard.writeText(value);
+
+    setTimeout(function () { // eslint-disable-line prefer-arrow-callback, func-names
       this.setState({
-        tooltipState: !this.state.tooltipState,
+        tooltipState,
       });
     }.bind(this), 1000);
   };
@@ -47,15 +40,16 @@ export class InputGroupWithCopyButton extends Component {
   render() {
     const {
       id: idFromProps,
-      buttonClassName,
       className,
       inputClassName,
       name,
-      readOnly,
       value,
       message,
       multiLine,
     } = this.props;
+    const {
+      tooltipState,
+    } = this.state;
     const id = `icon-${idFromProps}`;
 
     return (
@@ -64,31 +58,45 @@ export class InputGroupWithCopyButton extends Component {
           className={`form-control ${inputClassName}`}
           id={name}
           name={name}
-          readOnly={readOnly}
+          disabled
           type={multiLine ? 'textarea' : 'text'}
           value={value}
         />
-        <InputGroupAddon
-          addonType="append"
-          id={id}
+        <Button
           onClick={this.handleTooltipTargetClick}
+          id={id}
+          outline
+          color="secondary"
         >
           <Tooltip
+            autohide
             container="#root"
-            isOpen={this.state.tooltipState}
+            isOpen={tooltipState}
             placement="top"
             target={id}
           >
             {message}
           </Tooltip>
-          <Clipboard
-            className={`btn btn-outline-secondary copy-to-clipboard-button ${buttonClassName}`}
-            data-clipboard-text={value}
-          >
-            <FontAwesomeIcon icon={['far', 'copy']}/>
-          </Clipboard>
-        </InputGroupAddon>
+          <FontAwesomeIcon icon={['far', 'copy']} inverted="true" />
+        </Button>
       </InputGroup>
     );
   }
 }
+
+InputGroupWithCopyButton.propTypes = {
+  className: PropTypes.string,
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  inputClassName: PropTypes.string,
+  message: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  multiLine: PropTypes.bool,
+  name: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+};
+
+InputGroupWithCopyButton.defaultProps = {
+  message: 'Copied!',
+  multiLine: false,
+};
+
+export default InputGroupWithCopyButton;

@@ -1,19 +1,19 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import {submitConfigure} from '../../actions/configure';
-import {deleteProfile} from '../../actions/profile';
 import {
   InputGroup,
-  InputGroupAddon,
   Input,
   ListGroupItem,
   Button,
+  Collapse,
 } from 'reactstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import {InputGroupWithCopyButton} from '../components/InputGroupWithCopyButton';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { submitConfigure } from '../../actions/configure';
+import { deleteProfile } from '../../actions/profile';
+import InputGroupWithCopyButton from '../components/InputGroupWithCopyButton';
 
 const ProfileInputGroup = styled(InputGroup)`
   width: 100%;
@@ -21,102 +21,155 @@ const ProfileInputGroup = styled(InputGroup)`
   line-height: 2.5em;
 `;
 
+const PaddedCollapse = styled(Collapse)`
+  margin-top: 0.4rem;
+`;
+
 class LoginComponent extends Component {
-  static propTypes = {
-    deleteProfile: PropTypes.func.isRequired,
-    pretty: PropTypes.string,
-    profileUuid: PropTypes.string,
-    submitConfigure: PropTypes.func.isRequired,
-    url: PropTypes.string,
-  };
+  constructor(props) {
+    super(props);
 
-  state = {
-    profileName: '',
-  };
+    this.state = {
+      profileName: '',
+      isOpen: false,
+      caretDirection: 'right',
+    };
+  }
 
-  handleInputChange = ({target: {name, value}}) => {
+  handleInputChange = ({ target: { name, value } }) => {
     this.setState({
       [name]: value,
     });
   };
 
+  // eslint-disable-next-line class-methods-use-this
   handleKeyDown = (event) => {
     if (event.keyCode !== 32) { // Spacebar
       return;
     }
     event.preventDefault();
+    // eslint-disable-next-line no-param-reassign
     event.currentTarget.value += ' ';
   };
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const {profileName} = this.state;
+    const {
+      profileName,
+    } = this.state;
+    const {
+      url,
+      pretty,
+      profileUuid,
+      submitConfigure: sc,
+    } = this.props;
     const payload = {
-      metadataUrl: this.props.url,
-      profileName: profileName ? profileName : this.props.pretty,
-      profileUuid: this.props.profileUuid,
+      metadataUrl: url,
+      profileName: profileName || pretty,
+      profileUuid,
     };
 
-    this.props.submitConfigure(payload);
+    sc(payload);
   };
 
   handleDelete = (event) => {
     event.preventDefault();
-    const {profileName} = this.state;
+    const {
+      profileName,
+    } = this.state;
+    const {
+      pretty,
+      profileUuid,
+      deleteProfile: dp,
+    } = this.props;
 
-    const text = `Are you sure you want to delete the profile "${profileName ? profileName : this.props.pretty}"?`;
+    const text = `Are you sure you want to delete the profile "${profileName || pretty}"?`;
 
+    // eslint-disable-next-line no-alert
     if (window.confirm(text)) {
-      const payload = {profileUuid: this.props.profileUuid};
+      const payload = { profileUuid };
 
-      this.props.deleteProfile(payload);
+      dp(payload);
     }
   };
 
+  handleCollapse = () => {
+    const {
+      isOpen,
+      caretDirection,
+    } = this.state;
+    const newCaretDirection = caretDirection === 'right' ? 'down' : 'right';
+
+    this.setState({
+      isOpen: !isOpen,
+      caretDirection: newCaretDirection,
+    });
+  };
+
   render() {
+    const {
+      url,
+      pretty,
+      profileUuid,
+    } = this.props;
+    const {
+      isOpen,
+      caretDirection,
+    } = this.state;
+
     return (
-      <ListGroupItem key={this.props.url}>
-        <details>
-          <summary>
-            <ProfileInputGroup>
-              <Input
-                className="form-control"
-                defaultValue={this.props.pretty}
-                name="profileName"
-                onChange={this.handleInputChange}
-                onKeyDown={this.handleKeyDown}
-                type="text"
-              />
-              <InputGroupAddon addonType="append">
-                <Button
-                  color="secondary"
-                  onClick={this.handleSubmit}
-                  outline
-                >
-                  Login
-                </Button>
-                <Button
-                  color="danger"
-                  onClick={this.handleDelete}
-                  outline
-                >
-                  <FontAwesomeIcon icon={['far', 'trash-alt']}/>
-                </Button>
-              </InputGroupAddon>
-            </ProfileInputGroup>
-          </summary>
-          <InputGroupWithCopyButton
-            id={this.props.profileUuid}
-            name={this.props.pretty}
-            value={this.props.url}
+      <ListGroupItem key={url}>
+        <ProfileInputGroup>
+          <Button
+            onClick={this.handleCollapse}
+            outline
+          >
+            <FontAwesomeIcon icon={['fas', `fa-caret-${caretDirection}`]} />
+          </Button>
+          <Input
+            className="form-control"
+            defaultValue={pretty}
+            name="profileName"
+            onChange={this.handleInputChange}
+            onKeyDown={this.handleKeyDown}
+            type="text"
           />
-        </details>
+          <Button
+            color="secondary"
+            onClick={this.handleSubmit}
+            outline
+          >
+            Login
+          </Button>
+          <Button
+            color="danger"
+            onClick={this.handleDelete}
+            outline
+          >
+            <FontAwesomeIcon icon={['far', 'trash-alt']} />
+          </Button>
+        </ProfileInputGroup>
+        <PaddedCollapse isOpen={isOpen}>
+          <InputGroupWithCopyButton
+            id={profileUuid}
+            name={pretty}
+            value={url}
+          />
+        </PaddedCollapse>
       </ListGroupItem>
     );
   }
 }
 
-const mapStateToProps = ({profile}) => ({
+LoginComponent.propTypes = {
+  deleteProfile: PropTypes.func.isRequired,
+  pretty: PropTypes.string,
+  profileUuid: PropTypes.string,
+  submitConfigure: PropTypes.func.isRequired,
+  url: PropTypes.string,
+};
+
+const mapStateToProps = ({ profile }) => ({
   ...profile.deleteFailure,
   deleted: profile.deleteSuccess,
 });
@@ -126,4 +179,4 @@ const mapDispatchToProps = (dispatch) => ({
   submitConfigure: bindActionCreators(submitConfigure, dispatch),
 });
 
-export const Login = connect(mapStateToProps, mapDispatchToProps)(LoginComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginComponent);

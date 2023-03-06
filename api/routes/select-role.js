@@ -12,7 +12,7 @@ module.exports = () => {
       });
     }
 
-    res.json({
+    return res.json({
       roles: session.roles,
     });
   });
@@ -40,7 +40,7 @@ module.exports = () => {
     session.principalArn = role.principalArn;
     session.accountId = role.accountId;
 
-    res.json({
+    return res.json({
       status: 'selected',
     });
   });
