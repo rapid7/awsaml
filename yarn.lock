@@ -171,7 +171,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron/get@npm:^1.0.1, @electron/get@npm:^1.6.0":
+"@electron/get@npm:^1.13.0, @electron/get@npm:^1.6.0":
   version: 1.14.1
   resolution: "@electron/get@npm:1.14.1"
   dependencies:
@@ -361,10 +361,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^12.0.12":
-  version: 12.20.55
-  resolution: "@types/node@npm:12.20.55"
-  checksum: e4f86785f4092706e0d3b0edff8dca5a13b45627e4b36700acd8dfe6ad53db71928c8dee914d4276c7fd3b6ccd829aa919811c9eb708a2c8e4c6eb3701178c37
+"@types/node@npm:^16.11.26":
+  version: 16.18.14
+  resolution: "@types/node@npm:16.18.14"
+  checksum: 7865c1c3e7c7d2fef6103c6dfa181755dc48365024253d6acc460e884508b5937a222aa8bd04835988ff0bdc47867e2ada78859c0a7f9c65b44884316f3b469c
   languageName: node
   linkType: hard
 
@@ -1160,7 +1160,7 @@ __metadata:
     bootstrap: ^4.6.1
     cookie-parser: ^1.4.6
     coveralls: ^3.1.1
-    electron: ^11.5.0
+    electron: ^18.3.7
     electron-devtools-installer: ^2.2.4
     electron-packager: ^15.4.0
     electron-rebuild: ^1.11.0
@@ -4456,16 +4456,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:^11.5.0":
-  version: 11.5.0
-  resolution: "electron@npm:11.5.0"
+"electron@npm:^18.3.7":
+  version: 18.3.15
+  resolution: "electron@npm:18.3.15"
   dependencies:
-    "@electron/get": ^1.0.1
-    "@types/node": ^12.0.12
+    "@electron/get": ^1.13.0
+    "@types/node": ^16.11.26
     extract-zip: ^1.0.3
   bin:
     electron: cli.js
-  checksum: 9c7cc76bf2d10d3299ed60ca1461573e62f30a0e38520e6447f8544d369a1aa743c4b0c59fed9666b3c9c5ba4638d9d797edea1ea4379adbf21b79eb3949b7a0
+  checksum: d5ff1a31cb2da292e3f1141036640cabe66563425ebe5ce9784c1945aab1f2b1a6d1b474c23c753cd46af5937702ace343d4b6f9119934bc86e3c41d4dd9fa4a
   languageName: node
   linkType: hard
 
