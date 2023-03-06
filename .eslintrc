@@ -1,4 +1,9 @@
 {
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "extends": ["rapid7/base"],
   "globals": {
     "require": true,
