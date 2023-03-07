@@ -1,4 +1,4 @@
-const SamlStrategy = require('passport-saml').Strategy;
+const SamlStrategy = require('@node-saml/passport-saml').Strategy;
 
 class Auth {
   constructor(options) {

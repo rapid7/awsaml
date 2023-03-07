@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
@@ -16,6 +16,6 @@ import App from './containers/App';
 
 library.add(faCopy, faTrashAlt, faSearch, faCaretRight, faCaretDown, faExclamationTriangle);
 
-const target = document.querySelector('#root');
-
-render(<App />, target);
+const container = document.getElementById('root');
+const root = createRoot(container);
+root.render(<App />);

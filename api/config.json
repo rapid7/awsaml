@@ -4,7 +4,8 @@
     "port": 2600
   },
   "auth": {
-    "path": "/sso/saml"
+    "path": "/sso/saml",
+    "audience": "http://localhost:2600/sso/saml"
   },
   "aws": {
     "duration": 3600

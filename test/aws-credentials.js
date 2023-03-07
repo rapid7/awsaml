@@ -1,14 +1,13 @@
-const should = require('should');
-const Path = require('path');
-const FS = require('fs');
-const ini = require('ini');
-const AwsCredentials = require('../api/aws-credentials');
+import Path from 'path';
+import FS from 'fs';
+import ini from 'ini';
+import AwsCredentials from '../api/aws-credentials';
 
-describe('AwsCredentials#saveAsIniFile', function() {
+describe('AwsCredentials#saveAsIniFile', () => {
   const awsFolder = Path.resolve(__dirname, '.aws');
   const awsCredentials = Path.resolve(awsFolder, 'credentials');
 
-  beforeEach(function() {
+  beforeEach(() => {
     if (FS.existsSync(awsCredentials)) {
       FS.unlinkSync(awsCredentials);
     }
@@ -18,25 +17,25 @@ describe('AwsCredentials#saveAsIniFile', function() {
     }
   });
 
-  it('returns an error when credentials are null', function(done) {
+  it('returns an error when credentials are null', (done) => {
     const aws = new AwsCredentials();
 
     aws.saveAsIniFile(null, 'profile', (error) => {
-      error.toString().should.not.eql('');
+      expect(error.toString()).not.toEqual('');
       done();
     });
   });
 
-  it('returns an error when profile is null', function(done) {
+  it('returns an error when profile is null', (done) => {
     const aws = new AwsCredentials();
 
     aws.saveAsIniFile({}, null, (error) => {
-      error.toString().should.not.eql('');
+      expect(error.toString()).not.toEqual('');
       done();
     });
   });
 
-  it('returns an error when $HOME path is unresolved', function(done) {
+  it('returns an error when $HOME path is unresolved', (done) => {
     const aws = new AwsCredentials();
 
     delete process.env.HOME;
@@ -45,47 +44,47 @@ describe('AwsCredentials#saveAsIniFile', function() {
     delete process.env.HOMEDRIVE;
 
     aws.saveAsIniFile({}, 'profile', (error) => {
-      error.toString().should.not.eql('');
+      expect(error.toString()).not.toEqual('');
       done();
     });
   });
 
-  it('returns an error when $HOME path is empty', function(done) {
+  it('returns an error when $HOME path is empty', (done) => {
     const aws = new AwsCredentials();
 
     process.env.HOME = '';
 
     aws.saveAsIniFile({}, 'profile', (error) => {
-      error.toString().should.not.eql('');
+      expect(error.toString()).not.toEqual('');
       done();
     });
   });
 
-  it('creates a $HOME/.aws folder when none exists', function(done) {
+  it('creates a $HOME/.aws folder when none exists', (done) => {
     const aws = new AwsCredentials();
 
     process.env.HOME = __dirname;
 
     aws.saveAsIniFile({}, 'profile', (error) => {
-      should(FS.existsSync(awsFolder)).be.true();
-      should(error).be.null();
+      expect(FS.existsSync(awsFolder)).toBe(true);
+      expect(error).toBeNull();
       done();
     });
   });
 
-  it('creates a $HOME/.aws folder with 0700 permissions', function(done) {
+  it('creates a $HOME/.aws folder with 0700 permissions', (done) => {
     const aws = new AwsCredentials();
 
     process.env.HOME = __dirname;
 
     aws.saveAsIniFile({}, 'profile', (error) => {
-      should(FS.statSync(awsFolder).mode & 0x0700).eql(256); // eslint-disable-line no-bitwise
-      should(error).be.null();
+      expect(FS.statSync(awsFolder).mode & 0x0700).toEqual(256); // eslint-disable-line no-bitwise
+      expect(error).toBeNull();
       done();
     });
   });
 
-  it('saves the access key in the credentials file', function(done) {
+  it('saves the access key in the credentials file', (done) => {
     const aws = new AwsCredentials();
     const credentials = {
       AccessKeyId: 'AccessKeyId',
@@ -97,13 +96,13 @@ describe('AwsCredentials#saveAsIniFile', function() {
       const data = FS.readFileSync(awsCredentials, 'utf-8');
       const config = ini.parse(data);
 
-      should(error).be.null();
-      should(config.profile.aws_access_key_id).eql(credentials.AccessKeyId);
+      expect(error).toBeNull();
+      expect(config.profile.aws_access_key_id).toEqual(credentials.AccessKeyId);
       done();
     });
   });
 
-  it('saves the secret key in the credentials file', function(done) {
+  it('saves the secret key in the credentials file', (done) => {
     const aws = new AwsCredentials();
     const credentials = {
       SecretAccessKey: 'SecretAccessKey',
@@ -115,13 +114,13 @@ describe('AwsCredentials#saveAsIniFile', function() {
       const data = FS.readFileSync(awsCredentials, 'utf-8');
       const config = ini.parse(data);
 
-      should(error).be.null();
-      should(config.profile.aws_secret_access_key).eql(credentials.SecretAccessKey);
+      expect(error).toBeNull();
+      expect(config.profile.aws_secret_access_key).toEqual(credentials.SecretAccessKey);
       done();
     });
   });
 
-  it('saves the session token in the credentials file', function(done) {
+  it('saves the session token in the credentials file', (done) => {
     const aws = new AwsCredentials();
     const credentials = {
       SessionToken: 'SessionToken',
@@ -133,31 +132,34 @@ describe('AwsCredentials#saveAsIniFile', function() {
       const data = FS.readFileSync(awsCredentials, 'utf-8');
       const config = ini.parse(data);
 
-      should(error).be.null();
-      should(config.profile.aws_session_token).eql(credentials.SessionToken);
+      expect(error).toBeNull();
+      expect(config.profile.aws_session_token).toEqual(credentials.SessionToken);
       done();
     });
   });
 
-  it('saves the session token as a security token in the credentials file', function(done) {
-    const aws = new AwsCredentials();
-    const credentials = {
-      SessionToken: 'SessionToken',
-    };
+  it(
+    'saves the session token as a security token in the credentials file',
+    (done) => {
+      const aws = new AwsCredentials();
+      const credentials = {
+        SessionToken: 'SessionToken',
+      };
 
-    process.env.HOME = __dirname;
+      process.env.HOME = __dirname;
 
-    aws.saveAsIniFile(credentials, 'profile', (error) => {
-      const data = FS.readFileSync(awsCredentials, 'utf-8');
-      const config = ini.parse(data);
+      aws.saveAsIniFile(credentials, 'profile', (error) => {
+        const data = FS.readFileSync(awsCredentials, 'utf-8');
+        const config = ini.parse(data);
 
-      should(error).be.null();
-      should(config.profile.aws_security_token).eql(credentials.SessionToken);
-      done();
-    });
-  });
+        expect(error).toBeNull();
+        expect(config.profile.aws_security_token).toEqual(credentials.SessionToken);
+        done();
+      });
+    },
+  );
 
-  it('keeps existing profiles', function(done) {
+  it('keeps existing profiles', (done) => {
     const aws = new AwsCredentials();
     const credentials1 = {
       AccessKeyId: 'AccessKeyId1',
@@ -177,13 +179,13 @@ describe('AwsCredentials#saveAsIniFile', function() {
         const data = FS.readFileSync(awsCredentials, 'utf-8');
         const config = ini.parse(data);
 
-        should(config.profile1).eql({
+        expect(config.profile1).toEqual({
           aws_access_key_id: credentials1.AccessKeyId,
           aws_secret_access_key: credentials1.SecretAccessKey,
           aws_security_token: credentials1.SessionToken,
           aws_session_token: credentials1.SessionToken,
         });
-        should(config.profile2).eql({
+        expect(config.profile2).toEqual({
           aws_access_key_id: credentials2.AccessKeyId,
           aws_secret_access_key: credentials2.SecretAccessKey,
           aws_security_token: credentials2.SessionToken,
@@ -196,40 +198,43 @@ describe('AwsCredentials#saveAsIniFile', function() {
   });
 });
 
-describe('AwsCredentials#resolveHomePath', function() {
-  beforeEach(function() {
+describe('AwsCredentials#resolveHomePath', () => {
+  beforeEach(() => {
     delete process.env.HOME;
     delete process.env.USERPROFILE;
     delete process.env.HOMEPATH;
     delete process.env.HOMEDRIVE;
   });
 
-  it('returns null if $HOME, $USERPROFILE, and $HOMEPATH are undefined', function() {
-    should(AwsCredentials.resolveHomePath()).be.null();
-  });
+  it(
+    'returns null if $HOME, $USERPROFILE, and $HOMEPATH are undefined',
+    () => {
+      expect(AwsCredentials.resolveHomePath()).toBeNull();
+    },
+  );
 
-  it('uses $HOME if defined', function() {
+  it('uses $HOME if defined', () => {
     process.env.HOME = 'HOME';
 
-    should(AwsCredentials.resolveHomePath()).eql('HOME');
+    expect(AwsCredentials.resolveHomePath()).toEqual('HOME');
   });
 
-  it('uses $USERPROFILE if $HOME is undefined', function() {
+  it('uses $USERPROFILE if $HOME is undefined', () => {
     process.env.USERPROFILE = 'USERPROFILE';
 
-    should(AwsCredentials.resolveHomePath()).eql('USERPROFILE');
+    expect(AwsCredentials.resolveHomePath()).toEqual('USERPROFILE');
   });
 
-  it('uses $HOMEPATH if $HOME and $USERPROFILE are undefined', function() {
+  it('uses $HOMEPATH if $HOME and $USERPROFILE are undefined', () => {
     process.env.HOMEPATH = 'HOMEPATH';
 
-    should(AwsCredentials.resolveHomePath()).eql('C:/HOMEPATH');
+    expect(AwsCredentials.resolveHomePath()).toEqual('C:/HOMEPATH');
   });
 
-  it('uses $HOMEDRIVE with $HOMEPATH if defined', function() {
+  it('uses $HOMEDRIVE with $HOMEPATH if defined', () => {
     process.env.HOMEPATH = 'HOMEPATH';
     process.env.HOMEDRIVE = 'D:/';
 
-    should(AwsCredentials.resolveHomePath()).eql('D:/HOMEPATH');
+    expect(AwsCredentials.resolveHomePath()).toEqual('D:/HOMEPATH');
   });
 });

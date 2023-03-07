@@ -5,7 +5,6 @@ const {
   BrowserWindow,
   TouchBar,
 } = electron;
-const isPlainObject = require('lodash.isplainobject');
 const path = require('path');
 const Server = require('../api/server');
 const config = require('../api/config.json');
@@ -30,6 +29,8 @@ const configureUrl = path.join(baseUrl, Server.get('configureUrlRoute'));
 const refreshUrl = path.join(baseUrl, Server.get('refreshUrlRoute'));
 
 let storedMetadataUrls = Storage.get('metadataUrls') || [];
+
+const isPlainObject = (value) => Object.prototype.toString.call(value) === '[object Object]';
 
 // Migrate from old metadata url storage schema to new one
 if (isPlainObject(storedMetadataUrls)) {

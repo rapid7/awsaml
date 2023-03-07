@@ -1,10 +1,18 @@
 const ini = require('ini');
 const fs = require('fs');
 const path = require('path');
-const mkdirp = require('mkdirp');
 
 class AwsCredentials {
   save(credentials, profile, done, region) {
+    this.saveAsIniFile(credentials, profile, done, region);
+  }
+
+  saveSync(credentials, profile, region) {
+    const done = (err) => {
+      if (err) {
+        throw err;
+      }
+    };
     this.saveAsIniFile(credentials, profile, done, region);
   }
 
@@ -26,41 +34,49 @@ class AwsCredentials {
       return done(new Error('Cannot save AWS credentials, profile not set'));
     }
 
-    // mkdirp is a no-op if the directory already exists
-    // eslint-disable-next-line consistent-return
-    mkdirp(path.join(home, '.aws'), '0700', (mkDirErr) => {
-      if (mkDirErr) {
-        return done(mkDirErr);
-      }
-
-      // eslint-disable-next-line consistent-return
-      fs.readFile(configFile, 'utf8', (fsErr, data) => {
-        if (fsErr && fsErr.code !== 'ENOENT') {
-          return done(fsErr);
-        }
-
-        let config = Object.create(null);
-
-        if (data && data !== '') {
-          config = ini.parse(data);
-        }
-
-        config[profile] = {};
-        config[profile].aws_access_key_id = credentials.AccessKeyId;
-        config[profile].aws_secret_access_key = credentials.SecretAccessKey;
-        config[profile].aws_session_token = credentials.SessionToken;
-        if (region.includes('gov')) {
-          config[profile].region = region;
-        }
-        // Some libraries e.g. boto v2.38.0, expect an "aws_security_token" entry.
-        config[profile].aws_security_token = credentials.SessionToken;
-        config = ini.encode(config, {
-          whitespace: true,
-        });
-
-        fs.writeFile(configFile, config, 'utf8', done);
+    try {
+      fs.mkdirSync(path.join(home, '.aws'), {
+        recursive: true,
+        mode: '0700',
       });
+    } catch (e) {
+      return done(e);
+    }
+
+    let data;
+    try {
+      data = fs.readFileSync(configFile, {
+        encoding: 'utf8',
+      });
+    } catch (error) {
+      if (error.code !== 'ENOENT') {
+        return done(error);
+      }
+    }
+
+    let config = Object.create(null);
+
+    if (data && data !== '') {
+      config = ini.parse(data);
+    }
+
+    config[profile] = {
+      aws_access_key_id: credentials.AccessKeyId,
+      aws_secret_access_key: credentials.SecretAccessKey,
+      aws_session_token: credentials.SessionToken,
+      // Some libraries e.g. boto v2.38.0, expect an "aws_security_token" entry.
+      aws_security_token: credentials.SessionToken,
+    };
+
+    if (region.includes('gov')) {
+      config[profile].region = region;
+    }
+
+    config = ini.encode(config, {
+      whitespace: true,
     });
+
+    fs.writeFile(configFile, config, 'utf8', done);
   }
 
   static resolveHomePath() {

@@ -44,18 +44,18 @@ module.exports = {
     {
       files: 'test/**/*.js',
       env: {
-        mocha: true,
+        'jest/globals': true,
       },
-      extends: ['plugin:node/recommended'],
+      plugins: ['jest'],
+      parserOptions: {
+        sourceType: 'module',
+      },
       rules: {
         'func-names': 0,
         'global-require': 0,
         'prefer-arrow-callback': 0,
         'max-nested-callbacks': 0,
         'space-before-function-paren': 0,
-        'node/no-unpublished-require': ['error', {
-          allowModules: ['should'],
-        }],
       },
     },
     {

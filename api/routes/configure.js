@@ -1,7 +1,7 @@
 const https = require('https');
 const express = require('express');
-const uuidv4 = require('uuid/v4');
-const xmldom = require('xmldom');
+const { v4: uuidv4 } = require('uuid');
+const { DOMParser } = require('@xmldom/xmldom');
 const xpath = require('xpath.js');
 const config = require('../config.json');
 
@@ -168,7 +168,7 @@ module.exports = (app, auth) => {
       });
 
       xmlRes.on('end', () => {
-        const xmlDoc = new xmldom.DOMParser().parseFromString(xml);
+        const xmlDoc = new DOMParser().parseFromString(xml, 'text/xml');
         const safeXpath = (doc, p) => {
           try {
             return xpath(doc, p);
