@@ -7,6 +7,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getMetadataUrls: () => ipcRenderer.invoke('configure:metadataUrls:get'),
   getDefaultMetadata: () => ipcRenderer.invoke('configure:defaultMetadata:get'),
   login: (args) => ipcRenderer.invoke('configure:login', args),
+  isAuthenticated: () => ipcRenderer.invoke('configure:is-authenticated'),
+  hasMultipleRoles: () => ipcRenderer.invoke('configure:has-multiple-roles'),
   logout: () => ipcRenderer.invoke('logout:get'),
   getRoles: () => ipcRenderer.invoke('select-role:get'),
   setRole: (args) => ipcRenderer.invoke('select-role:set', args),

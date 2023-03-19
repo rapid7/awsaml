@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 import {
   Container,
@@ -23,14 +23,23 @@ const RoundedCenteredDivColumnContent = styled(RoundedContent)(CenteredDivColumn
 const RoundedCenteredDivColumnWrapper = styled(RoundedWrapper)(CenteredDivColumn);
 
 function Configure() {
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const [auth] = useState(params.get('auth') === 'true');
-  const [selectRole] = useState(params.get('select-role') === 'true');
+  const [auth, setAuth] = useState(false);
+  const [selectRole, setSelectRole] = useState(false);
 
   const [metadataUrlValid, setMetadataUrlValid] = useState(true);
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    (async () => {
+      const isAuthenticated = await window.electronAPI.isAuthenticated();
+      setAuth(isAuthenticated);
+
+      const mustSelectRole = await window.electronAPI.hasMultipleRoles();
+      setSelectRole(mustSelectRole);
+    })();
+
+    return () => {};
+  });
   const errorHandler = (err) => {
     console.error(err); // eslint-disable-line no-console
     setError(err);

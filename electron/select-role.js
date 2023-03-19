@@ -40,6 +40,7 @@ async function setRole(event, payload) {
   session.accountId = role.accountId;
 
   Storage.set('session', session);
+  Storage.set('multipleRoles', false);
 
   return {
     status: 'selected',

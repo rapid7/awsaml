@@ -2,6 +2,8 @@ const {
   getMetadataUrls,
   getDefaultMetadata,
   login,
+  isAuthenticated,
+  hasMultipleRoles,
   getProfile,
   deleteProfile,
 } = require('./configure');
@@ -27,6 +29,8 @@ module.exports = {
       'configure:profile:delete': deleteProfile,
       'configure:profile:get': getProfile,
       'configure:login': login,
+      'configure:is-authenticated': isAuthenticated,
+      'configure:has-multiple-roles': hasMultipleRoles,
     },
     'select-role': {
       'select-role:get': getRoles,

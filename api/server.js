@@ -5,18 +5,9 @@ const sessionSecret = '491F9BAD-DFFF-46E2-A0F9-56397B538060';
 
 const auth = new Auth(config.auth);
 const app = require('./server-config')(auth, config, sessionSecret);
+const authRoute = require('./routes/auth')(app, auth);
 
-[
-  {
-    name: config.auth.path,
-    route: require('./routes/auth')(app, auth),
-  }, {
-    name: '/',
-    route: require('./routes/static')(),
-  },
-].forEach((el) => {
-  app.use(el.name, el.route);
-});
+app.use(config.auth.path, authRoute);
 app.all('*', auth.guard);
 
 module.exports = {

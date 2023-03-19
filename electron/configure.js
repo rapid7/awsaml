@@ -262,9 +262,18 @@ async function login(event, payload) {
 
   app.set('entryPointUrl', config.auth.entryPoint);
   auth.configure(config.auth);
+
   return {
     redirect: config.auth.entryPoint,
   };
+}
+
+async function isAuthenticated() {
+  return Storage.get('authenticated') || false;
+}
+
+async function hasMultipleRoles() {
+  return Storage.get('multipleRoles') || false;
 }
 
 module.exports = {
@@ -273,4 +282,6 @@ module.exports = {
   login,
   deleteProfile,
   getProfile,
+  isAuthenticated,
+  hasMultipleRoles,
 };

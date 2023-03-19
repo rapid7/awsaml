@@ -3,7 +3,7 @@ const url = require('url');
 function authHandler(app) {
   return async (req, res) => {
     let roleAttr = req.user['https://aws.amazon.com/SAML/Attributes/Role'];
-    let frontend = process.env.ELECTRON_START_URL || app.get('baseUrl');
+    let frontend = app.get('baseUrl');
 
     frontend = new url.URL(frontend);
 
@@ -53,14 +53,14 @@ function authHandler(app) {
       // If the session still has a previous role, proceed directly to auth.
       // Otherwise ask the user to select a role.
       if (session.roleArn && session.principalArn && session.roleName && session.accountId) {
-        frontend.searchParams.set('auth', 'true');
+        Storage.set('authenticated', true);
       } else {
-        frontend.searchParams.set('select-role', 'true');
+        Storage.set('multipleRoles', true);
       }
     } else {
       const role = roles[0];
 
-      frontend.searchParams.set('auth', 'true');
+      Storage.set('authenticated', true);
 
       session.showRole = false;
       session.roleArn = role.roleArn;

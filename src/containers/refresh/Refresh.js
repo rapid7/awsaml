@@ -4,6 +4,7 @@ import {
   Row,
   Button,
   Collapse,
+  Alert,
 } from 'reactstrap';
 import {
   Navigate,
@@ -88,9 +89,14 @@ const relativeDate = (date) => {
   }
   if (minutes) {
     relative.push(`${minutes}m`);
+  } else {
+    relative.push('0m');
   }
+
   if (seconds) {
     relative.push(`${seconds}s`);
+  } else {
+    relative.push('0s');
   }
 
   return relative.join(' ');
@@ -116,8 +122,11 @@ function Refresh() {
   const [localExpiration, setLocalExpiration] = useState(new Date());
   const [darkMode, setDarkMode] = useState(false);
   const { accessKey, secretKey, sessionToken } = credentials;
+  const [flash, setFlash] = useState('');
 
   const getSuccessCallback = (data) => {
+    const firstLoad = credentials.accessKey === '';
+
     setAccountId(data.accountId);
     setCredentials({
       accessKey: data.accessKey,
@@ -136,6 +145,16 @@ function Refresh() {
 
     if (data.error) {
       setError(data.error);
+      setFlash('');
+    } else {
+      if (!firstLoad) {
+        setFlash('Updated credentials');
+        setTimeout(() => {
+          setFlash('');
+        }, 3000);
+      }
+
+      setError('');
     }
   };
 
@@ -196,6 +215,10 @@ function Refresh() {
         <RoundedWrapper>
           <Logo />
           <RoundedContent>
+            <Alert color="success" fade isOpen={!!flash}>
+              <FontAwesomeIcon icon="fa-brands fa-aws" />
+              {`   ${flash}`}
+            </Alert>
             <Error error={error} />
             <div>
               <BorderlessButton
@@ -205,11 +228,11 @@ function Refresh() {
               >
                 <FontAwesomeIcon icon={['fas', `fa-caret-${caretDirection}`]} />
                 {'   '}
-                Account
+                &nbsp;&nbsp;&nbsp;Account
               </BorderlessButton>
               <Collapse isOpen={isOpen}>
                 <DarkModeAwareCard className="card card-body bg-transparent mb-3">
-                  <AccountProps className={darkMode ? 'text-light' : 'text-dark'}>
+                  <AccountProps>
                     {profileName !== `awsaml-${accountId}` && [
                       <AccountPropsKey key="profile-name-dt">Profile:</AccountPropsKey>,
                       <AccountPropsVal key="profile-name-dd">{profileName}</AccountPropsVal>,

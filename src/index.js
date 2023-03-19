@@ -12,9 +12,12 @@ import {
   faCaretDown,
   faExclamationTriangle,
 } from '@fortawesome/free-solid-svg-icons';
+import {
+  faAws,
+} from '@fortawesome/free-brands-svg-icons';
 import App from './containers/App';
 
-library.add(faCopy, faTrashAlt, faSearch, faCaretRight, faCaretDown, faExclamationTriangle);
+library.add(faCopy, faTrashAlt, faSearch, faCaretRight, faCaretDown, faExclamationTriangle, faAws);
 
 const container = document.getElementById('root');
 const root = createRoot(container);

@@ -1,22 +1,24 @@
+const path = require('node:path');
+const url = require('node:url');
 const {
   app,
   BrowserWindow,
   ipcMain,
   nativeTheme,
+  protocol,
+  clipboard,
 } = require('electron');
-const path = require('path');
-const {
-  app: Server,
-} = require('../api/server');
+const { app: Server } = require('../api/server');
 const config = require('../api/config.json');
-const {
-  loadTouchBar,
-} = require('./touchbar');
-const {
-  channels,
-} = require('./constants');
+const { loadTouchBar } = require('./touchbar');
+const { channels } = require('./constants');
+
+// See https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
+// for more details.
+if (require('electron-squirrel-startup')) app.quit();
 
 const storagePath = path.join(app.getPath('userData'), 'data.json');
+const isDev = process.env.NODE_ENV === 'development';
 
 global.Storage = require('../api/storage')(storagePath);
 
@@ -25,7 +27,7 @@ const WindowHeight = 800;
 
 let mainWindow = null;
 
-const baseUrl = process.env.ELECTRON_START_URL || Server.get('baseUrl');
+let baseUrl = process.env.ELECTRON_START_URL || Server.get('baseUrl');
 
 let storedMetadataUrls = Storage.get('metadataUrls') || [];
 
@@ -52,6 +54,12 @@ app.on('window-all-closed', () => {
 app.on('ready', async () => {
   // eslint-disable-next-line global-require
   require('./menu');
+
+  // register a custom protocol so we can redirect from the webserver that handles SSO to our UI
+  protocol.registerFileProtocol('awsaml', (request, callback) => {
+    const filePath = url.fileURLToPath(`file://${request.url.slice('awsaml://'.length)}`);
+    callback(filePath);
+  });
 
   const host = Server.get('host');
   const port = Server.get('port');
@@ -95,14 +103,19 @@ app.on('ready', async () => {
     });
 
     Storage.delete('session');
+    Storage.delete('authenticated');
+    Storage.delete('multipleRoles');
   });
 
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
 
-  if (process.env.NODE_ENV === 'development') {
+  if (isDev) {
     mainWindow.openDevTools({ mode: 'detach' });
+  } else {
+    baseUrl = `awsaml://${path.join(__dirname, '/../build/index.html')}`;
+    Server.set('baseUrl', baseUrl);
   }
 
   mainWindow.on('reset', () => {
@@ -124,10 +137,15 @@ app.on('ready', async () => {
     });
   });
 
-  // set up  dark mode handler
+  // set up dark mode handler
   ipcMain.handle('dark-mode:get', () => nativeTheme.shouldUseDarkColors);
   nativeTheme.on('updated', () => {
     mainWindow.webContents.send('dark-mode:updated', nativeTheme.shouldUseDarkColors);
+  });
+
+  // set up clipboard handler
+  ipcMain.handle('copy', async (event, value) => {
+    clipboard.writeText(value);
   });
 
   setInterval(() => {

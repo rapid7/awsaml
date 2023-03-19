@@ -12,8 +12,7 @@ function Error(props) {
   return (error || metadataUrlValid === false) ? (
     <Alert color="danger" fade={false}>
       <FontAwesomeIcon icon="exclamation-triangle" />
-      {'  '}
-      {error}
+      {`   ${error}`}
     </Alert>
   ) : '';
 }

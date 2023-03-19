@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Route,
   Routes,
-  BrowserRouter,
+  MemoryRouter,
 } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import 'prismjs';
@@ -69,14 +69,14 @@ function App() {
   return (
     <React.StrictMode>
       <ErrorBoundary>
-        <BrowserRouter>
+        <MemoryRouter>
           <Routes>
-            <Route element={<Configure />} path="/" />
-            <Route element={<Refresh />} path="/refresh" />
-            <Route element={<SelectRole />} path="/select-role" />
+            <Route element={<Configure />} path="/" exact />
+            <Route element={<Refresh />} path="/refresh" exact />
+            <Route element={<SelectRole />} path="/select-role" exact />
             {debug ? <Route element={<DebugRoute />} /> : ''}
           </Routes>
-        </BrowserRouter>
+        </MemoryRouter>
       </ErrorBoundary>
       <GlobalStyle />
     </React.StrictMode>
