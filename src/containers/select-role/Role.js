@@ -2,10 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ListGroupItem } from 'reactstrap';
 import styled from 'styled-components';
-import { postSelectRole } from '../../apis';
+import {
+  BORDER_COLOR_SCHEME_MEDIA_QUERY,
+} from '../../constants/styles';
 
 const SelectRoleButton = styled(ListGroupItem)`
   cursor: pointer;
+  background-color: transparent;
+
+  ${BORDER_COLOR_SCHEME_MEDIA_QUERY}
+
+  margin-right: 0.8em;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
 `;
 
 function Role(props) {
@@ -13,26 +22,15 @@ function Role(props) {
     displayAccountId,
     name,
     accountId,
-    index,
-    selectStatusCallback,
+    onClick,
   } = props;
-
-  const handleClick = (event) => {
-    event.preventDefault();
-
-    const selectRole = async () => postSelectRole({ index });
-
-    selectRole().then((data) => {
-      selectStatusCallback(data);
-    }).catch(console.error);
-  };
 
   const displayName = displayAccountId ? `${accountId}:${name}` : name;
 
   return (
     <SelectRoleButton
       action
-      onClick={handleClick}
+      onClick={onClick}
       tag="button"
     >
       {displayName}
@@ -43,9 +41,8 @@ function Role(props) {
 Role.propTypes = {
   accountId: PropTypes.string.isRequired,
   displayAccountId: PropTypes.bool.isRequired,
-  index: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
-  selectStatusCallback: PropTypes.func,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default Role;

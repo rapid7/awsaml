@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   Button,
   Input,
 } from 'reactstrap';
 import styled from 'styled-components';
-import { postConfigure } from '../../apis';
-import ComponentWithError from '../components/ComponentWithError';
 
 const FullSizeLabel = styled.label`
   width: 100%;
@@ -15,15 +13,32 @@ const FullSizeLabel = styled.label`
 
 function ConfigureMetadata(props) {
   const {
-    defaultMetadataUrl,
-    defaultMetadataName,
-    errorMessage,
-    urlGroupClass,
-    nameGroupClass,
+    setError,
+    setMetadataUrlValid,
   } = props;
 
-  const [metadataUrl, setMetadataUrl] = useState(defaultMetadataUrl);
-  const [profileName, setProfileName] = useState(defaultMetadataName);
+  const [metadataUrl, setMetadataUrl] = useState('');
+  const [profileName, setProfileName] = useState('');
+  const [urlGroupClass, setUrlGroupClass] = useState('form-group');
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const {
+        url,
+        name,
+      } = await window.electronAPI.getDefaultMetadata();
+      setMetadataUrl(url);
+      setProfileName(name);
+
+      const dm = await window.electronAPI.getDarkMode();
+      setDarkMode(dm);
+    })();
+
+    window.electronAPI.darkModeUpdated((event, value) => {
+      setDarkMode(value);
+    });
+  }, []);
 
   const handleInputChange = ({ target: { name, value } }) => {
     switch (name) {
@@ -38,7 +53,7 @@ function ConfigureMetadata(props) {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const payload = {
@@ -46,11 +61,20 @@ function ConfigureMetadata(props) {
       profileName,
     };
 
-    postConfigure(payload).then(({ redirect }) => {
-      if (redirect) {
-        document.location.replace(redirect);
-      }
-    }).catch(console.error);
+    const {
+      error,
+      redirect,
+      metadataUrlValid,
+    } = await window.electronAPI.login(payload);
+    if (error) {
+      setError(error);
+      setMetadataUrlValid(metadataUrlValid);
+      setUrlGroupClass('form-group has-error');
+    }
+
+    if (redirect) {
+      document.location.replace(redirect);
+    }
   };
 
   const handleKeyDown = (event) => event.keyCode === 13 && handleSubmit(event);
@@ -58,7 +82,6 @@ function ConfigureMetadata(props) {
   return (
     <fieldset>
       <legend>Configure</legend>
-      {errorMessage}
       <div className={urlGroupClass}>
         <FullSizeLabel htmlFor="metadataUrl">
           SAML Metadata URL
@@ -75,7 +98,7 @@ function ConfigureMetadata(props) {
           />
         </FullSizeLabel>
       </div>
-      <div className={nameGroupClass}>
+      <div className="form-group">
         <FullSizeLabel htmlFor="profileName">
           Account Alias
           <Input
@@ -85,7 +108,7 @@ function ConfigureMetadata(props) {
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             pattern=".+"
-            type="string"
+            type="text"
             value={profileName}
           />
         </FullSizeLabel>
@@ -93,7 +116,7 @@ function ConfigureMetadata(props) {
       <Button
         color="primary"
         onClick={handleSubmit}
-        outline
+        outline={!darkMode}
       >
         Done
       </Button>
@@ -102,18 +125,8 @@ function ConfigureMetadata(props) {
 }
 
 ConfigureMetadata.propTypes = {
-  defaultMetadataName: PropTypes.string,
-  defaultMetadataUrl: PropTypes.string.isRequired,
-  errorMessage: PropTypes.string,
-  nameGroupClass: PropTypes.string,
-  urlGroupClass: PropTypes.string,
+  setError: PropTypes.func.isRequired,
+  setMetadataUrlValid: PropTypes.func.isRequired,
 };
 
-ConfigureMetadata.defaultProps = {
-  defaultMetadataName: '',
-  errorMessage: '',
-  nameGroupClass: '',
-  urlGroupClass: '',
-};
-
-export default ComponentWithError(ConfigureMetadata);
+export default ConfigureMetadata;

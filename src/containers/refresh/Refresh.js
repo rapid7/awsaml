@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import {
   Container,
   Row,
@@ -7,13 +6,11 @@ import {
   Collapse,
 } from 'reactstrap';
 import {
-  Link,
   Navigate,
 } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
-import { getRefresh } from '../../apis';
-import ComponentWithError from '../components/ComponentWithError';
+import Error from '../components/Error';
 import Logo from '../components/Logo';
 import Credentials from './Credentials';
 import Logout from './Logout';
@@ -21,8 +18,9 @@ import InputGroupWithCopyButton from '../components/InputGroupWithCopyButton';
 import {
   RoundedContent,
   RoundedWrapper,
-  BUTTON_MARGIN,
+  DARK_MODE_AWARE_BORDERLESS_BUTTON,
 } from '../../constants/styles';
+import useInterval from '../../constants/hooks';
 
 const EnvVar = styled(RoundedContent)`
   margin-top: 20px;
@@ -30,8 +28,14 @@ const EnvVar = styled(RoundedContent)`
   padding: 10px 20px;
 `;
 
-const LinkWithButtonMargin = styled(Link)`
-${BUTTON_MARGIN}
+const DarkModeAwareCard = styled.div`
+  @media (prefers-color-scheme: dark) {
+    border-color: rgb(249, 249, 249);
+  }
+
+  @media (prefers-color-scheme: light) {
+    border-color: #333;
+  }
 `;
 
 const AccountProps = styled.dl`
@@ -57,8 +61,7 @@ const PreInputGroupWithCopyButton = styled(InputGroupWithCopyButton)`
 `;
 
 const BorderlessButton = styled(Button)`
-  border: 0;
-  margin-bottom: 3px;
+  ${DARK_MODE_AWARE_BORDERLESS_BUTTON}
 `;
 
 const getLang = (platform) => (platform === 'win32' ? 'language-batch' : 'language-bash');
@@ -72,66 +75,110 @@ ${getExport(platform)} AWS_PROFILE=awsaml-${accountId}
 ${getExport(platform)} AWS_DEFAULT_PROFILE=awsaml-${accountId}
 `.trim();
 
-function Refresh(props) {
-  const {
-    errorMessage,
-    status,
-  } = props;
+const relativeDate = (date) => {
+  const deltaSeconds = (new Date(date) - new Date()) / 1000;
+  const relative = [];
 
-  const [loaded, setLoaded] = useState(false);
+  const hours = Math.floor(deltaSeconds / 3600);
+  const minutes = Math.floor((deltaSeconds % 3600) / 60);
+  const seconds = Math.floor(deltaSeconds % 60);
+
+  if (hours) {
+    relative.push(`${hours}h`);
+  }
+  if (minutes) {
+    relative.push(`${minutes}m`);
+  }
+  if (seconds) {
+    relative.push(`${seconds}s`);
+  }
+
+  return relative.join(' ');
+};
+
+function Refresh() {
   const [caretDirection, setCaretDirection] = useState('down');
   const [isOpen, setIsOpen] = useState(true);
   const [credentials, setCredentials] = useState({
     accessKey: '',
     secretKey: '',
     sessionToken: '',
+    expiration: '',
   });
   const [accountId, setAccountId] = useState('');
   const [platform, setPlatform] = useState('');
   const [profileName, setProfileName] = useState('');
   const [roleName, setRoleName] = useState('');
   const [showRole, setShowRole] = useState(false);
-
+  const [error, setError] = useState('');
+  const [status, setStatus] = useState(null);
+  const [ttl, setTtl] = useState('');
+  const [localExpiration, setLocalExpiration] = useState(new Date());
+  const [darkMode, setDarkMode] = useState(false);
   const { accessKey, secretKey, sessionToken } = credentials;
 
-  const get = async () => getRefresh();
   const getSuccessCallback = (data) => {
     setAccountId(data.accountId);
     setCredentials({
       accessKey: data.accessKey,
       secretKey: data.secretKey,
       sessionToken: data.sessionToken,
+      expiration: data.expiration,
     });
+
+    setTtl(relativeDate(data.expiration));
+    setLocalExpiration(new Date(data.expiration));
 
     setPlatform(data.platform);
     setProfileName(data.profileName);
     setRoleName(data.roleName);
     setShowRole(data.showRole);
+
+    if (data.error) {
+      setError(data.error);
+    }
   };
 
-  useEffect(() => {
-    let isMounted = true;
+  useInterval(() => {
+    setTtl(relativeDate(credentials.expiration));
+  }, 1000);
 
-    get().then((data) => {
+  useEffect(() => {
+    (async () => { // eslint-disable-line consistent-return
+      const data = await window.electronAPI.refresh();
+
       if (data.redirect) {
         window.location.href = data.redirect;
       }
 
-      if (isMounted) {
-        setLoaded(true);
-        getSuccessCallback(data);
-      }
-    }).catch(console.error);
+      getSuccessCallback(data);
 
-    return () => {
-      isMounted = false;
-    };
-  }, [props]);
+      const dm = await window.electronAPI.getDarkMode();
+      setDarkMode(dm);
+    })();
 
-  const handleRefreshClickEvent = (event) => {
+    window.electronAPI.darkModeUpdated((event, value) => {
+      setDarkMode(value);
+    });
+
+    return () => {};
+  }, []);
+
+  const handleRefreshClickEvent = async (event) => {
     event.preventDefault();
 
-    get().then(getSuccessCallback).catch(console.error);
+    const data = await window.electronAPI.refresh();
+
+    if (data.redirect) {
+      window.location.href = data.redirect;
+    }
+
+    if (data.logout) {
+      setStatus(data.logout);
+      return;
+    }
+
+    getSuccessCallback(data);
   };
 
   const handleCollapse = () => {
@@ -143,29 +190,26 @@ function Refresh(props) {
     return <Navigate to="/" />;
   }
 
-  if (!loaded) {
-    return ('');
-  }
-
   return (
     <Container>
       <Row className="d-flex p-2">
         <RoundedWrapper>
           <Logo />
           <RoundedContent>
-            {errorMessage}
+            <Error error={error} />
             <div>
               <BorderlessButton
                 onClick={handleCollapse}
-                outline
+                outline={!darkMode}
                 color="link"
               >
                 <FontAwesomeIcon icon={['fas', `fa-caret-${caretDirection}`]} />
-                &nbsp;&nbsp;&nbsp;Account
+                {'   '}
+                Account
               </BorderlessButton>
               <Collapse isOpen={isOpen}>
-                <div className="card card-body bg-light mb-3">
-                  <AccountProps className="bg-dark text-light">
+                <DarkModeAwareCard className="card card-body bg-transparent mb-3">
+                  <AccountProps className={darkMode ? 'text-light' : 'text-dark'}>
                     {profileName !== `awsaml-${accountId}` && [
                       <AccountPropsKey key="profile-name-dt">Profile:</AccountPropsKey>,
                       <AccountPropsVal key="profile-name-dd">{profileName}</AccountPropsVal>,
@@ -177,19 +221,20 @@ function Refresh(props) {
                       <AccountPropsVal key="role-name-dd">{roleName}</AccountPropsVal>,
                     ]}
                   </AccountProps>
-                </div>
+                </DarkModeAwareCard>
               </Collapse>
             </div>
             <Credentials
               awsAccessKey={accessKey}
               awsSecretKey={secretKey}
               awsSessionToken={sessionToken}
+              darkMode={darkMode}
             />
             <EnvVar>
               <p>
-                Run these commands from a&nbsp;
-                {getTerm(platform)}
-                &nbsp;to use the AWS CLI:
+                Run these commands from a
+                {` ${getTerm(platform)} `}
+                to use the AWS CLI:
               </p>
               <PreInputGroupWithCopyButton
                 buttonClassName="bg-dark text-light"
@@ -198,18 +243,26 @@ function Refresh(props) {
                 multiLine
                 name="input-envvars"
                 value={getEnvVars({ platform, accountId })}
+                darkMode={darkMode}
               />
             </EnvVar>
-            <span className="ml-auto p-2">
-              <LinkWithButtonMargin
-                className="btn btn-secondary"
+            <div>
+              <b>Expires in:</b>
+              {` ${ttl}`}
+            </div>
+            <div className="mb-3">
+              <b>Expires at:</b>
+              {` ${localExpiration.toString()}`}
+            </div>
+            <span className="ml-auto">
+              <Button
+                color="secondary"
                 onClick={handleRefreshClickEvent}
-                role="button"
-                to="/refresh"
+                outline={!darkMode}
               >
                 Refresh
-              </LinkWithButtonMargin>
-              <Logout />
+              </Button>
+              <Logout darkMode={darkMode} />
             </span>
           </RoundedContent>
         </RoundedWrapper>
@@ -218,13 +271,4 @@ function Refresh(props) {
   );
 }
 
-Refresh.propTypes = {
-  errorMessage: PropTypes.string,
-  status: PropTypes.number,
-};
-
-Refresh.defaultProps = {
-  errorMessage: '',
-};
-
-export default ComponentWithError(Refresh);
+export default Refresh;

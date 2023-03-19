@@ -5,10 +5,8 @@ import {
   Row,
 } from 'reactstrap';
 import { Navigate } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { getSelectRole } from '../../apis';
-import ComponentWithError from '../components/ComponentWithError';
+import Error from '../components/Error';
 import Role from './Role';
 import Logo from '../components/Logo';
 import {
@@ -21,48 +19,46 @@ const SelectRoleHeader = styled.h4`
   padding-top: 15px;
 `;
 
-function SelectRole(props) {
-  const {
-    errorMessage,
-  } = props;
-
-  const [loaded, setLoaded] = useState(false);
+function SelectRole() {
   const [displayAccountId, setDisplayAccountId] = useState(true);
   const [roles, setRoles] = useState([]);
   const [status, setStatus] = useState('');
+  const [error, setError] = useState('');
+  const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    let isMounted = true;
-    const fetchRole = async () => getSelectRole();
+    (async () => {
+      const data = await window.electronAPI.getRoles();
+      setRoles(data.roles);
 
-    fetchRole().then((data) => {
-      if (isMounted) {
-        setLoaded(true);
+      const uniqueAccountIds = new Set(data.roles.map((role) => role.accountId));
 
-        setRoles(data.roles);
-        const uniqueAccountIds = new Set(data.roles.map((role) => role.accountId));
-
-        if (uniqueAccountIds.size === 1) {
-          setDisplayAccountId(false);
-        }
+      if (uniqueAccountIds.size === 1) {
+        setDisplayAccountId(false);
       }
-    }).catch(console.error);
+    })();
 
-    return () => {
-      isMounted = false;
-    };
-  }, [props]);
+    window.electronAPI.darkModeUpdated((event, value) => {
+      setDarkMode(value);
+    });
 
-  const selectStatusCallback = (payload) => {
-    setStatus(payload.status);
+    return () => {};
+  }, []);
+
+  const handleClick = (index) => async (event) => {
+    event.preventDefault();
+
+    const data = await window.electronAPI.setRole({ index });
+
+    if (data.error) {
+      setError(data.error);
+    } else {
+      setStatus(data.status);
+    }
   };
 
   if (status === 'selected') {
     return <Navigate to="/refresh" />;
-  }
-
-  if (!loaded) {
-    return ('');
   }
 
   return (
@@ -71,23 +67,27 @@ function SelectRole(props) {
         <RoundedWrapper>
           <Logo />
           <RoundedContent>
-            {errorMessage}
-
+            <Error error={error} />
             <SelectRoleHeader>Select a role:</SelectRoleHeader>
             <ListGroup>
               {
-                roles.map((role) => (
-                  <Role
-                    accountId={role.accountId}
-                    displayAccountId={displayAccountId}
-                    index={role.index}
-                    key={`role-item-${role.index}`}
-                    name={role.roleName}
-                    principalArn={role.principalArn}
-                    roleArn={role.roleArn}
-                    selectStatusCallback={selectStatusCallback}
-                  />
-                ))
+                roles.map((role) => {
+                  const roleOnClick = handleClick(role.index);
+
+                  return (
+                    <Role
+                      accountId={role.accountId}
+                      displayAccountId={displayAccountId}
+                      index={role.index}
+                      key={`role-item-${role.index}`}
+                      name={role.roleName}
+                      principalArn={role.principalArn}
+                      roleArn={role.roleArn}
+                      onClick={roleOnClick}
+                      darkMode={darkMode}
+                    />
+                  );
+                })
               }
             </ListGroup>
           </RoundedContent>
@@ -97,12 +97,4 @@ function SelectRole(props) {
   );
 }
 
-SelectRole.propTypes = {
-  errorMessage: PropTypes.string,
-};
-
-SelectRole.defaultProps = {
-  errorMessage: '',
-};
-
-export default ComponentWithError(SelectRole);
+export default SelectRole;

@@ -27,9 +27,15 @@ module.exports = {
       'configure:profile:delete': deleteProfile,
       'configure:profile:get': getProfile,
       'configure:login': login,
+    },
+    'select-role': {
       'select-role:get': getRoles,
       'select-role:set': setRole,
+    },
+    logout: {
       'logout:get': logout,
+    },
+    refresh: {
       'refresh:get': refresh,
     },
   },

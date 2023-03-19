@@ -5,17 +5,30 @@ import {
   BrowserRouter,
 } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
+import 'prismjs';
+import 'prismjs/themes/prism-tomorrow.css';
 import Configure from './configure/Configure';
 import Refresh from './refresh/Refresh';
 import SelectRole from './select-role/SelectRole';
 import ErrorBoundary from './ErrorBoundary';
 import DebugRoute from './components/DebugRoute';
 
-import 'prismjs';
-import 'prismjs/themes/prism-tomorrow.css';
-
 const debug = process.env.NODE_ENV === 'development';
 const GlobalStyle = createGlobalStyle`
+  @media (prefers-color-scheme: dark) {
+    body {
+      background: #333;
+      color: rgb(249, 249, 249);
+    }
+  }
+
+  @media (prefers-color-scheme: light) {
+    body {
+      background: rgb(249, 249, 249);
+      color: #333;
+    }
+  }
+
   html {
     height: 100%;
   }
@@ -27,7 +40,6 @@ const GlobalStyle = createGlobalStyle`
     min-height: 100%;
     display: flex;
     align-items: center;
-    background: rgb(249, 249, 249);
   }
 
   body > * {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {
@@ -55,23 +55,44 @@ const filterMetadataUrls = (metadataUrls, filterText) => {
     }
 
     // Compare profile roles
-    if ((metadataUrl.roles || []).some((role) => role.toLowerCase().indexOf(token) !== -1)) {
-      return true;
-    }
-
-    return false;
+    return (metadataUrl.roles || []).some((role) => role.toLowerCase().indexOf(token) !== -1);
   })
   ));
 };
 
 function RecentLogins(props) {
+  const {
+    errorHandler,
+  } = props;
+
   const [filterText, setFilterText] = useState('');
+  const [metadataUrls, setMetadataUrls] = useState('');
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const mdUrls = await window.electronAPI.getMetadataUrls();
+      setMetadataUrls(mdUrls);
+
+      const dm = await window.electronAPI.getDarkMode();
+      setDarkMode(dm);
+    })();
+
+    window.electronAPI.darkModeUpdated((event, value) => {
+      setDarkMode(value);
+    });
+
+    return () => {};
+  }, []);
+
   // eslint-disable-next-line max-len
   const handleFilterInputChange = ({ currentTarget: { value: ft } }) => setFilterText(ft);
-  const {
-    metadataUrls,
-    deleteCallback,
-  } = props;
+
+  const deleteCallback = (deleted) => {
+    const updatedMetadataUrls = metadataUrls
+      .filter((metadataUrl) => metadataUrl.profileUuid !== deleted.profileUuid);
+    setMetadataUrls(updatedMetadataUrls);
+  };
 
   const filteredMetadataUrls = filterMetadataUrls(metadataUrls, filterText);
 
@@ -89,29 +110,24 @@ function RecentLogins(props) {
         />
       </SearchContainer>
       <ScrollableListGroup>
-        {
-          filteredMetadataUrls.map(({ url, name, profileUuid }) => (
-            <Login
-              deleteCallback={deleteCallback}
-              key={url}
-              pretty={name}
-              profileUuid={profileUuid}
-              url={url}
-            />
-          ))
-        }
+        {filteredMetadataUrls ? filteredMetadataUrls.map(({ url, name, profileUuid }) => (
+          <Login
+            deleteCallback={deleteCallback}
+            errorHandler={errorHandler}
+            key={url}
+            pretty={name}
+            profileUuid={profileUuid}
+            url={url}
+            darkMode={darkMode}
+          />
+        )) : ''}
       </ScrollableListGroup>
     </div>
   );
 }
 
 RecentLogins.propTypes = {
-  metadataUrls: PropTypes.arrayOf(PropTypes.shape({
-    url: PropTypes.string,
-    name: PropTypes.string,
-    profileUuid: PropTypes.string,
-  })).isRequired,
-  deleteCallback: PropTypes.func,
+  errorHandler: PropTypes.func.isRequired,
 };
 
 export default RecentLogins;

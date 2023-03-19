@@ -9,13 +9,21 @@ import {
   Collapse,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { postConfigure, deleteProfile } from '../../apis';
+import {
+  BORDER_COLOR_SCHEME_MEDIA_QUERY,
+} from '../../constants/styles';
 import InputGroupWithCopyButton from '../components/InputGroupWithCopyButton';
 
 const ProfileInputGroup = styled(InputGroup)`
   width: 100%;
   height: 2.5em;
   line-height: 2.5em;
+`;
+
+const TransparentlistGroupItem = styled(ListGroupItem)`
+  background-color: transparent;
+
+  ${BORDER_COLOR_SCHEME_MEDIA_QUERY}
 `;
 
 const PaddedCollapse = styled(Collapse)`
@@ -28,6 +36,8 @@ function Login(props) {
     pretty,
     profileUuid,
     deleteCallback,
+    errorHandler,
+    darkMode,
   } = props;
 
   const [profileName, setProfileName] = useState('');
@@ -47,7 +57,7 @@ function Login(props) {
     event.currentTarget.value += ' ';
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const payload = {
@@ -56,14 +66,20 @@ function Login(props) {
       profileUuid,
     };
 
-    postConfigure(payload).then(({ redirect }) => {
-      if (redirect) {
-        document.location.replace(redirect);
-      }
-    }).catch(console.error);
+    const {
+      error,
+      redirect,
+    } = await window.electronAPI.login(payload);
+
+    if (error) {
+      errorHandler(error);
+    }
+    if (redirect) {
+      document.location.replace(redirect);
+    }
   };
 
-  const handleDelete = (event) => {
+  const handleDelete = async (event) => {
     event.preventDefault();
 
     const text = `Are you sure you want to delete the profile "${profileName || pretty}"?`;
@@ -74,9 +90,8 @@ function Login(props) {
         params: { profileUuid },
       };
 
-      deleteProfile(payload).then(() => {
-        deleteCallback(payload);
-      }).catch(console.error);
+      await window.electronAPI.deleteProfile({ profileUuid });
+      deleteCallback(payload);
     }
   };
 
@@ -86,11 +101,11 @@ function Login(props) {
   };
 
   return (
-    <ListGroupItem key={url}>
+    <TransparentlistGroupItem key={url}>
       <ProfileInputGroup>
         <Button
           onClick={handleCollapse}
-          outline
+          outline={!darkMode}
         >
           <FontAwesomeIcon icon={['fas', `fa-caret-${caretDirection}`]} />
         </Button>
@@ -105,14 +120,14 @@ function Login(props) {
         <Button
           color="secondary"
           onClick={handleSubmit}
-          outline
+          outline={!darkMode}
         >
           Login
         </Button>
         <Button
           color="danger"
           onClick={handleDelete}
-          outline
+          outline={!darkMode}
         >
           <FontAwesomeIcon icon={['far', 'trash-alt']} />
         </Button>
@@ -122,17 +137,24 @@ function Login(props) {
           id={profileUuid}
           name={pretty}
           value={url}
+          darkMode={darkMode}
         />
       </PaddedCollapse>
-    </ListGroupItem>
+    </TransparentlistGroupItem>
   );
 }
 
 Login.propTypes = {
   pretty: PropTypes.string,
-  profileUuid: PropTypes.string,
-  url: PropTypes.string,
+  profileUuid: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
   deleteCallback: PropTypes.func.isRequired,
+  errorHandler: PropTypes.func.isRequired,
+  darkMode: PropTypes.bool.isRequired,
+};
+
+Login.defaultProps = {
+  pretty: '',
 };
 
 export default Login;

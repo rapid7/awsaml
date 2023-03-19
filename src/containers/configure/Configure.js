@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import {
   Container,
   Row,
 } from 'reactstrap';
-import { getConfigure } from '../../apis';
 import Logo from '../components/Logo';
 import RecentLogins from './RecentLogins';
 import ConfigureMetadata from './ConfigureMetadata';
@@ -13,6 +12,7 @@ import {
   RoundedContent,
   RoundedWrapper,
 } from '../../constants/styles';
+import Error from '../components/Error';
 
 const CenteredDivColumn = styled.div`
   float: none;
@@ -22,39 +22,18 @@ const CenteredDivColumn = styled.div`
 const RoundedCenteredDivColumnContent = styled(RoundedContent)(CenteredDivColumn);
 const RoundedCenteredDivColumnWrapper = styled(RoundedWrapper)(CenteredDivColumn);
 
-function Configure(props) {
+function Configure() {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const [auth] = useState(params.get('auth') === 'true');
-  const [loaded, setLoaded] = useState(false);
   const [selectRole] = useState(params.get('select-role') === 'true');
-  const [defaultMetadataUrl, setDefaultMetadataUrl] = useState('');
-  const [defaultMetadataName, setDefaultMetadataName] = useState('');
-  const [metadataUrls, setMetadataUrls] = useState([]);
 
-  useEffect(() => {
-    let isMounted = true;
-    const fetchConfig = async () => getConfigure();
+  const [metadataUrlValid, setMetadataUrlValid] = useState(true);
+  const [error, setError] = useState('');
 
-    fetchConfig().then((data) => {
-      if (isMounted) {
-        setDefaultMetadataUrl(data.defaultMetadataUrl);
-        setDefaultMetadataName(data.defaultMetadataName);
-        setMetadataUrls(data.metadataUrls);
-
-        setLoaded(true);
-      }
-    }).catch(console.error);
-
-    return () => {
-      isMounted = false;
-    };
-  }, [props]);
-
-  const deleteCallback = (deleted) => {
-    const updatedMetadataUrls = metadataUrls
-      .filter((metadataUrl) => metadataUrl.profileUuid !== deleted.profileUuid);
-    setMetadataUrls(updatedMetadataUrls);
+  const errorHandler = (err) => {
+    console.error(err); // eslint-disable-line no-console
+    setError(err);
   };
 
   if (auth) {
@@ -65,26 +44,20 @@ function Configure(props) {
     return <Navigate to="/select-role" />;
   }
 
-  if (!loaded) {
-    return '';
-  }
-
   return (
     <Container>
       <Row>
         <RoundedCenteredDivColumnWrapper>
           <Logo />
           <RoundedCenteredDivColumnContent>
+            <Error error={error} metadataUrlValid={metadataUrlValid} />
             <ConfigureMetadata
-              defaultMetadataName={defaultMetadataName}
-              defaultMetadataUrl={defaultMetadataUrl}
+              setError={setError}
+              setMetadataUrlValid={setMetadataUrlValid}
             />
-            {!!metadataUrls.length && (
-              <RecentLogins
-                metadataUrls={metadataUrls}
-                deleteCallback={deleteCallback}
-              />
-            )}
+            <RecentLogins
+              errorHandler={errorHandler}
+            />
           </RoundedCenteredDivColumnContent>
         </RoundedCenteredDivColumnWrapper>
       </Row>

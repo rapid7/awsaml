@@ -17,6 +17,7 @@ function InputGroupWithCopyButton(props) {
     value,
     message,
     multiLine,
+    darkMode,
   } = props;
   const [tooltipState, setTooltipState] = useState(false);
 
@@ -44,7 +45,7 @@ function InputGroupWithCopyButton(props) {
       <Button
         onClick={handleTooltipTargetClick}
         id={id}
-        outline
+        outline={!darkMode}
         color="secondary"
       >
         <Tooltip
@@ -70,11 +71,15 @@ InputGroupWithCopyButton.propTypes = {
   multiLine: PropTypes.bool,
   name: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
+  darkMode: PropTypes.bool,
 };
 
 InputGroupWithCopyButton.defaultProps = {
   message: 'Copied!',
   multiLine: false,
+  className: '',
+  inputClassName: '',
+  darkMode: false,
 };
 
 export default InputGroupWithCopyButton;

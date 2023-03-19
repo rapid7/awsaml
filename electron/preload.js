@@ -14,4 +14,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getProfile: (args) => ipcRenderer.invoke('configure:profile:get', args),
   refresh: () => ipcRenderer.invoke('refresh:get'),
   getDarkMode: () => ipcRenderer.invoke('dark-mode:get'),
+  darkModeUpdated: (callback) => ipcRenderer.on('dark-mode:updated', callback),
 });

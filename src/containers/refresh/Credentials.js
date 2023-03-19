@@ -9,6 +9,9 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import InputGroupWithCopyButton from '../components/InputGroupWithCopyButton';
+import {
+  DARK_MODE_AWARE_BORDERLESS_BUTTON,
+} from '../../constants/styles';
 
 const CredProps = styled.dl`
   display: grid;
@@ -33,10 +36,29 @@ const SmallMarginCardBody = styled(CardBody)`
 `;
 
 const BorderlessButton = styled(Button)`
-  border: 0;
+  ${DARK_MODE_AWARE_BORDERLESS_BUTTON}
 `;
 
-function Credentials({ awsAccessKey, awsSecretKey, awsSessionToken }) {
+const DarkModeAwareCard = styled(Card)`
+  @media (prefers-color-scheme: light) {
+    background-color: rgb(249, 249, 249);
+    border-color: #333;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #333;
+    border-color: rgb(249, 249, 249);
+  }
+`;
+
+function Credentials(props) {
+  const {
+    awsAccessKey,
+    awsSecretKey,
+    awsSessionToken,
+    darkMode,
+  } = props;
+
   const [caretDirection, setCaretDirection] = useState('right');
   const [isOpen, setIsOpen] = useState(false);
 
@@ -63,15 +85,16 @@ function Credentials({ awsAccessKey, awsSecretKey, awsSessionToken }) {
     <div>
       <BorderlessButton
         onClick={handleCollapse}
-        outline
+        outline={!darkMode}
         color="link"
       >
         <FontAwesomeIcon icon={['fas', `fa-caret-${caretDirection}`]} />
-        &nbsp;&nbsp;&nbsp;Credentials
+        {'   '}
+        Credentials
       </BorderlessButton>
       <Collapse isOpen={isOpen}>
-        <Card>
-          <SmallMarginCardBody className="bg-light">
+        <DarkModeAwareCard>
+          <SmallMarginCardBody className="bg-transparent">
             <CredProps>
               {
                 Array.from(creds).map(([name, value]) => {
@@ -87,6 +110,7 @@ function Credentials({ awsAccessKey, awsSecretKey, awsSessionToken }) {
                         id={id}
                         name={`input-${id}`}
                         value={value}
+                        darkMode={darkMode}
                       />
                     </CredPropsVal>,
                   ]);
@@ -94,7 +118,7 @@ function Credentials({ awsAccessKey, awsSecretKey, awsSessionToken }) {
               }
             </CredProps>
           </SmallMarginCardBody>
-        </Card>
+        </DarkModeAwareCard>
       </Collapse>
     </div>
   );
@@ -104,6 +128,7 @@ Credentials.propTypes = {
   awsAccessKey: PropTypes.string.isRequired,
   awsSecretKey: PropTypes.string.isRequired,
   awsSessionToken: PropTypes.string.isRequired,
+  darkMode: PropTypes.bool.isRequired,
 };
 
 export default Credentials;

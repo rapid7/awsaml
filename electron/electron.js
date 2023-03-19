@@ -126,6 +126,9 @@ app.on('ready', async () => {
 
   // set up  dark mode handler
   ipcMain.handle('dark-mode:get', () => nativeTheme.shouldUseDarkColors);
+  nativeTheme.on('updated', () => {
+    mainWindow.webContents.send('dark-mode:updated', nativeTheme.shouldUseDarkColors);
+  });
 
   setInterval(() => {
     const entryPointUrl = Server.get('entryPointUrl');
