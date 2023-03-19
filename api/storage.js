@@ -67,6 +67,14 @@ class Storage {
 
     return value;
   }
+
+  delete(key) {
+    this.load();
+    if (key in this.data) {
+      delete this.data[key];
+    }
+    this.save();
+  }
 }
 
 module.exports = (path) => new Storage(path);

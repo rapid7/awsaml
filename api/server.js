@@ -11,21 +11,6 @@ const app = require('./server-config')(auth, config, sessionSecret);
     name: config.auth.path,
     route: require('./routes/auth')(app, auth),
   }, {
-    name: '/configure',
-    route: require('./routes/configure')(app, auth),
-  }, {
-    name: '/logout',
-    route: require('./routes/logout')(app),
-  }, {
-    name: '/refresh',
-    route: require('./routes/refresh')(app),
-  }, {
-    name: '/profile',
-    route: require('./routes/profile')(),
-  }, {
-    name: '/select-role',
-    route: require('./routes/select-role')(),
-  }, {
     name: '/',
     route: require('./routes/static')(),
   },
@@ -34,4 +19,7 @@ const app = require('./server-config')(auth, config, sessionSecret);
 });
 app.all('*', auth.guard);
 
-module.exports = app;
+module.exports = {
+  app,
+  auth,
+};

@@ -13,7 +13,7 @@ module.exports = (auth, config, secret) => {
   app.set('baseUrl', `http://${config.server.host}:${config.server.port}/`);
   app.set('configureUrlRoute', 'configure');
   app.set('refreshUrlRoute', 'refresh');
-  app.use(morgan('dev'));
+  app.use(morgan('[:date[iso]] :method :url :status :response-time ms - :res[content-length]'));
   app.use(cookieParser(secret));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));

@@ -32,14 +32,15 @@ module.exports = {
   },
   rules: {
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
+    'import/no-extraneous-dependencies': ['error', {
+      devDependencies: true,
+    }],
+    'global-require': 0,
   },
   overrides: [
     {
       files: 'api/**/*.js',
       extends: ['plugin:node/recommended'],
-      rules: {
-        'global-require': 0,
-      },
     },
     {
       files: 'test/**/*.js',
@@ -52,7 +53,6 @@ module.exports = {
       },
       rules: {
         'func-names': 0,
-        'global-require': 0,
         'prefer-arrow-callback': 0,
         'max-nested-callbacks': 0,
         'space-before-function-paren': 0,
@@ -66,11 +66,6 @@ module.exports = {
       plugins: [
         'react-hooks',
       ],
-      rules: {
-        'import/no-extraneous-dependencies': 0,
-        'react/require-default-props': 0,
-        'no-console': 0,
-      },
     },
   ],
 };

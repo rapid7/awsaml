@@ -1,21 +1,22 @@
-const electron = require('electron');
-
-const Application = electron.app;
 const {
+  app,
   BrowserWindow,
-  TouchBar,
-} = electron;
+  ipcMain,
+  nativeTheme,
+} = require('electron');
 const path = require('path');
-const Server = require('../api/server');
-const config = require('../api/config.json');
-
-const storagePath = path.join(Application.getPath('userData'), 'data.json');
 const {
-  TouchBarButton,
-  TouchBarGroup,
-  TouchBarPopover,
-  TouchBarSpacer,
-} = TouchBar;
+  app: Server,
+} = require('../api/server');
+const config = require('../api/config.json');
+const {
+  loadTouchBar,
+} = require('./touchbar');
+const {
+  channels,
+} = require('./constants');
+
+const storagePath = path.join(app.getPath('userData'), 'data.json');
 
 global.Storage = require('../api/storage')(storagePath);
 
@@ -25,8 +26,6 @@ const WindowHeight = 800;
 let mainWindow = null;
 
 const baseUrl = process.env.ELECTRON_START_URL || Server.get('baseUrl');
-const configureUrl = path.join(baseUrl, Server.get('configureUrlRoute'));
-const refreshUrl = path.join(baseUrl, Server.get('refreshUrlRoute'));
 
 let storedMetadataUrls = Storage.get('metadataUrls') || [];
 
@@ -42,62 +41,15 @@ if (isPlainObject(storedMetadataUrls)) {
   Storage.set('metadataUrls', storedMetadataUrls);
 }
 
-const buttonForProfileWithUrl = (browserWindow, profile, url) => new TouchBarButton({
-  backgroundColor: '#3B86CE',
-  click: () => {
-    browserWindow.loadURL(configureUrl, {
-      extraHeaders: 'Content-Type: application/x-www-form-urlencoded',
-      postData: [{
-        bytes: Buffer.from(`metadataUrl=${url}&origin=electron`),
-        type: 'rawData',
-      }],
-
-    });
-  },
-  label: profile.replace(/^awsaml-/, ''),
-});
-
-const loadTouchBar = (browserWindow) => {
-  const refreshButton = new TouchBarButton({
-    backgroundColor: '#62ac5b',
-    click: () => {
-      browserWindow.loadURL(refreshUrl);
-    },
-    label: '🔄',
-  });
-
-  const profileButtons = storedMetadataUrls
-    .map((storedMetadataUrl) => (
-      buttonForProfileWithUrl(browserWindow, storedMetadataUrl.name, storedMetadataUrl.url)
-    ));
-  const touchbar = new TouchBar({
-    items: [
-      refreshButton,
-      new TouchBarGroup({
-        items: profileButtons.slice(0, 3),
-      }),
-      new TouchBarSpacer({
-        size: 'flexible',
-      }),
-      new TouchBarPopover({
-        items: profileButtons,
-        label: '👥 More Profiles',
-      }),
-    ],
-  });
-
-  browserWindow.setTouchBar(touchbar);
-};
-
-Application.commandLine.appendSwitch('disable-http-cache');
+app.commandLine.appendSwitch('disable-http-cache');
 // No reason for Awsaml to force Macs to use dedicated gfx
-Application.disableHardwareAcceleration();
+app.disableHardwareAcceleration();
 
-Application.on('window-all-closed', () => {
-  Application.quit();
+app.on('window-all-closed', () => {
+  app.quit();
 });
 
-Application.on('ready', async () => {
+app.on('ready', async () => {
   // eslint-disable-next-line global-require
   require('./menu');
 
@@ -117,12 +69,14 @@ Application.on('ready', async () => {
     };
   }
 
+  Storage.set('session', {});
+
   mainWindow = new BrowserWindow({
     height: lastWindowState.height,
     show: false,
     title: 'Rapid7 - Awsaml',
     webPreferences: {
-      nodeIntegration: false,
+      preload: path.join(__dirname, 'preload.js'),
     },
     width: lastWindowState.width,
     x: lastWindowState.x,
@@ -139,6 +93,8 @@ Application.on('ready', async () => {
       x: bounds.x,
       y: bounds.y,
     });
+
+    Storage.delete('session');
   });
 
   mainWindow.on('closed', () => {
@@ -146,7 +102,7 @@ Application.on('ready', async () => {
   });
 
   if (process.env.NODE_ENV === 'development') {
-    mainWindow.openDevTools();
+    mainWindow.openDevTools({ mode: 'detach' });
   }
 
   mainWindow.on('reset', () => {
@@ -156,16 +112,32 @@ Application.on('ready', async () => {
     });
   });
 
-  mainWindow.webContents.on('did-finish-load', () => loadTouchBar(mainWindow));
+  mainWindow.webContents.on('did-finish-load', () => loadTouchBar(mainWindow, storedMetadataUrls));
 
   mainWindow.emit('reset');
 
+  // set up IPC handlers
+  Object.entries(channels).forEach(([namespace, value = {}]) => {
+    console.log(`loading handlers for ${namespace}`); // eslint-disable-line no-console
+    Object.entries(value).forEach(([channelName, handler]) => {
+      ipcMain.handle(channelName, handler);
+    });
+  });
+
+  // set up  dark mode handler
+  ipcMain.handle('dark-mode:get', () => nativeTheme.shouldUseDarkColors);
+
   setInterval(() => {
     const entryPointUrl = Server.get('entryPointUrl');
+    const lastEntryPointLoad = Server.get('lastEntryPointLoad');
+    const elapsedSinceLastLoad = Date.now() - lastEntryPointLoad;
+    const needLoad = !lastEntryPointLoad
+      || elapsedSinceLastLoad > ((config.aws.duration / 2) * 1000);
 
-    if (entryPointUrl) {
-      console.log('Reloading...'); // eslint-disable-line no-console
+    if (entryPointUrl && needLoad) {
+      console.log('Reloading...', entryPointUrl); // eslint-disable-line no-console
       mainWindow.loadURL(entryPointUrl);
+      Server.set('lastEntryPointLoad', Date.now());
     }
   }, (config.aws.duration / 2) * 1000);
 });
