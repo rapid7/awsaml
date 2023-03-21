@@ -1,11 +1,12 @@
-cask 'awsaml' do
-  version '2.2.2'
-  sha256 'bd314a4960ee4c996733af19cf9f77385625480b61136dd0f53fa91ede65f10e'
+cask "awsaml" do
+  version "2.3.0"
+  sha256 "08aac0225232a9330570176b19651cd6c330841daad06f5e37bae207a5368776"
 
   url "https://github.com/rapid7/awsaml/releases/download/v#{version}/awsaml-v#{version}-darwin-x64.zip"
-  appcast 'https://github.com/rapid7/awsaml/releases.atom'
-  name 'awsaml'
-  homepage 'https://github.com/rapid7/awsaml'
+  name "awsaml"
+  desc "Awsaml is an application for providing automatically rotated temporary AWS credentials."
+  homepage "https://github.com/rapid7/awsaml"
+  appcast "https://github.com/rapid7/awsaml/releases.atom"
 
-  app 'Awsaml.app'
+  app "Awsaml-darwin-x64/Awsaml.app"
 end
