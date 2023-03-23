@@ -5,4 +5,8 @@ module.exports = {
   testMatch: [
     '**/test/**/*.js',
   ],
+  reporters: [
+    'default',
+    ['jest-junit', { outputName: 'test-results.xml' }],
+  ],
 };
