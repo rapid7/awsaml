@@ -21,13 +21,13 @@ function InputGroupWithCopyButton(props) {
   } = props;
   const [tooltipState, setTooltipState] = useState(false);
 
-  const handleTooltipTargetClick = () => {
-    setTooltipState(!tooltipState);
-    navigator.clipboard.writeText(value);
+  const handleTooltipTargetClick = async () => {
+    setTooltipState(true);
+    await window.electronAPI.copy(value);
 
     setTimeout(function () { // eslint-disable-line prefer-arrow-callback, func-names
-      setTooltipState(!tooltipState);
-    }, 1000);
+      setTooltipState(false);
+    }, 3000);
   };
 
   const id = `icon-${idFromProps}`;
