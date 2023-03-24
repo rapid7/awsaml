@@ -8,10 +8,10 @@ const {
   protocol,
   clipboard,
 } = require('electron');
-const { app: Server } = require('../api/server');
-const config = require('../api/config.json');
+const { app: Server } = require('./api/server');
+const config = require('./api/config.json');
 const { loadTouchBar } = require('./touchbar');
-const { channels } = require('./constants');
+const { channels } = require('./containers/index');
 
 // See https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
 // for more details.
@@ -20,7 +20,7 @@ if (require('electron-squirrel-startup')) app.quit();
 const storagePath = path.join(app.getPath('userData'), 'data.json');
 const isDev = process.env.NODE_ENV === 'development';
 
-global.Storage = require('../api/storage')(storagePath);
+global.Storage = require('./api/storage')(storagePath);
 
 const WindowWidth = 800;
 const WindowHeight = 800;
@@ -83,6 +83,7 @@ app.on('ready', async () => {
     height: lastWindowState.height,
     show: false,
     title: 'Rapid7 - Awsaml',
+    icon: 'images/icon.png',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
@@ -114,7 +115,7 @@ app.on('ready', async () => {
   if (isDev) {
     mainWindow.openDevTools({ mode: 'detach' });
   } else {
-    baseUrl = `awsaml://${path.join(__dirname, '/../build/index.html')}`;
+    baseUrl = `awsaml://${path.join(__dirname, '/../../build/index.html')}`;
     Server.set('baseUrl', baseUrl);
   }
 

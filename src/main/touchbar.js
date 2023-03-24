@@ -2,7 +2,7 @@ const {
   TouchBar,
 } = require('electron');
 const path = require('path');
-const { app } = require('../api/server');
+const { app } = require('./api/server');
 
 const {
   TouchBarButton,

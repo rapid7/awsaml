@@ -1,7 +1,7 @@
 const express = require('express');
 const {
   authHandler,
-} = require('../../electron/auth');
+} = require('../../containers/auth');
 
 const router = express.Router();
 

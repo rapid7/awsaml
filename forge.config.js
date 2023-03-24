@@ -8,10 +8,8 @@ const awsaml = require('./package.json');
 const includeFiles = [
   // we need to make sure the project root directory is included
   '',
-  'out',
-  ...globSync('api/**'),
   ...globSync('build/**'),
-  ...globSync('electron/**'),
+  ...globSync('src/**'),
   'LICENSE.md',
   'package.json',
   // per electron-packager's docs, a set of files in the node_modules directory are always ignored
@@ -46,6 +44,8 @@ const config = {
     prune: true,
     ignore: (p) => !includeFiles.includes(p.replace('/', '')),
     name: 'Awsaml',
+    darwinDarkModeSupport: true,
+    icon: 'images/icon',
   },
   rebuildConfig: {},
   hooks: {
@@ -87,6 +87,7 @@ const config = {
         options: {
           homepage: awsaml.repository.url.replace('.git', ''),
           maintainer: awsaml.contributors.join(', '),
+          icon: 'images/icon.png',
         },
       },
     },

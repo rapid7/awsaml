@@ -1,7 +1,7 @@
 import Path from 'path';
 import FS from 'fs';
 import ini from 'ini';
-import AwsCredentials from '../api/aws-credentials';
+import AwsCredentials from '../src/main/api/aws-credentials';
 
 describe('AwsCredentials#saveAsIniFile', () => {
   const awsFolder = Path.resolve(__dirname, '.aws');
