@@ -15,7 +15,14 @@ const { channels } = require('./containers/index');
 
 // See https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
 // for more details.
-if (require('electron-squirrel-startup')) app.quit();
+if (require('electron-squirrel-startup')) {
+  app.quit();
+}
+
+// Bootstrap the updater
+if (app.isPackaged) {
+  require('update-electron-app')();
+}
 
 const storagePath = path.join(app.getPath('userData'), 'data.json');
 const isDev = process.env.NODE_ENV === 'development';
