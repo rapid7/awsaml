@@ -1,16 +1,15 @@
 const path = require('node:path');
-const url = require('node:url');
 const {
   app,
   BrowserWindow,
   ipcMain,
   nativeTheme,
-  protocol,
   clipboard,
 } = require('electron');
 const { app: Server } = require('./api/server');
 const config = require('./api/config.json');
 const { loadTouchBar } = require('./touchbar');
+const protocol = require('./protocol');
 const { channels } = require('./containers/index');
 
 // See https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
@@ -24,21 +23,18 @@ if (app.isPackaged) {
   require('update-electron-app')();
 }
 
+const isPlainObject = (value) => Object.prototype.toString.call(value) === '[object Object]';
 const storagePath = path.join(app.getPath('userData'), 'data.json');
 const isDev = process.env.NODE_ENV === 'development';
-
-global.Storage = require('./api/storage')(storagePath);
-
 const WindowWidth = 800;
 const WindowHeight = 800;
 
 let mainWindow = null;
-
 let baseUrl = process.env.ELECTRON_START_URL || Server.get('baseUrl');
 
-let storedMetadataUrls = Storage.get('metadataUrls') || [];
+global.Storage = require('./api/storage')(storagePath);
 
-const isPlainObject = (value) => Object.prototype.toString.call(value) === '[object Object]';
+let storedMetadataUrls = Storage.get('metadataUrls') || [];
 
 // Migrate from old metadata url storage schema to new one
 if (isPlainObject(storedMetadataUrls)) {
@@ -50,6 +46,7 @@ if (isPlainObject(storedMetadataUrls)) {
   Storage.set('metadataUrls', storedMetadataUrls);
 }
 
+// Disable cache
 app.commandLine.appendSwitch('disable-http-cache');
 // No reason for Awsaml to force Macs to use dedicated gfx
 app.disableHardwareAcceleration();
@@ -58,31 +55,27 @@ app.on('window-all-closed', () => {
   app.quit();
 });
 
+let lastWindowState = Storage.get('lastWindowState');
+
+if (lastWindowState === null) {
+  lastWindowState = {
+    height: WindowHeight,
+    width: WindowWidth,
+  };
+}
+
 app.on('ready', async () => {
   // eslint-disable-next-line global-require
   require('./menu');
 
-  // register a custom protocol so we can redirect from the webserver that handles SSO to our UI
-  protocol.registerFileProtocol('awsaml', (request, callback) => {
-    const filePath = url.fileURLToPath(`file://${request.url.slice('awsaml://'.length)}`);
-    callback(filePath);
-  });
+  protocol.registerHandlers();
 
   const host = Server.get('host');
   const port = Server.get('port');
 
   Server.listen(port, host, () => {
-    console.log('Server listening on http://%s:%s', host, port); // eslint-disable-line no-console
+    console.log(`Server listening on ${host}:${port}`); // eslint-disable-line no-console
   });
-
-  let lastWindowState = Storage.get('lastWindowState');
-
-  if (lastWindowState === null) {
-    lastWindowState = {
-      height: WindowHeight,
-      width: WindowWidth,
-    };
-  }
 
   Storage.set('session', {});
 
@@ -126,16 +119,13 @@ app.on('ready', async () => {
     Server.set('baseUrl', baseUrl);
   }
 
-  mainWindow.on('reset', () => {
-    setImmediate(() => {
-      mainWindow.loadURL(baseUrl);
-      mainWindow.show();
-    });
+  await mainWindow.loadURL(baseUrl);
+
+  mainWindow.on('ready-to-show', () => {
+    mainWindow.show();
   });
 
   mainWindow.webContents.on('did-finish-load', () => loadTouchBar(mainWindow, storedMetadataUrls));
-
-  mainWindow.emit('reset');
 
   // set up IPC handlers
   Object.entries(channels).forEach(([namespace, value = {}]) => {
