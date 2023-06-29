@@ -1,4 +1,4 @@
-const url = require('url');
+const url = require('node:url');
 
 function authHandler(app) {
   return async (req, res) => {

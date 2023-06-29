@@ -1,4 +1,4 @@
-const https = require('https');
+const https = require('node:https');
 const { v4: uuidv4 } = require('uuid');
 const { DOMParser } = require('@xmldom/xmldom');
 const xpath = require('xpath.js');

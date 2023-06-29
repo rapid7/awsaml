@@ -1,6 +1,6 @@
 const ini = require('ini');
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
 class AwsCredentials {
   save(credentials, profile, done, region) {

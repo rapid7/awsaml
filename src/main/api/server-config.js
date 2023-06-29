@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require('node:path');
 const express = require('express');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
@@ -25,6 +25,7 @@ module.exports = (auth, config, secret) => {
   app.use(auth.initialize());
   app.use(auth.session());
   app.use(express.static(path.join(__dirname, '..', 'build')));
+
   if (process.env.NODE_ENV === 'development') {
     app.use((req, res, next) => {
       res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
