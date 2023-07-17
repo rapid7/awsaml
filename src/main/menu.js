@@ -1,10 +1,27 @@
 const {
   Menu,
   app,
+  autoUpdater,
 } = require('electron');
+const packageJson = require('../../package.json');
 
+const d = new Date();
 const isMac = process.platform === 'darwin';
 const name = 'Awsaml';
+const padAndreplaceEmail = (el) => `${' '.repeat(25)}${el.replace(/<([^;]*)>/, '').trim()}`;
+const contributors = [
+  ...packageJson.contributors.map(padAndreplaceEmail),
+  '\nSpecial thanks to:\n',
+  ...packageJson.thanks.map(padAndreplaceEmail),
+  '\n',
+].join('\n');
+
+app.setAboutPanelOptions({
+  applicationName: name,
+  applicationVersion: packageJson.version,
+  copyright: `Copyright (c) Rapid7 ${d.getFullYear()} (${packageJson.license})`,
+  [isMac ? 'credits' : 'authors']: contributors,
+});
 
 const template = [
   ...(isMac ? [{
@@ -12,6 +29,13 @@ const template = [
     submenu: [{
       label: `About ${name}`,
       role: 'about',
+    }, {
+      label: 'Check For Updates...',
+      click: () => {
+        if (app.isPackaged) {
+          autoUpdater.checkForUpdates();
+        }
+      },
     }, {
       type: 'separator',
     }, {
