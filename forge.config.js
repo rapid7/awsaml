@@ -5,10 +5,9 @@ const exec = util.promisify(require('node:child_process').exec);
 const { globSync } = require('glob');
 const awsaml = require('./package.json');
 
-const includeFiles = [
+let includeFiles = [
   // we need to make sure the project root directory is included
   '',
-  ...globSync('build/**'),
   ...globSync('src/**'),
   'LICENSE.md',
   'package.json',
@@ -59,6 +58,11 @@ const config = {
       }
 
       await exec('yarn react-build');
+      // Update the files we want to include with generated build artifacts
+      includeFiles = [
+        ...includeFiles,
+        ...globSync('build/**'),
+      ];
     },
     prePackage: () => {
       // Clear the out directory if it exists
