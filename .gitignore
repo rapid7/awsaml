@@ -10,6 +10,7 @@
 
 # production
 /build
+/out
 /dist
 
 # misc
@@ -30,3 +31,4 @@ yarn-error.log*
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+test-results.xml

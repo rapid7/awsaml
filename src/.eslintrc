@@ -1,4 +1,0 @@
-{
-  "parser": "babel-eslint",
-  "extends": ["rapid7/browser", "rapid7/react"]
-}

@@ -1,4 +1,5 @@
 # Awsaml
+
 [![Build Status](https://api.travis-ci.org/rapid7/awsaml.svg?branch=master)](https://travis-ci.org/rapid7/awsaml) [![Coverage Status](https://coveralls.io/repos/github/rapid7/awsaml/badge.svg?branch=master)](https://coveralls.io/github/rapid7/awsaml?branch=master)
 
 Awsaml is an application for providing automatically rotated temporary [AWS][]
@@ -18,10 +19,9 @@ while the application's running. Awsaml reuses the SAML response from the
 identity provider, so the user doesn't need to reauthenticate every time.
 
 You can grab prebuilt binaries for Mac, Linux, and Window from [the releases page][releases].
-Awsaml is current pre-release software. Back up your `~/.aws/credentials` file
-before using it, please.
 
 ## Configuration
+
 Configuring Awsaml is a multi-step process that involves a bit of back and forth
 between Amazon and your identity provider. The general flow looks like this
 
@@ -32,6 +32,7 @@ between Amazon and your identity provider. The general flow looks like this
 5. Run Awsaml and give it your application's metadata.
 
 ### 1. Create a SAML application in your identity provider
+
 The only tested identity provider is [Okta][]. To use Awsaml with Okta, you'll
 need to create a SAML 2.0 application in Okta with the following settings
 
@@ -75,6 +76,7 @@ You should do two things with this url:
    supply that file when you create an identity provider in AWS.
 
 #### A note on naming things (if you are using Okta)
+
 In the next two steps, you will create and name an identity provider and a role.
 Be sure to choose short names (fewer than 28 characters between the two).
 
@@ -103,6 +105,7 @@ The `IDENTITY_PROVIDER_ARN` will be in this format:
 ```
 arn:aws:iam::{ACCOUNT_ID}:saml-provider/{PROVIDER_NAME}
 ```
+
 Where the `ACCOUNT_ID` is 12 digits long, and the `PROVIDER_NAME` is as long as
 you want it to be.
 
@@ -117,6 +120,7 @@ As a consequence, between the name you give to the identity provider and the nam
 you give to the role, you can only use up to 28 characters.
 
 ### 2. Create a SAML identity provider in AWS
+
 Follow [Amazon's documentation for creating a SAML identity provider][saml-provider],
 in which you will need to upload the metadata document you downloaded in the
 previous step.
@@ -125,6 +129,7 @@ Save the ARN for your identity provider so you can configure it in your
 application.
 
 ### 3. Create an IAM role in AWS
+
 Follow [Amazon's documentation for creating an IAM role][iam-role] with the
 following modifications:
 
@@ -145,7 +150,7 @@ between your role and the SAML identity provider you created. If not, you will
 need to set up a trust relationship between it and your SAML identity provider
 manually. Here's an example of the JSON policy document for that relationship.
 
-~~~json
+```json
 {
   "Version": "2012-10-17",
   "Statement": [{
@@ -162,7 +167,7 @@ manually. Here's an example of the JSON policy document for that relationship.
     }
   }]
 }
-~~~
+```
 
 Replace the "issuer" value for the "SAML:iss" key in the policy document with
 the issuer URL for your application. Replace the "arn:aws:iam:saml-provider"
@@ -172,6 +177,7 @@ SAML identity provider.
 Save the ARN for the role so you can configure it in your application.
 
 ### 4. Update the SAML application with ARNs
+
 Now that you have ARNs for the AWS identity provider and role, you can go back
 into Okta and add them to your application. Edit your application to include the
 following attributes.
@@ -189,6 +195,7 @@ provider in AWS your created.
 
 
 ##### Multiple Role Support
+
 To support multiple roles, add multiple values to the `https://aws.amazon.com/SAML/Attributes/Role`
 attribute.  For example:
 
@@ -205,7 +212,8 @@ To support multiple roles, you must contact Okta support and request that the
 see [this post](https://devforum.okta.com/t/multivalued-attributes/179).
 
 
-### 5. Run Awsaml and give it your application's metadata.
+### 5. Run Awsaml and give it your application's metadata
+
 You can find a prebuilt binary for Awsaml on [the releases page][releases]. Grab
 the appropriate binary for your architecture and run the Awsaml application. It
 will prompt you for a SAML metadata URL. Enter the URL you saved in step 1. If
@@ -213,38 +221,52 @@ the URL's valid, it will prompt you to log in to your identity provider. If the
 login's successful, you'll see temporary AWS credentials in the UI.
 
 ## Building
-Awsaml is built using [Node][] and [Yarn][], so
-make sure you've got a compatible versions installed. Then run Yarn to install
-dependencies and build Awsaml.
 
-~~~bash
+Awsaml is built using [Node][] and [Yarn 3][], so
+make sure you've got a compatible versions installed. Then run Yarn to install dependencies and build Awsaml.
+
+```bash
 rm -rf node_modules/
 yarn install
 yarn build
-~~~
+```
 
-Those commands will create a "dist" folder with zipped binaries. If you only want
-to create binaries for specific platforms, you can set a `PLATFORM` environment
+Those commands will create a "out" folder with zipped binaries. If you only want to create binaries for specific platforms, you can set a `PLATFORM` environment
 variable before building.
 
-~~~bash
+```bash
 export PLATFORM=linux
 yarn build
-~~~
+```
 
 Allowed values for `PLATFORM` are `darwin`, `linux` and `win32`. You can build
 binaries for multiple platforms by using a comma separated list.
 
-~~~bash
+```bash
 export PLATFORM=darwin,linux
 yarn build
-~~~
+```
+
+Similarly, if you want to
+specify the build architecture, you can set a `ARCH`
+environment variable before building.
+
+```bash
+export ARCH=universal
+export PLATFORM=darwin
+yarn build
+```
+
+Supported architectures are `ia32`, `x64` , `armv7l`,
+`arm64`, `mips64el`, `universal`, or `all`.
 
 ## Setup on macOS with Homebrew
+
 A caskfile is bundled with the repository, to install Awsaml with [Homebrew][] simply run:
 
 `wget https://raw.githubusercontent.com/rapid7/awsaml/master/brew/cask/awsaml.rb`
 `brew install --cask awsaml.rb`
+
 There might be an error and warning prompt but it should start succesfully downloading right after
 When download is succesfully installed, a `awsaml was successfully installed!` prompt is displayed
 
@@ -253,13 +275,17 @@ When download is succesfully installed, a `awsaml was successfully installed!` p
 Awsaml is licensed under a MIT License. See the "LICENSE.md" file for more
 details.
 
+## Special Thanks
+
+* [Tristan Harward] for the app icon.
 
 [AWS]: https://aws.amazon.com
 [AssumeRoleWithSAML]: http://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoleWithSAML.html
 [releases]: https://github.com/rapid7/awsaml/releases
 [Okta]: https://www.okta.com
 [Node]: https://nodejs.org
-[Yarn]: https://yarnpkg.com
+[Yarn 3]: https://yarnpkg.com
 [saml-provider]: http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_saml.html
 [iam-role]: http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp_saml.html
 [Homebrew]: http://brew.sh/
+[Tristan Harward]: https://github.com/trisweb
