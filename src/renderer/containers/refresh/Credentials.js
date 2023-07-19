@@ -25,6 +25,14 @@ const CredPropsKey = styled.dt`
   margin-right: 1rem;
   margin-bottom: 10px;
   line-height: 2.5rem;
+
+  @media (prefers-color-scheme: light) {
+    color: #333;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    color: rgb(249, 249, 249);
+  }
 `;
 
 const CredPropsVal = styled.dd`
