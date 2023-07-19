@@ -1,6 +1,10 @@
 name: Lint and Test
 
-on: [pull_request]
+on:
+  push:
+    branches:
+      - 'master'
+  pull_request: {}
 
 jobs:
   test:
@@ -24,3 +28,5 @@ jobs:
       run: yarn lint
     - name: Unit Tests
       run: yarn test
+    - name: Coverage
+      run: yarn report
