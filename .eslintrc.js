@@ -21,6 +21,7 @@ module.exports = {
     __dirname: true,
     console: true,
     Storage: true,
+    Manager: true,
   },
   parser: '@babel/eslint-parser',
   parserOptions: {
