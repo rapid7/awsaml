@@ -7,7 +7,7 @@ async function logout() {
   const profileName = `awsaml-${session.accountId}`;
   const reloader = Manager.get(profileName);
   reloader.stop();
-  Manager.removeByReloader(reloader)
+  Manager.removeByReloader(reloader);
 
   Storage.set('session', {});
   app.set('entryPointUrl', null);

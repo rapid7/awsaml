@@ -1,7 +1,9 @@
 class Reloader {
   intervalId = null;
 
-  constructor({ name, callback, interval, role=null }) {
+  constructor({
+    name, callback, interval, role = null,
+  }) {
     this.name = name;
     this.callback = callback;
     this.interval = interval;
@@ -35,4 +37,3 @@ class Reloader {
 }
 
 module.exports = Reloader;
-

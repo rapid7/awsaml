@@ -97,7 +97,7 @@ app.on('ready', async () => {
   mainWindow.on('close', () => {
     const bounds = mainWindow.getBounds();
 
-    Storage.delete('manager')
+    Storage.delete('manager');
     Storage.set('lastWindowState', {
       height: bounds.height,
       version: 1,
@@ -148,5 +148,4 @@ app.on('ready', async () => {
   ipcMain.handle('copy', async (event, value) => {
     clipboard.writeText(value);
   });
-
 });

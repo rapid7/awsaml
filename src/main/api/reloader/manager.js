@@ -19,4 +19,3 @@ class ReloadManager {
 }
 
 module.exports = () => new ReloadManager();
-

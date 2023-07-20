@@ -1,46 +1,16 @@
 const { STSClient, AssumeRoleWithSAMLCommand } = require('@aws-sdk/client-sts');
+const { webContents } = require('electron');
 const config = require('../api/config.json');
 const AwsCredentials = require('../api/aws-credentials');
 const ResponseObj = require('../api/response');
-const Reloader = require("../api/reloader/reloader");
-const { webContents }= require('electron');
+const Reloader = require('../api/reloader/reloader');
 const {
   app,
 } = require('../api/server');
 
 const credentials = new AwsCredentials();
 
-async function refresh() {
-  const session = Storage.get('session');
-  const wc = webContents.getFocusedWebContents();
-
-  if (session === undefined) {
-    return {
-      error: 'Invalid session',
-      logout: true,
-    };
-  }
-  const profileName = `awsaml-${session.accountId}`;
-
-
-  let r = Manager.get(profileName);
-  if (!r) {
-    r = new Reloader ( {
-      name: profileName,
-      callback: async function () {
-        await refresh_callback(profileName, session, wc);
-      },
-      interval: (config.aws.duration / 2) * 1000,
-    });
-    Manager.add(r);
-    r.start();
-  } else {
-    r.restart();
-  }
-  return await refresh_callback(profileName, session, wc);
-}
-
-async function refresh_callback(profileName, session, wc) {
+async function refreshCallback(profileName, session, wc) {
   const refreshResponseObj = {
     ...ResponseObj,
     accountId: session.accountId,
@@ -115,6 +85,35 @@ async function refresh_callback(profileName, session, wc) {
 
   wc.send('reloadUi', credentialResponseObj);
   return credentialResponseObj;
+}
+
+async function refresh() {
+  const session = Storage.get('session');
+  const wc = webContents.getFocusedWebContents();
+
+  if (session === undefined) {
+    return {
+      error: 'Invalid session',
+      logout: true,
+    };
+  }
+  const profileName = `awsaml-${session.accountId}`;
+
+  let r = Manager.get(profileName);
+  if (!r) {
+    r = new Reloader({
+      name: profileName,
+      async callback() {
+        await refreshCallback(profileName, session, wc);
+      },
+      interval: (config.aws.duration / 2) * 1000,
+    });
+    Manager.add(r);
+    r.start();
+  } else {
+    r.restart();
+  }
+  return refreshCallback(profileName, session, wc);
 }
 
 module.exports = {
