@@ -14,6 +14,7 @@ function registerSchemas() {
     privileges: { supportFetchAPI: true },
   }]);
 }
+
 function registerHandlers() {
   protocol.handle('awsaml', (request) => {
     const prefix = 'awsaml://'.length;
@@ -22,38 +23,39 @@ function registerHandlers() {
   });
 
   protocol.handle('jit', async (request) => {
-    let sessionId;
     const { host, pathname } = new URL(request.url);
     if (host === 'get-active-profiles') {
       const activeProfiles = Object.values(Manager.reloaders).map((r) => r.role);
       return new Response(JSON.stringify({ activeProfiles }));
     }
-    return session.defaultSession.cookies.get({})
-      .then(async (cookies) => {
-        sessionId = cookies.find((cookie) => cookie.name === 'session_id');
-        const body = await request.body.getReader().read();
-        const reqBody = JSON.parse(Buffer.from(body.value).toString());
-        const profile = {
-          ...reqBody,
-          roleName: reqBody.roleArn.split('/')[1],
-          header: {
-            'X-Auth-Token': sessionId.value,
-          },
-          apiUri: `https://${host}${pathname}`,
-          showRole: false,
-        };
-        const data = await refreshJit(profile);
-        const activeProfiles = Object.values(Manager.reloaders).map((r) => r.role);
-        data.activeProfiles = activeProfiles;
-        return new Response(JSON.stringify(data));
-      })
-      .catch((err) => {
-        const body = JSON.stringify({
-          error_message: err?.message || 'unknown',
-          error_type: err?.error_type || 'unknown',
-        });
-        return new Response(body, { status: 500 });
+    const cookies = await session.defaultSession.cookies.get({});
+    const sessionId = cookies.find((cookie) => cookie.name === 'session_id');
+    const body = await request.body.getReader().read();
+    const reqBody = JSON.parse(Buffer.from(body.value).toString());
+    const profile = {
+      ...reqBody,
+      roleName: reqBody.roleArn.split('/')[1],
+      header: {
+        'X-Auth-Token': sessionId.value,
+      },
+      apiUri: `https://${host}${pathname}`,
+      showRole: false,
+    };
+
+    let data;
+    try {
+      data = await refreshJit(profile);
+    } catch (err) {
+      const errBody = JSON.stringify({
+        error_message: err?.message || 'unknown',
+        error_type: err?.error_type || 'unknown',
       });
+      return new Response(errBody, { status: 500 });
+    }
+
+    const activeProfiles = Object.values(Manager.reloaders).map((r) => r.role);
+    data.activeProfiles = activeProfiles;
+    return new Response(JSON.stringify(data));
   });
 }
 

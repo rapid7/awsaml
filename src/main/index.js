@@ -22,8 +22,6 @@ if (app.isPackaged) {
   require('update-electron-app')();
 }
 
-protocol.registerSchemas();
-
 const isPlainObject = (value) => Object.prototype.toString.call(value) === '[object Object]';
 const storagePath = path.join(app.getPath('userData'), 'data.json');
 const isDev = process.env.NODE_ENV === 'development';
@@ -66,6 +64,8 @@ if (lastWindowState === null) {
   };
 }
 
+protocol.registerSchemas();
+
 app.on('ready', async () => {
   // eslint-disable-next-line global-require
   require('./menu');
@@ -97,7 +97,6 @@ app.on('ready', async () => {
   mainWindow.on('close', () => {
     const bounds = mainWindow.getBounds();
 
-    Storage.delete('manager');
     Storage.set('lastWindowState', {
       height: bounds.height,
       version: 1,

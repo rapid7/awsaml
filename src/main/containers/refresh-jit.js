@@ -14,17 +14,19 @@ async function refreshJitCallback(profileName, session) {
   };
 
   let creds = {};
-  await fetch(session.apiUri, {
+  const response = await fetch(session.apiUri, {
     method: 'GET',
     headers: session.header,
-  }).then(async (response) => {
-    if (response.ok) {
-      creds = await response.json();
-    } else {
-      Manager.removeByName(profileName);
-      throw new Error('Unable to retrieve credentials from Divvy');
-    }
+  }).catch((err) => {
+    console.error(err);
+    throw new Error('AWSAML is unable to fetch credentials from ICS');
   });
+  if (response.ok) {
+    creds = response.json();
+  } else {
+    Manager.removeByName(profileName);
+    throw new Error('An error occurred while fetching credentials from ICS');
+  }
 
   const credentialResponseObj = {
     ...refreshResponseObj,
@@ -46,7 +48,7 @@ async function refreshJitCallback(profileName, session) {
   return credentialResponseObj;
 }
 
-async function refreshJit(session = null) {
+async function refreshJit(session) {
   const profileName = `awsaml-${session.accountId}`;
   let r = Manager.get(profileName);
 
