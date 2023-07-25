@@ -14,7 +14,7 @@ async function refreshJitCallback(profileName, session) {
   };
 
   let creds = {};
-  await fetch(session.apiUri.replace('localhost', '127.0.0.1'), {
+  await fetch(session.apiUri, {
     method: 'GET',
     headers: session.header,
   }).then(async (response) => {

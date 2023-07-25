@@ -24,30 +24,41 @@ function registerHandlers() {
   protocol.handle('jit', async (request) => {
     let sessionId;
     const { host, pathname } = new URL(request.url);
-    return session.defaultSession.cookies.get({})
-      .then(async (cookies) => {
-        sessionId = cookies.find((cookie) => cookie.name === 'session_id');
-        const body = await request.body.getReader().read();
-        const reqBody = JSON.parse(Buffer.from(body.value).toString());
-        const profile = {
-          ...reqBody,
-          roleName: reqBody.roleArn.split('/')[1],
-          header: {
-            'X-Auth-Token': sessionId.value,
-          },
-          apiUri: `http://${host}${pathname}`,
-          showRole: false,
-        };
-        const data = await refreshJit(profile);
-        return new Response(JSON.stringify(data));
+    if (host === 'get-active-profiles') {
+      const activeProfiles = Object.values(Manager.reloaders).map(function(r){
+        return r.role;
       })
-      .catch((err) => {
-        const body = JSON.stringify({
-          error_message: err?.message || 'unknown',
-          error_type: err?.error_type || 'unknown',
-        });
-        return new Response(body, { status: 500 });
-      });
+      return new Response(JSON.stringify({activeProfiles: activeProfiles}));
+    } else {
+      return session.defaultSession.cookies.get({})
+          .then(async (cookies) => {
+            sessionId = cookies.find((cookie) => cookie.name === 'session_id');
+            const body = await request.body.getReader().read();
+            const reqBody = JSON.parse(Buffer.from(body.value).toString());
+            const profile = {
+              ...reqBody,
+              roleName: reqBody.roleArn.split('/')[1],
+              header: {
+                'X-Auth-Token': sessionId.value,
+              },
+              apiUri: `https://${host}${pathname}`,
+              showRole: false,
+            };
+            const data = await refreshJit(profile);
+            const activeProfiles = Object.values(Manager.reloaders).map(function (r) {
+              return r.role;
+            })
+            data.activeProfiles = activeProfiles;
+            return new Response(JSON.stringify(data));
+          })
+          .catch((err) => {
+            const body = JSON.stringify({
+              error_message: err?.message || 'unknown',
+              error_type: err?.error_type || 'unknown',
+            });
+            return new Response(body, {status: 500});
+          });
+    }
   });
 }
 
