@@ -28,15 +28,15 @@ function registerHandlers() {
       const activeProfiles = Object.values(Manager.reloaders).map((r) => r.role);
       return new Response(JSON.stringify({ activeProfiles }));
     }
-    const cookies = await session.defaultSession.cookies.get({});
-    const sessionId = cookies.find((cookie) => cookie.name === 'session_id');
+
+    const sessionId = await session.defaultSession.cookies.get({ name: 'session_id', domain: host });
     const body = await request.body.getReader().read();
     const reqBody = JSON.parse(Buffer.from(body.value).toString());
     const profile = {
       ...reqBody,
       roleName: reqBody.roleArn.split('/')[1],
       header: {
-        'X-Auth-Token': sessionId.value,
+        'X-Auth-Token': sessionId[0].value,
       },
       apiUri: `https://${host}${pathname}`,
       showRole: false,
