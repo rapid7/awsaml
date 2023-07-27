@@ -1,25 +1,16 @@
 const { STSClient, AssumeRoleWithSAMLCommand } = require('@aws-sdk/client-sts');
+const { webContents } = require('electron');
 const config = require('../api/config.json');
 const AwsCredentials = require('../api/aws-credentials');
 const ResponseObj = require('../api/response');
+const Reloader = require('../api/reloader/reloader');
 const {
   app,
 } = require('../api/server');
 
 const credentials = new AwsCredentials();
 
-async function refresh() {
-  const session = Storage.get('session');
-
-  if (session === undefined) {
-    return {
-      error: 'Invalid session',
-      logout: true,
-    };
-  }
-
-  const region = session.roleArn.includes('aws-us-gov') ? 'us-gov-west-1' : 'us-east-1';
-
+async function refreshCallback(profileName, session, wc) {
   const refreshResponseObj = {
     ...ResponseObj,
     accountId: session.accountId,
@@ -27,6 +18,7 @@ async function refresh() {
     showRole: session.showRole,
   };
 
+  const region = session.roleArn.includes('aws-us-gov') ? 'us-gov-west-1' : 'us-east-1';
   const client = new STSClient({ region });
 
   const input = {
@@ -56,7 +48,6 @@ async function refresh() {
     expiration: data.Credentials.Expiration,
   };
 
-  const profileName = `awsaml-${session.accountId}`;
   const metadataUrl = app.get('metadataUrl');
 
   // Update the stored profile with account number(s) and profile names
@@ -81,7 +72,6 @@ async function refresh() {
 
   // Fetch the metadata profile name for this URL
   const profile = metadataUrls.find((metadata) => metadata.url === metadataUrl);
-
   credentialResponseObj.profileName = profile.name;
 
   try {
@@ -93,7 +83,37 @@ async function refresh() {
     };
   }
 
+  wc.send('reloadUi', credentialResponseObj);
   return credentialResponseObj;
+}
+
+async function refresh() {
+  const session = Storage.get('session');
+  const wc = webContents.getFocusedWebContents();
+
+  if (session === undefined) {
+    return {
+      error: 'Invalid session',
+      logout: true,
+    };
+  }
+  const profileName = `awsaml-${session.accountId}`;
+
+  let r = Manager.get(profileName);
+  if (!r) {
+    r = new Reloader({
+      name: profileName,
+      async callback() {
+        await refreshCallback(profileName, session, wc);
+      },
+      interval: (config.aws.duration / 2) * 1000,
+    });
+    Manager.add(r);
+    r.start();
+  } else {
+    r.restart();
+  }
+  return refreshCallback(profileName, session, wc);
 }
 
 module.exports = {

@@ -170,14 +170,16 @@ function Refresh() {
         window.location.href = data.redirect;
       }
 
-      getSuccessCallback(data);
-
       const dm = await window.electronAPI.getDarkMode();
       setDarkMode(dm);
     })();
 
     window.electronAPI.darkModeUpdated((event, value) => {
       setDarkMode(value);
+    });
+
+    window.electronAPI.reloadUi((event, value) => {
+      getSuccessCallback(value);
     });
 
     return () => {};
@@ -194,10 +196,7 @@ function Refresh() {
 
     if (data.logout) {
       setStatus(data.logout);
-      return;
     }
-
-    getSuccessCallback(data);
   };
 
   const handleCollapse = () => {

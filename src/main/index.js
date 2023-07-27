@@ -7,7 +7,6 @@ const {
   clipboard,
 } = require('electron');
 const { app: Server } = require('./api/server');
-const config = require('./api/config.json');
 const { loadTouchBar } = require('./touchbar');
 const protocol = require('./protocol');
 const { channels } = require('./containers/index');
@@ -33,6 +32,7 @@ let mainWindow = null;
 let baseUrl = process.env.ELECTRON_START_URL || Server.get('baseUrl');
 
 global.Storage = require('./api/storage')(storagePath);
+global.Manager = require('./api/reloader/manager')();
 
 let storedMetadataUrls = Storage.get('metadataUrls') || [];
 
@@ -63,6 +63,8 @@ if (lastWindowState === null) {
     width: WindowWidth,
   };
 }
+
+protocol.registerSchemas();
 
 app.on('ready', async () => {
   // eslint-disable-next-line global-require
@@ -145,18 +147,4 @@ app.on('ready', async () => {
   ipcMain.handle('copy', async (event, value) => {
     clipboard.writeText(value);
   });
-
-  setInterval(() => {
-    const entryPointUrl = Server.get('entryPointUrl');
-    const lastEntryPointLoad = Server.get('lastEntryPointLoad');
-    const elapsedSinceLastLoad = Date.now() - lastEntryPointLoad;
-    const needLoad = !lastEntryPointLoad
-      || elapsedSinceLastLoad > ((config.aws.duration / 2) * 1000);
-
-    if (entryPointUrl && needLoad) {
-      console.log('Reloading...', entryPointUrl); // eslint-disable-line no-console
-      mainWindow.loadURL(entryPointUrl);
-      Server.set('lastEntryPointLoad', Date.now());
-    }
-  }, (config.aws.duration / 2) * 1000);
 });
