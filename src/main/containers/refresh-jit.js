@@ -14,14 +14,18 @@ async function refreshJitCallback(profileName, session) {
   };
 
   let creds = {};
-  const response = await fetch(session.apiUri, {
-    method: 'GET',
-    headers: session.header,
-  }).catch((err) => {
+  let response;
+  try {
+    response = await fetch(session.apiUri, {
+      method: 'GET',
+      headers: session.header,
+    })
+  } catch(err) {
     console.error(err);
     Manager.removeByName(profileName);
     throw new Error('AWSAML is unable to fetch credentials from ICS');
-  });
+  }
+
   if (response.ok) {
     creds = await response.json();
   } else {
