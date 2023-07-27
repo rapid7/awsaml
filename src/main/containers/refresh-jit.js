@@ -19,8 +19,8 @@ async function refreshJitCallback(profileName, session) {
     response = await fetch(session.apiUri, {
       method: 'GET',
       headers: session.header,
-    })
-  } catch(err) {
+    });
+  } catch (err) {
     console.error(err);
     Manager.removeByName(profileName);
     throw new Error('AWSAML is unable to fetch credentials from ICS');
