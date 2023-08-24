@@ -29,7 +29,7 @@ function registerHandlers() {
       return new Response(JSON.stringify({ activeProfiles }));
     }
 
-    const sessionId = await session.defaultSession.cookies.get({ name: 'session_id', domain: host });
+    const sessionId = await session.defaultSession.cookies.get({ name: 'session_id'});
     const body = await request.body.getReader().read();
     const reqBody = JSON.parse(Buffer.from(body.value).toString());
     const profile = {
