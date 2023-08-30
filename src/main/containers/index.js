@@ -1,5 +1,6 @@
 const {
   getMetadataUrls,
+  setMetadataUrls,
   getDefaultMetadata,
   login,
   isAuthenticated,
@@ -25,6 +26,7 @@ module.exports = {
   channels: {
     configure: {
       'configure:metadataUrls:get': getMetadataUrls,
+      'configure:metadataUrls:set': setMetadataUrls,
       'configure:defaultMetadata:get': getDefaultMetadata,
       'configure:profile:delete': deleteProfile,
       'configure:profile:get': getProfile,

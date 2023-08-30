@@ -37,6 +37,10 @@ async function getMetadataUrls() {
   return storedMetadataUrls;
 }
 
+async function setMetadataUrls(event, metadataUrls) {
+  Storage.set('metadataUrls', metadataUrls);
+}
+
 async function getDefaultMetadata() {
   const storedMetadataUrls = (Storage.get('metadataUrls') || []);
 
@@ -278,6 +282,7 @@ async function hasMultipleRoles() {
 
 module.exports = {
   getMetadataUrls,
+  setMetadataUrls,
   getDefaultMetadata,
   login,
   deleteProfile,

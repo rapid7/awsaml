@@ -1,17 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {
-  ListGroup,
   Input,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Login from './Login';
-
-const ScrollableListGroup = styled(ListGroup)`
-  overflow-x: hidden;
-  height: 300px;
-`;
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import LoginList from './LoginList';
 
 const RecentLoginsHeader = styled.h4`
   border-top: 2px solid rgb(203, 203, 203);
@@ -88,11 +84,16 @@ function RecentLogins(props) {
   // eslint-disable-next-line max-len
   const handleFilterInputChange = ({ currentTarget: { value: ft } }) => setFilterText(ft);
 
-  const deleteCallback = (deleted) => {
+  const deleteCallback = useCallback((deleted) => {
     const updatedMetadataUrls = metadataUrls
       .filter((metadataUrl) => metadataUrl.profileUuid !== deleted.profileUuid);
     setMetadataUrls(updatedMetadataUrls);
-  };
+  }, [metadataUrls]);
+
+  const reorderCallback = useCallback((updatedMetadataUrls) => {
+    setMetadataUrls(updatedMetadataUrls);
+    window.electronAPI.setMetadataUrls(updatedMetadataUrls);
+  }, []);
 
   const filteredMetadataUrls = filterMetadataUrls(metadataUrls, filterText);
 
@@ -109,19 +110,15 @@ function RecentLogins(props) {
           icon={['fas', 'search']}
         />
       </SearchContainer>
-      <ScrollableListGroup>
-        {filteredMetadataUrls ? filteredMetadataUrls.map(({ url, name, profileUuid }) => (
-          <Login
-            deleteCallback={deleteCallback}
-            errorHandler={errorHandler}
-            key={url}
-            pretty={name}
-            profileUuid={profileUuid}
-            url={url}
-            darkMode={darkMode}
-          />
-        )) : ''}
-      </ScrollableListGroup>
+      <DndProvider backend={HTML5Backend}>
+        <LoginList
+          filteredMetadataUrls={filteredMetadataUrls || []}
+          deleteCallback={deleteCallback}
+          reOrderCallback={reorderCallback}
+          errorHandler={errorHandler}
+          darkMode={darkMode}
+        />
+      </DndProvider>
     </div>
   );
 }

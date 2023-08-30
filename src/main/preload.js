@@ -5,6 +5,7 @@ const {
 
 contextBridge.exposeInMainWorld('electronAPI', {
   getMetadataUrls: () => ipcRenderer.invoke('configure:metadataUrls:get'),
+  setMetadataUrls: (args) => ipcRenderer.invoke('configure:metadataUrls:set', args),
   getDefaultMetadata: () => ipcRenderer.invoke('configure:defaultMetadata:get'),
   login: (args) => ipcRenderer.invoke('configure:login', args),
   isAuthenticated: () => ipcRenderer.invoke('configure:is-authenticated'),
