@@ -79,6 +79,7 @@ const config = {
       name: '@electron-forge/maker-squirrel',
       config: {
         authors: awsaml.contributors.join(', '),
+        setupIcon: path.join(__dirname, 'images', 'icon.ico'),
       },
     },
     {
