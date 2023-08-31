@@ -21,7 +21,7 @@ async function refreshJitCallback(profileName, session) {
       headers: session.header,
     });
   } catch (err) {
-    console.error(err);
+    console.error(err); // eslint-disable-line no-console
     Manager.removeByName(profileName);
     throw new Error('AWSAML is unable to fetch credentials from ICS');
   }
