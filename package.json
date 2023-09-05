@@ -4,13 +4,13 @@
   "description": "Periodically refreshes AWS access keys",
   "license": "MIT",
   "contributors": [
-    "Opal Mitchell <opal_mitchell@rapid7.com>",
-    "Dave Greene <david_greene@rapid7.com>",
-    "Marguerite Martinez <marguerite_murrell@rapid7.com>",
-    "Andrea Nguyen <andrea_nguyen@rapid7.com>"
+    "Opal Mitchell",
+    "Dave Greene",
+    "Marguerite Martinez",
+    "Andrea Nguyen"
   ],
   "thanks": [
-    "Tristan Harward <tristan_harward@rapid7.com>"
+    "Tristan Harward"
   ],
   "repository": {
     "type": "git",
