@@ -117,7 +117,12 @@ app.on('ready', async () => {
   if (isDev) {
     mainWindow.openDevTools({ mode: 'detach' });
   } else {
-    baseUrl = `awsaml://${path.join(__dirname, '/../../build/index.html')}`;
+    baseUrl = path.normalize(path.join(__dirname, '/../../build/index.html'));
+    baseUrlPath = baseUrl.split(path.sep); // Split file path by OS path separator ('/' for POSIX, '/' or '\' for Windows)
+    baseUrlPath = baseUrlPath.join('/'); // Rejoin file path by acceptable separator, '/'
+    // baseUrlPath = encodeURIComponent(baseUrlPath); // URL encode file path, so we don't lose any ':'
+    baseUrl = `awsaml://${baseUrlPath}`;
+    console.log(`baseUrl: ${baseUrl}`);
     Server.set('baseUrl', baseUrl);
   }
 
