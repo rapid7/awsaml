@@ -8,6 +8,7 @@ const {
 const url = require('node:url');
 const { refreshJit } = require('./containers/refresh-jit');
 const isWindows = process.platform === 'win32';
+const path = require('node:path');
 
 function registerSchemas() {
   protocol.registerSchemesAsPrivileged([{
@@ -25,6 +26,7 @@ function registerHandlers() {
       prefix = 'awsaml://';
       filePath = `file://${request.url.slice(prefix.length)}`;
     }
+    console.log(filePath);
     return new Response(readFileSync(url.fileURLToPath(filePath)));
   });
 
