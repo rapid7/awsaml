@@ -92,6 +92,7 @@ app.on('ready', async () => {
     width: lastWindowState.width,
     x: lastWindowState.x,
     y: lastWindowState.y,
+    alwaysOnTop: false,
   });
 
   mainWindow.on('close', () => {
@@ -118,18 +119,18 @@ app.on('ready', async () => {
     mainWindow.openDevTools({ mode: 'detach' });
   } else {
     baseUrl = path.normalize(path.join(__dirname, '/../../build/index.html'));
-    baseUrlPath = baseUrl.split(path.sep); // Split file path by OS path separator ('/' for POSIX, '/' or '\' for Windows)
-    baseUrlPath = baseUrlPath.join('/'); // Rejoin file path by acceptable separator, '/'
-    // baseUrlPath = encodeURIComponent(baseUrlPath); // URL encode file path, so we don't lose any ':'
-    baseUrl = `awsaml://${baseUrlPath}`;
-    console.log(`baseUrl: ${baseUrl}`);
+    baseUrl = baseUrl.split(path.sep); // Split file path by OS path separator ('/' for POSIX, '/' or '\' for Windows)
+    baseUrl = baseUrl.join('/'); // Rejoin file path by acceptable separator, '/'
+    baseUrl = `awsaml://${baseUrl}`;
     Server.set('baseUrl', baseUrl);
   }
 
   await mainWindow.loadURL(baseUrl);
 
   mainWindow.on('ready-to-show', () => {
+    // console.log('Page loaded; showing window');
     mainWindow.show();
+    // console.log('Yoo hoo window should be showing');
   });
 
   mainWindow.webContents.on('did-finish-load', () => loadTouchBar(mainWindow, storedMetadataUrls));
