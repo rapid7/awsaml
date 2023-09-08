@@ -7,8 +7,8 @@ const {
 } = require('node:fs');
 const url = require('node:url');
 const { refreshJit } = require('./containers/refresh-jit');
+
 const isWindows = process.platform === 'win32';
-const path = require('node:path');
 
 function registerSchemas() {
   protocol.registerSchemesAsPrivileged([{
@@ -19,6 +19,8 @@ function registerSchemas() {
 
 function registerHandlers() {
   protocol.handle('awsaml', (request) => {
+    let prefix;
+    let filePath;
     if (isWindows) {
       prefix = 'awsaml://C:';
       filePath = `file://C:/${request.url.slice(prefix.length)}`;
