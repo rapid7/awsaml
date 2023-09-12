@@ -92,7 +92,6 @@ app.on('ready', async () => {
     width: lastWindowState.width,
     x: lastWindowState.x,
     y: lastWindowState.y,
-    alwaysOnTop: false,
   });
 
   mainWindow.on('close', () => {
@@ -125,9 +124,7 @@ app.on('ready', async () => {
   await mainWindow.loadURL(baseUrl);
 
   mainWindow.on('ready-to-show', () => {
-    // console.log('Page loaded; showing window');
     mainWindow.show();
-    // console.log('Yoo hoo window should be showing');
   });
 
   mainWindow.webContents.on('did-finish-load', () => loadTouchBar(mainWindow, storedMetadataUrls));
