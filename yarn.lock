@@ -3771,8 +3771,8 @@ __metadata:
   linkType: hard
 
 "@node-saml/node-saml@npm:^4.0.4":
-  version: 4.0.4
-  resolution: "@node-saml/node-saml@npm:4.0.4"
+  version: 4.0.5
+  resolution: "@node-saml/node-saml@npm:4.0.5"
   dependencies:
     "@types/debug": ^4.1.7
     "@types/passport": ^1.0.11
@@ -3785,7 +3785,7 @@ __metadata:
     xml-encryption: ^3.0.2
     xml2js: ^0.5.0
     xmlbuilder: ^15.1.1
-  checksum: f56f56dad68b6b6b03642186879e3a2f63108d63dea6a5912dd2e997dff668372e72fbbdbaa3d676c30e054c9646cd0f1937e23a02af499863ccfef353a673e0
+  checksum: 7d97575111a381ef2d0f16e1fc85ae3f84322ccba06dcb0594b00cf598e429658f45e479b78836943f69f249c08a8593e5168404acf7f1ed659ead53ceef465e
   languageName: node
   linkType: hard
 
