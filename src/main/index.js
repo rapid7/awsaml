@@ -117,7 +117,7 @@ app.on('ready', async () => {
   if (isDev) {
     mainWindow.openDevTools({ mode: 'detach' });
   } else {
-    baseUrl = `awsaml://${path.join(__dirname, '/../../build/index.html')}`;
+    baseUrl = new URL(`awsaml:///${path.join(__dirname, '/../../build/index.html')}`).toString();
     Server.set('baseUrl', baseUrl);
   }
 
