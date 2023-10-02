@@ -1,0 +1,19 @@
+---
+info:
+  title: Awsaml
+  description: 'Awsaml is an application for providing automatically rotated temporary
+    AWS credentials. '
+  x-cortex-git:
+    github:
+      alias: r7org
+      repository: rapid7/awsaml
+  x-cortex-tag: awsaml
+  x-cortex-type: service
+  x-cortex-groups:
+  - critical
+  - publicly-accessible
+  x-cortex-domain-parents:
+  - tag: platform-delivery
+openapi: 3.0.1
+servers:
+- url: "/"
