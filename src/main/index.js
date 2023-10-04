@@ -6,10 +6,13 @@ const {
   nativeTheme,
   clipboard,
 } = require('electron');
+const log = require('electron-log');
 const { app: Server } = require('./api/server');
 const { loadTouchBar } = require('./touchbar');
 const protocol = require('./protocol');
 const { channels } = require('./containers/index');
+
+log.initialize({ preload: true });
 
 // See https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
 // for more details.
@@ -64,6 +67,8 @@ if (lastWindowState === null) {
   };
 }
 
+log.info(`lastWindowState: ${lastWindowState}`);
+
 protocol.registerSchemas();
 
 app.on('ready', async () => {
@@ -76,7 +81,7 @@ app.on('ready', async () => {
   const port = Server.get('port');
 
   Server.listen(port, host, () => {
-    console.log(`Server listening on ${host}:${port}`); // eslint-disable-line no-console
+    log.info(`Server listening on ${host}:${port}`); // eslint-disable-line no-console
   });
 
   Storage.set('session', {});
@@ -95,6 +100,7 @@ app.on('ready', async () => {
   });
 
   mainWindow.on('close', () => {
+    log.info('BrowserWindow.webContents.close');
     const bounds = mainWindow.getBounds();
 
     Storage.set('lastWindowState', {
@@ -111,27 +117,34 @@ app.on('ready', async () => {
   });
 
   mainWindow.on('closed', () => {
+    log.info('BrowserWindow.webContents.closed');
     mainWindow = null;
   });
 
   if (isDev) {
     mainWindow.openDevTools({ mode: 'detach' });
   } else {
-    baseUrl = new URL(`awsaml:///${path.join(__dirname, '/../../build/index.html')}`).toString();
+    baseUrl = new URL(`awsaml://${path.join(__dirname, '/../../build/index.html')}`).toString();
+    log.info(`baseUrl: ${baseUrl}`);
     Server.set('baseUrl', baseUrl);
   }
 
-  await mainWindow.loadURL(baseUrl);
-
   mainWindow.on('ready-to-show', () => {
+    log.info('BrowserWindow.webContents.ready-to-show');
     mainWindow.show();
   });
 
-  mainWindow.webContents.on('did-finish-load', () => loadTouchBar(mainWindow, storedMetadataUrls));
+  log.info('BrowserWindow.loadURL');
+  await mainWindow.loadURL(baseUrl);
+
+  mainWindow.webContents.on('did-finish-load', () => {
+    log.info('BrowserWindow.webContents.did-finish-load');
+    loadTouchBar(mainWindow, storedMetadataUrls);
+  });
 
   // set up IPC handlers
   Object.entries(channels).forEach(([namespace, value = {}]) => {
-    console.log(`loading handlers for ${namespace}`); // eslint-disable-line no-console
+    log.info(`Loading handlers for ${namespace}`); // eslint-disable-line no-console
     Object.entries(value).forEach(([channelName, handler]) => {
       ipcMain.handle(channelName, handler);
     });
