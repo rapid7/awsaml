@@ -67,8 +67,6 @@ if (lastWindowState === null) {
   };
 }
 
-log.info(`lastWindowState: ${lastWindowState}`);
-
 protocol.registerSchemas();
 
 app.on('ready', async () => {
