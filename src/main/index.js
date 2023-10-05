@@ -6,10 +6,13 @@ const {
   nativeTheme,
   clipboard,
 } = require('electron');
+const log = require('electron-log');
 const { app: Server } = require('./api/server');
 const { loadTouchBar } = require('./touchbar');
 const protocol = require('./protocol');
 const { channels } = require('./containers/index');
+
+log.initialize({ preload: true });
 
 // See https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
 // for more details.
@@ -76,7 +79,7 @@ app.on('ready', async () => {
   const port = Server.get('port');
 
   Server.listen(port, host, () => {
-    console.log(`Server listening on ${host}:${port}`); // eslint-disable-line no-console
+    log.info(`Server listening on ${host}:${port}`);
   });
 
   Storage.set('session', {});
@@ -95,6 +98,7 @@ app.on('ready', async () => {
   });
 
   mainWindow.on('close', () => {
+    log.info('[Event] BrowserWindow close');
     const bounds = mainWindow.getBounds();
 
     Storage.set('lastWindowState', {
@@ -111,6 +115,7 @@ app.on('ready', async () => {
   });
 
   mainWindow.on('closed', () => {
+    log.info('[Event] BrowserWindow closed');
     mainWindow = null;
   });
 
@@ -118,20 +123,27 @@ app.on('ready', async () => {
     mainWindow.openDevTools({ mode: 'detach' });
   } else {
     baseUrl = new URL(`awsaml:///${path.join(__dirname, '/../../build/index.html')}`).toString();
+    log.info(`baseUrl: ${baseUrl}`);
     Server.set('baseUrl', baseUrl);
   }
 
-  await mainWindow.loadURL(baseUrl);
-
   mainWindow.on('ready-to-show', () => {
+    log.info('[Event] BrowserWindow ready-to-show');
     mainWindow.show();
   });
 
-  mainWindow.webContents.on('did-finish-load', () => loadTouchBar(mainWindow, storedMetadataUrls));
+  log.info('BrowserWindow.loadURL');
+  await mainWindow.loadURL(baseUrl);
+  log.info('BrowserWindow.loadURL completed');
+
+  mainWindow.webContents.on('did-finish-load', () => {
+    log.info('[Event] BrowserWindow did-finish-load');
+    loadTouchBar(mainWindow, storedMetadataUrls);
+  });
 
   // set up IPC handlers
   Object.entries(channels).forEach(([namespace, value = {}]) => {
-    console.log(`loading handlers for ${namespace}`); // eslint-disable-line no-console
+    log.info(`Loading handlers for ${namespace}`);
     Object.entries(value).forEach(([channelName, handler]) => {
       ipcMain.handle(channelName, handler);
     });
