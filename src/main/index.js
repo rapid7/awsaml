@@ -134,6 +134,7 @@ app.on('ready', async () => {
 
   log.info('BrowserWindow.loadURL');
   await mainWindow.loadURL(baseUrl);
+  log.info('BrowserWindow.loadURL completed');
 
   mainWindow.webContents.on('did-finish-load', () => {
     log.info('[Event] BrowserWindow did-finish-load');
