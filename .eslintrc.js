@@ -36,6 +36,7 @@ module.exports = {
     'import/no-extraneous-dependencies': ['error', {
       devDependencies: true,
     }],
+    'linebreak-style': ['error', process.platform === 'win32' ? 'windows' : 'unix'],
     'global-require': 0,
   },
   overrides: [
