@@ -1,6 +1,6 @@
 # Awsaml
 
-(https://coveralls.io/repos/github/rapid7/awsaml/badge.svg?branch=master)](https://coveralls.io/github/rapid7/awsaml?branch=master)
+[![coverage](https://coveralls.io/repos/github/rapid7/awsaml/badge.svg?branch=master)](https://coveralls.io/github/rapid7/awsaml?branch=master)
 
 Awsaml is an application for providing automatically rotated temporary [AWS][]
 credentials. Credentials are stored in `~/.aws/credentials` so they can be used
