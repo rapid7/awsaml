@@ -44,7 +44,7 @@ function registerHandlers() {
 
     let data;
     try {
-      data = await refreshJit(profile);
+      data = await refreshJit(encodeURI(profile));
     } catch (err) {
       const errBody = JSON.stringify({
         error_message: err?.message || 'unknown',
