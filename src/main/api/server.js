@@ -1,7 +1,7 @@
 const config = require('./config.json');
 const Auth = require('./auth');
 
-const sessionSecret = '491F9BAD-DFFF-46E2-A0F9-56397B538060';
+const sessionSecret = process.env.SESSION_SECRET;
 
 const auth = new Auth(config.auth);
 const app = require('./server-config')(auth, config, sessionSecret);
