@@ -16,14 +16,14 @@ async function refreshJitCallback(profileName, session) {
   let creds = {};
   let response;
   try {
-    response = await fetch(session.apiUri, {
+    response = await fetch(encodeURI(session.apiUri), {
       method: 'GET',
       headers: session.header,
     });
   } catch (err) {
     console.error(err); // eslint-disable-line no-console
     Manager.removeByName(profileName);
-    throw new Error('AWSAML is unable to fetch credentials from ICS');
+    throw new Error(`AWSAML is unable to fetch credentials from ICS. HTTPS request to URI: ${session.apiUri}`);
   }
 
   if (response.ok) {
@@ -61,7 +61,7 @@ async function refreshJit(session) {
     r = new Reloader({
       name: profileName,
       async callback() {
-        await refreshJitCallback(profileName, session);
+        await refreshJitCallback(profileName, session).catch((e) => { throw e; });
       },
       interval: (session.duration / 2) * 1000,
       role: session.roleConfigId,
@@ -73,14 +73,14 @@ async function refreshJit(session) {
       r.role = session.roleConfigId;
       r.setCallback(
         async () => {
-          await refreshJitCallback(profileName, session);
+          await refreshJitCallback(profileName, session).catch((e) => { throw e; });
         },
       );
       r.role = session.roleConfigId;
     }
     r.restart();
   }
-  return refreshJitCallback(profileName, session);
+  return refreshJitCallback(profileName, session).catch((e) => { throw e; });
 }
 
 module.exports = {
