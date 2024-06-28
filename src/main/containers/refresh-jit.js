@@ -61,7 +61,7 @@ async function refreshJit(session) {
     r = new Reloader({
       name: profileName,
       async callback() {
-        await refreshJitCallback(profileName, session).catch(e => console.log(e));
+        await refreshJitCallback(profileName, session).catch((e) => { return e });
       },
       interval: (session.duration / 2) * 1000,
       role: session.roleConfigId,
@@ -73,14 +73,14 @@ async function refreshJit(session) {
       r.role = session.roleConfigId;
       r.setCallback(
         async () => {
-          await refreshJitCallback(profileName, session).catch(e => console.log(e));
+          await refreshJitCallback(profileName, session).catch((e) => { return e });
         },
       );
       r.role = session.roleConfigId;
     }
     r.restart();
   }
-  return refreshJitCallback(profileName, session).catch(e => console.log(e));
+  return refreshJitCallback(profileName, session).catch((e) => { return e });
 }
 
 module.exports = {
