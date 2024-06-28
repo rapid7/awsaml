@@ -11,7 +11,7 @@ In order to rotate credentials, Awsaml takes the following actions
 
 1. Authenticates the user with their identity provider.
 2. Reads the SAML authentication response returned from the identity provider.
-3. Generates new temporary AWS keys by calling the [AssumeRoleWithSAML][] API.
+3. Generates new temporary AWS keys by calling the [AssumeRoleWithSAML][] API.*
 4. Writes the new temporary credentials to disk.
 
 This flow repeats every hour so the user always has a valid set of AWS keys
@@ -19,6 +19,8 @@ while the application's running. Awsaml reuses the SAML response from the
 identity provider, so the user doesn't need to reauthenticate every time.
 
 You can grab prebuilt binaries for Mac, Linux, and Window from [the releases page][releases].
+
+*This API is used to fetch credentials if the Okta SAML + AWS configuration is used. Alternatively, Awsaml also supports the Just In Time IAM tool in Rapid7's InsightCloudSec product.
 
 ## Configuration
 
