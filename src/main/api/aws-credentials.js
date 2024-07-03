@@ -68,6 +68,11 @@ class AwsCredentials {
       aws_security_token: credentials.SessionToken,
     };
 
+    // Include expiration if it is available
+    if (credentials.Expiration) {
+      config[profile].expiration = credentials.Expiration;
+    }
+
     if (region.includes('gov')) {
       config[profile].region = region;
     }

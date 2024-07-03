@@ -159,6 +159,33 @@ describe('AwsCredentials#saveAsIniFile', () => {
     },
   );
 
+  it('saves the expiration in the credentials file if it exists', (done) => {
+    const aws = new AwsCredentials();
+    const credentials = {
+      AccessKeyId: 'AccessKeyId',
+      SecretAccessKey: 'SecretAccessKey',
+      SessionToken: 'SessionToken',
+      Expiration: new Date().toISOString(),
+    };
+
+    process.env.HOME = __dirname;
+
+    aws.saveAsIniFile(credentials, 'profile', () => {
+      const data = FS.readFileSync(awsCredentials, 'utf-8');
+      const config = ini.parse(data);
+
+      expect(config.profile).toEqual({
+        aws_access_key_id: credentials.AccessKeyId,
+        aws_secret_access_key: credentials.SecretAccessKey,
+        aws_security_token: credentials.SessionToken,
+        aws_session_token: credentials.SessionToken,
+        expiration: credentials.Expiration,
+      });
+
+      done();
+    });
+  });
+
   it('keeps existing profiles', (done) => {
     const aws = new AwsCredentials();
     const credentials1 = {
@@ -171,28 +198,44 @@ describe('AwsCredentials#saveAsIniFile', () => {
       SecretAccessKey: 'SecretAccessKey2',
       SessionToken: 'SessionToken2',
     };
+    const credentials3 = {
+      AccessKeyId: 'AccessKeyId3',
+      SecretAccessKey: 'SecretAccessKey3',
+      SessionToken: 'SessionToken3',
+      Expiration: new Date().toISOString(),
+    };
 
     process.env.HOME = __dirname;
 
     aws.saveAsIniFile(credentials1, 'profile1', () => {
       aws.saveAsIniFile(credentials2, 'profile2', () => {
-        const data = FS.readFileSync(awsCredentials, 'utf-8');
-        const config = ini.parse(data);
+        aws.saveAsIniFile(credentials3, 'profile3', () => {
+          const data = FS.readFileSync(awsCredentials, 'utf-8');
+          const config = ini.parse(data);
 
-        expect(config.profile1).toEqual({
-          aws_access_key_id: credentials1.AccessKeyId,
-          aws_secret_access_key: credentials1.SecretAccessKey,
-          aws_security_token: credentials1.SessionToken,
-          aws_session_token: credentials1.SessionToken,
-        });
-        expect(config.profile2).toEqual({
-          aws_access_key_id: credentials2.AccessKeyId,
-          aws_secret_access_key: credentials2.SecretAccessKey,
-          aws_security_token: credentials2.SessionToken,
-          aws_session_token: credentials2.SessionToken,
-        });
+          expect(config.profile1).toEqual({
+            aws_access_key_id: credentials1.AccessKeyId,
+            aws_secret_access_key: credentials1.SecretAccessKey,
+            aws_security_token: credentials1.SessionToken,
+            aws_session_token: credentials1.SessionToken,
+          });
+          expect(config.profile2).toEqual({
+            aws_access_key_id: credentials2.AccessKeyId,
+            aws_secret_access_key: credentials2.SecretAccessKey,
+            aws_security_token: credentials2.SessionToken,
+            aws_session_token: credentials2.SessionToken,
+          });
 
-        done();
+          expect(config.profile3).toEqual({
+            aws_access_key_id: credentials3.AccessKeyId,
+            aws_secret_access_key: credentials3.SecretAccessKey,
+            aws_security_token: credentials3.SessionToken,
+            aws_session_token: credentials3.SessionToken,
+            expiration: credentials3.Expiration,
+          });
+
+          done();
+        });
       });
     });
   });
