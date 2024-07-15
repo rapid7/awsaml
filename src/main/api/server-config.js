@@ -1,7 +1,6 @@
 const path = require('node:path');
 const express = require('express');
 const morgan = require('morgan');
-const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const expressSession = require('express-session');
 
@@ -14,7 +13,6 @@ module.exports = (auth, config, secret) => {
   app.set('configureUrlRoute', 'configure');
   app.set('refreshUrlRoute', 'refresh');
   app.use(morgan('[:date[iso]] :method :url :status :response-time ms - :res[content-length]'));
-  app.use(cookieParser(secret));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(expressSession({

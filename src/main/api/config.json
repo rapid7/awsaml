@@ -4,6 +4,7 @@
     "port": 2600
   },
   "auth": {
+    "callbackUrl": "http://localhost:2600/sso/saml",
     "path": "/sso/saml",
     "audience": "http://localhost:2600/sso/saml"
   },
