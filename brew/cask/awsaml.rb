@@ -1,5 +1,5 @@
 cask "awsaml" do
-  version "3.1.2"
+  version "3.2.0"
   sha256 "1cf9093156370380b328e3250a3ff7649968aee78c8bfcb09badbcdec05e36a0"
 
   url "https://github.com/rapid7/awsaml/releases/download/v#{version}/Awsaml-darwin-universal-#{version}.zip"
