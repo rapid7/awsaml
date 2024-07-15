@@ -226,7 +226,7 @@ async function login(event, payload) {
   if (cert) {
     cert = cert.length ? cert[0].data.replace(/\s+/g, '') : null;
   }
-  config.auth.cert = cert;
+  config.auth.idpCert = cert;
 
   if (issuer) {
     issuer = issuer.length ? issuer[0].value : null;
