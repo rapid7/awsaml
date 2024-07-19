@@ -22,7 +22,8 @@ if (require('electron-squirrel-startup')) {
 
 // Bootstrap the updater
 if (app.isPackaged) {
-  require('update-electron-app')();
+  const { updateElectronApp } = require('update-electron-app');
+  updateElectronApp();
 }
 
 const isPlainObject = (value) => Object.prototype.toString.call(value) === '[object Object]';
