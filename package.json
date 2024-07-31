@@ -43,7 +43,7 @@
   "proxy": "http://localhost:2600/",
   "main": "src/main/index.js",
   "dependencies": {
-    "@aws-sdk/client-sts": "^3.614.0",
+    "@aws-sdk/client-sts": "^3.621.0",
     "@node-saml/passport-saml": "^5.0.0",
     "@xmldom/xmldom": "^0.8.10",
     "body-parser": "^1.20.2",
