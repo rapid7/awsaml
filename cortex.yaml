@@ -12,6 +12,7 @@ info:
   x-cortex-groups:
   - critical
   - publicly-accessible
+  - exposure:opensource
   x-cortex-domain-parents:
   - tag: pd-services
 openapi: 3.0.1
