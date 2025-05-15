@@ -66,6 +66,8 @@ class AwsCredentials {
       aws_session_token: credentials.SessionToken,
       // Some libraries e.g. boto v2.38.0, expect an "aws_security_token" entry.
       aws_security_token: credentials.SessionToken,
+      // add for shell completion
+      ...(!!credentials.Expiration && { x_security_token_expires: credentials.Expiration }),
     };
 
     // Include expiration if it is available
