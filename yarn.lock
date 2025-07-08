@@ -19150,7 +19150,7 @@ __metadata:
     "@xmldom/is-dom-node": "npm:^1.0.1"
     "@xmldom/xmldom": "npm:^0.8.10"
     xpath: "npm:^0.0.33"
-  checksum: 10/95e04e5507558bc16f3c9acc628ba6ec8722f6acb17c4e24562f80929528602497690178225066d5c9de4caf6803147ad4ba58c53c7b94d72c9c121e469196db
+  checksum: 10c0/70c19a0d721df6fbc967c09636d2c9ed5fa49309cb8a1ed740f6a4bebdcee76c6988d32fd2a338f3122aa112ac67842a638b2913347496c937c2167f0c9d3ed0
   languageName: node
   linkType: hard
 
