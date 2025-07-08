@@ -19144,13 +19144,13 @@ __metadata:
   linkType: hard
 
 "xml-crypto@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "xml-crypto@npm:6.0.0"
+  version: 6.1.2
+  resolution: "xml-crypto@npm:6.1.2"
   dependencies:
     "@xmldom/is-dom-node": "npm:^1.0.1"
     "@xmldom/xmldom": "npm:^0.8.10"
     xpath: "npm:^0.0.33"
-  checksum: 10/bc8f634618e8c30844546cf7a19d3c80634f8134118a2d2b9b76f0bb094b745c53ad94214cd3577fba93327d5d992c7570903e4463ce078d9699e45008246400
+  checksum: 10/95e04e5507558bc16f3c9acc628ba6ec8722f6acb17c4e24562f80929528602497690178225066d5c9de4caf6803147ad4ba58c53c7b94d72c9c121e469196db
   languageName: node
   linkType: hard
 
