@@ -15806,8 +15806,8 @@ __metadata:
   linkType: hard
 
 "reactstrap@npm:^9.2.2":
-  version: 9.2.2
-  resolution: "reactstrap@npm:9.2.2"
+  version: 9.2.3
+  resolution: "reactstrap@npm:9.2.3"
   dependencies:
     "@babel/runtime": "npm:^7.12.5"
     "@popperjs/core": "npm:^2.6.0"
@@ -15818,7 +15818,7 @@ __metadata:
   peerDependencies:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 10/97e46b90c31c0060ee9ce3d2e8d67fb863972f2af53c911cb78b776fd0e3e74f50687124448e64623ff4be8f25a219238f1d630c0ef495cde97e3c71f5055ea1
+  checksum: 10/9d10b0afccc71be5f4b50c14dda310e4512e9cb2b64dfbab679bd42bf24b8005abaabb642ee3cdd7a1a2040274108283a402c4cea2d358eed3567c5ecb474687
   languageName: node
   linkType: hard
 
