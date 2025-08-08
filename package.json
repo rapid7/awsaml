@@ -44,7 +44,7 @@
   "main": "src/main/index.js",
   "dependencies": {
     "@aws-sdk/client-sts": "^3.614.0",
-    "@node-saml/passport-saml": "^5.0.0",
+    "@node-saml/passport-saml": "^5.1.0",
     "@xmldom/xmldom": "^0.8.10",
     "body-parser": "^1.20.2",
     "electron-log": "^5.1.5",
