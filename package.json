@@ -1,6 +1,6 @@
 {
   "name": "awsaml",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Periodically refreshes AWS access keys",
   "license": "MIT",
   "contributors": [
@@ -22,7 +22,7 @@
   "engines": {
     "node": ">=16.0.0"
   },
-  "packageManager": "yarn@4.9.2",
+  "packageManager": "yarn@4.12.0",
   "scripts": {
     "electron": "electron src/main/index.js",
     "electron-dev": "NODE_ENV=development ELECTRON_START_URL=http://localhost:3000 electron src/main/index.js",
