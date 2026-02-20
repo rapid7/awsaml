@@ -18,7 +18,7 @@ module.exports = (auth, config, secret) => {
   app.use(expressSession({
     resave: false,
     saveUninitialized: true,
-    secret,
+    secret: secret || require('node:crypto').randomBytes(32).toString('hex'),
   }));
   app.use(auth.initialize());
   app.use(auth.session());
